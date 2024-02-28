@@ -12,3 +12,5 @@ As seen from the above image the experiences are shared under Emotional Phases a
 ![Alt text](Preview_Images/06_CreatePosts.jpg.JPG)
 ![Alt text](Preview_Images/07_LifePhases.jpg.JPG)
 
+If you find this project useful, consider supporting it by buying me a coffee. Paypal: https://www.paypal.com/donate/?hosted_button_id=SK5SEGTHVC53L .
+
