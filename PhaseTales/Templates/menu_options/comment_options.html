@@ -1,0 +1,104 @@
+{% load static %}
+<div class="container">
+  <ul style="margin-bottom:0px;">
+    {% if comment.author == user %}
+      <li class="options delete-comment">
+        <img class="icon" src="{% static 'assets/snooze.png' %}"> <span class="option-title">Delete Comment</span>
+        <p class="option-title">Delete this comment permanently.</p>
+      </li>
+    {% else %}
+      <li class="options report-comment">
+        <img class="icon" src="{% static 'assets/find_post.png' %}"> <span class="option-title">Report Comment</span>
+        <p class="option-title">I'm concerned about this comment.</p>
+      </li>
+          
+
+    {% endif %}
+  </ul>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+    function getCSRFToken() {
+      const cookieValue = document.cookie.match(/csrftoken=([^;]+)/);
+      return cookieValue ? cookieValue[1] : '';
+    }
+
+    var popupText = document.getElementById("cd-popup-text");
+
+    $('.delete-comment').on('click', function(event){
+      event.preventDefault();
+      popupText.innerHTML = "Are you sure you want to delete this comment?";
+      $('.cd-popup-yes').addClass('cd-popup-delete-comment');
+      $('.cd-popup-delete-comment').removeClass('cd-popup-yes');
+      $('.cd-popup').addClass('is-visible');   
+      clear();
+    });
+
+    $('.report-comment').on('click', function(event){
+      event.preventDefault();
+      popupText.innerHTML = "Are you sure you want to report this comment?";
+      $('.cd-popup-yes').addClass('cd-popup-report-comment');
+      $('.cd-popup-report-comment').removeClass('cd-popup-yes');
+      $('.cd-popup').addClass('is-visible');      
+      clear();
+    });
+
+    $('.cd-popup').on('click', function(event){
+      if( $(event.target).is('.cd-popup-delete-comment') ) {
+        event.preventDefault();
+        const csrfToken = getCSRFToken();
+        $.ajax({
+          url: '{{ delete_url }}',
+          type: 'GET',
+          headers: {
+            'X-CSRFToken': csrfToken, // Include the CSRF token in the request header
+          },
+          dataType: 'json', // get the form data
+          success: function(response) {
+            $('.cd-popup').removeClass('is-visible');
+            $('.cd-popup-delete-comment').addClass('cd-popup-yes');
+            $('.cd-popup-yes').removeClass('cd-popup-delete-comment');
+            $('.cd-popup').removeClass('is-visible');
+            var commentElements = document.getElementsByClassName("comment-list-"+ {{ comment.id }});
+            for (var i = 0; i < commentElements.length; i++) {
+              commentElements[i].classList.add('dissapear');
+            }
+            showNotification(response.success); 
+          },
+          error: function(xhr, errmsg, err) {
+            alert('Error occurred. Please try again.');
+          }
+        });  
+      } 
+    });
+
+    $('.cd-popup').on('click', function(event){
+      if( $(event.target).is('.cd-popup-report-comment') ) {
+        event.preventDefault();
+        const csrfToken = getCSRFToken();
+        $.ajax({
+          url: '{{ report_url }}',
+          type: 'GET',
+          headers: {
+            'X-CSRFToken': csrfToken, // Include the CSRF token in the request header
+          },
+          dataType: 'json', // get the form data
+          success: function(response) {
+            $('.cd-popup').removeClass('is-visible');
+            $('.cd-popup-report-comment').addClass('cd-popup-yes');
+            $('.cd-popup-yes').removeClass('cd-popup-report-comment');
+            var commentElements = document.getElementsByClassName("comment-list-"+ {{ comment.id }});
+            for (var i = 0; i < commentElements.length; i++) {
+              commentElements[i].classList.add('dissapear');
+            }
+            showNotification(response.success); 
+          },
+          error: function(xhr, errmsg, err) {
+            alert('Error occurred. Please try again.');
+          }
+        });  
+      } 
+    });
+
+  });
+</script>

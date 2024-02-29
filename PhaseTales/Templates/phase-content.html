@@ -1,0 +1,660 @@
+{% load static %}
+{% load custom_filters %}
+<section class="site-wrap anim" id="Phases'_Descriptions" style="--delay: 0.2s">
+  <div class="site-section" style="padding-bottom: 3.7rem;">
+    <div class="container-fluid">
+      <div class="container-box">
+        <section >
+          <div class="description">
+            {% if phase.image %}
+              <img class="description-img" src="{{ phase.image.url }}">
+            {% else %}
+              <img class="description-img" src="{% static 'images/stress.png' %}">
+            {% endif %}
+            <div>
+              <h3 class="description-title">{{ phase.name }}</h3>
+              <p></p>
+              <p class="phase-description description-control">{{ phase.description }}</p>
+              <div class="f-buttons">
+                {% if user in phase.subscribers.all %}
+                  <div class="subscribe-btn button-unsubscribe" role="button">
+                    Unsubscribe
+                  </div>
+                {% else %}
+                  <div class="subscribe-btn button-18" role="button">
+                    Subscribe
+                  </div>
+                {% endif  %}
+                <div class="button-18 forum_button" role="button">
+                  Forum
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="site-wrap anim" id="{{ phase.slug }}_Articles" style="--delay: 0.3s">
+  <div class="site-section" style="padding-bottom: 3.7rem;">
+    <div class="container-fluid articulate">
+      <div class="anim" style="position: relative;display: flex;">
+        <div class="la-before blurry-before"></div>
+        <nav class="tmln tmln--box tmln--hr" style="padding: 10px;">
+          <h3 class="tmln__header">Articles</h3>
+          <ul class="tmln__list" id="{{ phase.slug }}_article_list">
+            {% for article in articles %}
+              <li class="tmln__item {% if forloop.first %}tmln__item--active{% else %}{% cycle 'tmln__item--bg-lght' 'tmln__item--bg-dark' %}{% endif %}">
+                <span data-title="">{{ article.created_at | shorten_time }}</span>
+                <h3 class="tmln__item-headline">{{ article.title }}</h3>
+                <p>{{ article.body }}</p><a class="my_article" href="" data-url="{% url 'article' article.id %}">Read more</a>
+              </li>
+            {% empty %}
+              <br>
+               <h6 class="title is-5">There are no articles!</h6>              
+            {% endfor %}
+          </ul>
+        </nav>
+        <div class="la-after blurry-after"></div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="site-wrap anim" id="Phases'_Stories" style="--delay: 0.5s">
+  <div class="site-section">
+    <div class="me-tweets container-fluid">
+      <div class="my-header anim" style="--delay: .3s,color:black;">
+        Phase Stories
+      </div>
+      <div class="card">
+        <form class="add-post create-post-content js-add-post" id="{{ phase.slug }}-create-post-form">
+          <input type="text" class="form-control create-post-title {{ phase.slug }}-formInput" placeholder="Title:" maxlength="100" id="{{ phase.slug }}-post-title" name="title" aria-label="" autocomplete="off"  />
+          <textarea class="form-control create-post-textarea {{ phase.slug }}-formInput" id="{{ phase.slug }}-post-body" placeholder="What's happening...?" name="content"></textarea>
+          <input class="js-upload-file-input" name="bait-image" type="file" accept="image/*" id="{{ phase.slug }}-image-upload" onchange="getImageEditor(this.id);" preview="{{ phase.slug }}-preview"> <!-- Attached Files --> 
+          <label class="file-upload-link js-file-upload-link create-post-upload" for="{{ phase.slug }}-image-upload"><i class="fa fa-paperclip js-file-upload-icon"></i></label>
+          <input type="hidden" name="phase" value="{{ phase.slug }}"> 
+          <p class="website-error dissapear" id="{{ phase.slug }}-post-error">Error: Both title and body fields should be filled and should not be left blank.</p>
+          <div class="hide-part create-post-content-controls">
+            <label><input class="js-anonymous" name="anonymous" type="checkbox"> Anonymous</label> <button class="button-success button-mini js-save">Post</button> <a class="js-cancel" href="#">Cancel</a>
+            <div class="clearfix"></div>
+          </div>
+          <div class="hide-part attached-files js-attached-files" style="margin-top: 2em">
+            <div id="{{ phase.slug }}-preview" style="position: relative;width: 250px;"></div>
+          </div>
+        </form>
+      </div>
+      <div style="padding: 10px;display: flex;justify-content: center;background-color: #f2f2f2;">
+        <div class="follow-buttons">
+          <button class="follow" id="{{ phase.slug }}-following-btn" opposite="{{ phase.slug }}-recommended-btn" for="{{ phase.slug }}-following-posts">Following</button>
+          <button class="follow follow-option active" id="{{ phase.slug }}-recommended-btn" opposite="{{ phase.slug }}-following-btn" for="{{ phase.slug }}-recommended-posts">For You</button>
+        </div>
+      </div>
+
+      <section id="{{ phase.slug }}-recommended-posts" class="posts-box selected-posts-box">
+        {% for post in posts %}
+          <div class="card post-list-{{ post.id }}">
+            <div class="card-content tweets">
+              <article class="media tweet">
+                <figure class="media-left">
+                  <p class="image is-64x64 is-circle">
+                    <a class="profile-link-img" onclick="user()" data-url="{% url 'profile' post.author.username %}">
+                      {% if post.author.profile.pro_image %}
+                        <img src="{{ post.author.profile.pro_image.url }}" style="width:64px;min-height:64px;">
+                      {% else %}
+                        <img src="{% static 'images/default.jpg' %}">
+                      {% endif %}
+                    </a>
+                  </p>
+                </figure>
+                <div class="media-content">
+                  <div class="content">
+                    <div class="user-name">
+                      <div class="psuedo-name">
+                        <strong>{{ post.author.username }}</strong> 
+                        <div class="dot"></div><small style="color: #7c7c7c;">{{ post.created_at| shorten_time }}</small>
+                      </div>
+                      <div class="more" data-url="{% url 'post_options' post.id %}">
+                        <img alt="more" src="{% static 'images/more3.png' %}">
+                      </div>
+                    </div>
+                    <div class="question">
+                      {{ post.title }}
+                    </div>
+                    <p id="{{ post.id }}_body">{{ post.body }}</p>
+                  </div>
+                  <div class="comments">
+                    <ul>
+                      <li class="post_details" data-url="{% url 'post' post.id %}" onclick="openPost()"><img alt="" src="{% static 'images/speech-bubble.png' %}">{{ post.comments_count }}</li>
+                      {% if user in post.likes.all %}
+                        <li class="like liked" data-url="{% url 'like_post' post.id %}"><i class="fas fa-heart"></i><div class="like-count">{{ post.likes_count }}</div></li>
+                      {% else %}
+                        <li class="like" data-url="{% url 'like_post' post.id %}"><i class="far fa-heart"></i><div class="like-count">{{ post.likes_count }}</div></li>
+                      {% endif  %}
+                      <li data-toggle="modal" data-target="#myModal" share-url="{% url 'share_post' post.id %}" onclick="share(this.getAttribute('share-url'))"><img alt="" src="{% static 'images/share.png' %}"></li>
+                      <li onclick="readAloud('{{ post.id }}_body')" class="readAloud"><i class="fal fa-volume-up sound"></i></li>
+                    </ul>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </div>
+        {% empty %}
+          <br>
+           <h6 class="title is-5">You do not have any Posts!</h6>              
+        {% endfor %}
+        <div class="card">
+          <div class="load-more">
+            <svg id="meow" fill="currentColor" viewbox="0 0 341.333 341.333" xmlns="http://w3.org/2000/svg">
+            <path d="M341.227 149.333V0l-50.133 50.133C260.267 19.2 217.707 0 170.56 0 76.267 0 .107 76.373.107 170.667s76.16 170.667 170.453 170.667c79.467 0 146.027-54.4 164.907-128h-44.373c-17.6 49.707-64.747 85.333-120.533 85.333-70.72 0-128-57.28-128-128s57.28-128 128-128c35.307 0 66.987 14.72 90.133 37.867l-68.8 68.8h149.333z"></path></svg> Load More
+          </div>
+        </div>  
+      </section>
+
+      <section id="{{ phase.slug }}-following-posts" class="posts-box">
+        
+      </section> 
+
+    </div>
+  </div>
+</section>
+<section class="site-wrap anim" id="Phases'_Books" style="--delay: 0.4s">
+  <div class="site-section">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="my-header book-header anim" style="--delay: .3s">
+            Recommended Books
+          </div>
+          <div class="col-md-12">
+            <section class="{{ phase.slug }}-slider">
+              <div>
+                <div class="product">
+                  <a class="img-wrapper" href="#"><img alt="Pink running shoe" class="p-image" src="{% static 'images/me.jpg' %}"></a>
+                  <div class="note on-sale">
+                    On sale
+                  </div>
+                  <div class="info">
+                    <div class="title">
+                      <a href="#">Some Product</a>
+                    </div>
+                    <div class="price sale">
+                      $20.50
+                    </div>
+                    <div class="price old">
+                      $34.99
+                    </div>
+                  </div>
+                  <div class="actions-wrapper">
+                    <a class="add-btn wishlist" href="#" onclick="openFun()">Details</a> <a class="add-btn cart" href="#">Buy</a>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div class="product">
+                  <a class="img-wrapper" href="#"><img alt="Pink running shoe" class="p-image" src="{% static 'images/me.jpg' %}"></a>
+                  <div class="note on-sale">
+                    On sale
+                  </div>
+                  <div class="info">
+                    <div class="title">
+                      <a href="#">Some Product</a>
+                    </div>
+                    <div class="price sale">
+                      $20.50
+                    </div>
+                    <div class="price old">
+                      $34.99
+                    </div>
+                  </div>
+                  <div class="actions-wrapper">
+                    <a class="add-btn wishlist" href="#" onclick="openFun()">Details</a> <a class="add-btn cart" href="#">Buy</a>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div class="product">
+                  <a class="img-wrapper" href="#"><img alt="Pink running shoe" class="p-image" src="{% static 'images/me.jpg' %}"></a>
+                  <div class="note on-sale">
+                    On sale
+                  </div>
+                  <div class="info">
+                    <div class="title">
+                      <a href="#">Some Product</a>
+                    </div>
+                    <div class="price sale">
+                      $20.50
+                    </div>
+                    <div class="price old">
+                      $34.99
+                    </div>
+                  </div>
+                  <div class="actions-wrapper">
+                    <a class="add-btn wishlist" href="#" onclick="openFun()">Details</a> <a class="add-btn cart" href="#">Buy</a>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div class="product">
+                  <a class="img-wrapper" href="#"><img alt="Pink running shoe" class="p-image" src="{% static 'images/me.jpg' %}"></a>
+                  <div class="note on-sale">
+                    On sale
+                  </div>
+                  <div class="info">
+                    <div class="title">
+                      <a href="#">Some Product</a>
+                    </div>
+                    <div class="price sale">
+                      $20.50
+                    </div>
+                    <div class="price old">
+                      $34.99
+                    </div>
+                  </div>
+                  <div class="actions-wrapper">
+                    <a class="add-btn wishlist" href="#" onclick="openFun()">Details</a> <a class="add-btn cart" href="#">Buy</a>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div class="product">
+                  <a class="img-wrapper" href="#"><img alt="Pink running shoe" class="p-image" src="{% static 'images/me.jpg' %}"></a>
+                  <div class="note on-sale">
+                    On sale
+                  </div>
+                  <div class="info">
+                    <div class="title">
+                      <a href="#">Some Product</a>
+                    </div>
+                    <div class="price sale">
+                      $20.50
+                    </div>
+                    <div class="price old">
+                      $34.99
+                    </div>
+                  </div>
+                  <div class="actions-wrapper">
+                    <a class="add-btn wishlist" href="#" onclick="openFun()">Details</a> <a class="add-btn cart" href="#">Buy</a>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div class="product">
+                  <a class="img-wrapper" href="#"><img alt="Pink running shoe" class="p-image" src="{% static 'images/me.jpg' %}"></a>
+                  <div class="note on-sale">
+                    On sale
+                  </div>
+                  <div class="info">
+                    <div class="title">
+                      <a href="#">Some Product</a>
+                    </div>
+                    <div class="price sale">
+                      $20.50
+                    </div>
+                    <div class="price old">
+                      $34.99
+                    </div>
+                  </div>
+                  <div class="actions-wrapper">
+                    <a class="add-btn wishlist" href="#" onclick="openFun()">Details</a> <a class="add-btn cart" href="#">Buy</a>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div class="product">
+                  <a class="img-wrapper" href="#"><img alt="Pink running shoe" class="p-image" src="{% static 'images/me.jpg' %}"></a>
+                  <div class="note on-sale">
+                    On sale
+                  </div>
+                  <div class="info">
+                    <div class="title">
+                      <a href="#">Some Product</a>
+                    </div>
+                    <div class="price sale">
+                      $20.50
+                    </div>
+                    <div class="price old">
+                      $34.99
+                    </div>
+                  </div>
+                  <div class="actions-wrapper">
+                    <a class="add-btn wishlist" href="#" onclick="openFun()">Details</a> <a class="add-btn cart" href="#">Buy</a>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div class="product">
+                  <a class="img-wrapper" href="#"><img alt="Pink running shoe" class="p-image" src="{% static 'images/me.jpg' %}"></a>
+                  <div class="note on-sale">
+                    On sale
+                  </div>
+                  <div class="info">
+                    <div class="title">
+                      <a href="#">Some Product</a>
+                    </div>
+                    <div class="price sale">
+                      $20.50
+                    </div>
+                    <div class="price old">
+                      $34.99
+                    </div>
+                  </div>
+                  <div class="actions-wrapper">
+                    <a class="add-btn wishlist" href="#" onclick="openFun()">Details</a> <a class="add-btn cart" href="#">Buy</a>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div class="product">
+                  <a class="img-wrapper" href="#"><img alt="Pink running shoe" class="p-image" src="{% static 'images/me.jpg' %}"></a>
+                  <div class="note on-sale">
+                    On sale
+                  </div>
+                  <div class="info">
+                    <div class="title">
+                      <a href="#">Some Product</a>
+                    </div>
+                    <div class="price sale">
+                      $20.50
+                    </div>
+                    <div class="price old">
+                      $34.99
+                    </div>
+                  </div>
+                  <div class="actions-wrapper">
+                    <a class="add-btn wishlist" href="#" onclick="openFun()">Details</a> <a class="add-btn cart" href="#">Buy</a>
+                  </div>
+                </div>
+              </div>
+            </section><a class="carousel-control-prev books-next"><i class="fa fa-angle-left"></i></a> <a class="carousel-control-next books-prev"><i class="fa fa-angle-right"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="site-wrap anim" id="Phases'_Insights" style="--delay: 0.6s">
+  <div class="site-section">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="my-header anim" style="--delay: .3s">
+            Phase Reels
+          </div>
+          <div class="col-md-12">
+            <section class="{{ phase.slug }}-video-slider">
+              <div>
+                <div class="video anim" style="--delay: .4s">
+                  <div class="video-wrapper">
+                    <p class="announcement">  
+                      Exciting things are coming your way! We're thrilled to announce that soon we'll be launching a collection of incredible webinars, insightful interviews, and impactful videos featuring renowned professionals.<br><br>Sign up for our newsletter or follow us on social media for updates. Be among the first to access these invaluable resources and embark on a journey of self-discovery and empowerment.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </section><a class="carousel-control-prev videos-next"><i class="fa fa-angle-left"></i></a> <a class="carousel-control-next videos-prev"><i class="fa fa-angle-right"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+  $(document).ready(function() {
+    // Get the CSRF token from the cookie
+    function getCSRFToken() {
+      const cookieValue = document.cookie.match(/csrftoken=([^;]+)/);
+      return cookieValue ? cookieValue[1] : '';
+    }
+
+    const containerForm = document.getElementById("{{ phase.slug }}-create-post-form");
+    const divToHide1 = containerForm.querySelector(".attached-files");
+    const divToHide2 = containerForm.querySelector(".create-post-content-controls");
+
+    $(document).on('input','.{{ phase.slug }}-formInput', function(event){
+      event.preventDefault();
+      if (document.getElementById("{{ phase.slug }}-post-body").value.length > 0 || document.getElementById("{{ phase.slug }}-post-title").value.length > 0 || document.getElementById("{{ phase.slug }}-image-upload").value.length > 0){
+        divToHide1.classList.remove('hide-part');
+        divToHide2.classList.remove('hide-part');
+      } else {
+        divToHide1.classList.add('hide-part')
+        divToHide2.classList.add('hide-part')
+      }
+    });
+
+    $(document).on('click','.{{ phase.slug }}-formInput', function(event){
+      event.preventDefault();
+      if (document.getElementById("{{ phase.slug }}-post-body").value.length > 0 || document.getElementById("{{ phase.slug }}-post-title").value.length > 0 || document.getElementById("{{ phase.slug }}-image-upload").value.length > 0){
+        divToHide1.classList.remove('hide-part');
+        divToHide2.classList.remove('hide-part');
+      } else {
+        divToHide1.classList.add('hide-part')
+        divToHide2.classList.add('hide-part')
+      }
+    });
+
+    $(document).on('change','#{{ phase.slug }}-image-upload', function(event){
+      event.preventDefault();
+      if (document.getElementById("{{ phase.slug }}-post-body").value.length > 0 || document.getElementById("{{ phase.slug }}-post-title").value.length > 0 || document.getElementById("{{ phase.slug }}-image-upload").value.length > 0){
+        divToHide1.classList.remove('hide-part');
+        divToHide2.classList.remove('hide-part');
+      } else {
+        divToHide1.classList.add('hide-part')
+        divToHide2.classList.add('hide-part')
+      }
+    });
+
+    $('.phase-description').click(function(event){ 
+      if (this.classList.contains("description-control")) {
+        this.classList.remove("description-control");
+      } else {
+        this.classList.add("description-control");
+      }
+    });
+
+
+    $('.like').click(function(event){
+      const $this = this
+      const url = $(this).attr("data-url");
+      const likeIcon = this.querySelector(".fa-heart");
+      const likeCount = this.querySelector(".like-count");
+      const csrfToken = getCSRFToken();
+
+      $.ajax({
+          type:"GET",
+          url: url,
+          headers: {
+            'X-CSRFToken': csrfToken, // Include the CSRF token in the request header
+          },
+          success: function(response) 
+          {
+            let likes = likeCount.innerText;
+            likes = parseInt( likes );
+            if (response.success === 'Post liked successfully.') {
+              likes++;
+              $this.classList.add("liked");
+              likeIcon.classList.remove("far");
+              likeIcon.classList.add("fas");
+            } else {
+              likes--;
+              $this.classList.remove("liked");
+              likeIcon.classList.remove("fas");
+              likeIcon.classList.add("far");
+            }
+            likeCount.innerHTML = likes
+          } 
+      })
+    });
+
+    $(document).on('submit','#{{ phase.slug }}-create-post-form', function(event){
+      event.preventDefault();
+      var returnValue = validatePhaseForm();
+
+      // If the return value is true, continue with logic
+      if (returnValue === true) {
+        $('#{{ phase.slug }}-post-error').addClass('dissapear');
+        const csrfToken = getCSRFToken();
+        var formData = new FormData(this);
+        var imageBase64 = $('#{{ phase.slug }}-image-upload')[0].src;
+        formData.append('image', base64ToBlob(imageBase64));
+        var url = "{% url 'create_post' %}"
+    
+        $.ajax({
+          url: url,
+          type: 'POST',
+          headers: {
+            'X-CSRFToken': csrfToken, // Include the CSRF token in the request header
+          },
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function () {
+            $('#{{ phase.slug }}-create-post-form').trigger('reset');
+            const preview_container = document.getElementById("{{ phase.slug }}-preview");
+            $(preview_container).html("");
+            showNotification("Post created successfully");
+          },
+          error: function () {
+            alert('Error occurred. Please try again.');
+          }
+        });
+      }
+    });
+
+    function validatePhaseForm() {
+      if ($('#{{ phase.slug }}-post-title').val() === '' || $('#{{ phase.slug }}-post-body').val() === '') {
+        $('#{{ phase.slug }}-post-error').removeClass('dissapear');
+        showNotification("Error: Both title and body fields should be filled and should not be left blank.");
+        return false;
+      }
+      return true;
+    }
+
+
+    const life_slider = document.querySelector(".{{ phase.slug }}-slider");
+
+    if (life_slider.classList.contains('slick-initialized')) {
+      $('.{{ phase.slug }}-slider').slick('refresh');
+      $('.{{ phase.slug }}-video-slider').slick('refresh');
+    } else {
+      $(".{{ phase.slug }}-slider").slick(getSliderSettings());
+      $(".{{ phase.slug }}-video-slider").slick(getVideoSliderSettings());
+    }
+
+    $(".blurry-after").removeClass("blurry-before");
+    ExchangeLifeCategoriesBlurry();
+    fixLifeArticlesBlurry('{{ phase.slug }}_article_list');
+    SliderControls();
+    clear();
+
+    $('.forum_button').click(function(e) {
+      e.preventDefault();
+      $('#forum').load('{% url "forum" phase.slug %}');
+      var url = '{% url "forum" phase.slug %}';
+      history.pushState(null, null, url);
+    });
+
+    $('.post_details').click(function(e) {
+      e.preventDefault();
+      var url = $(this).attr('data-url');
+      openPost()
+      var loader = '<div class="overlay"><div class="overlayDoor"></div><div class="overlayContent"><div class="loader"><div class="inner"></div></div></div></div>'
+      $('#PostModelBox').html(loader);
+      $('#PostModelBox').load($(this).attr('data-url'));
+    });
+
+    $('.more').click(function(e) {
+      e.preventDefault();
+      var url = $(this).attr('data-url');
+      var loader = '<div class="overlay"><div class="overlayDoor"></div><div class="overlayContent"><div class="loader"><div class="inner"></div></div></div></div>'
+      toggle_option(this);
+      $('#option').html(loader);
+      $('#option').load($(this).attr('data-url'));
+    });
+
+
+    document.querySelectorAll('.follow').forEach(function(button) {
+      button.addEventListener('click', function() {
+          if ( button.classList.contains('active') ) {
+
+          } else {
+              const opposite_id = button.getAttribute("opposite");
+              const opposite = document.getElementById(opposite_id);
+              $(opposite).removeClass("active");
+              $(button).addClass("active");
+              const content_id = button.getAttribute("for");
+              const content = document.getElementById(content_id);
+              $(".selected-posts-box").removeClass("selected-posts-box");
+              $(content).addClass("selected-posts-box");
+          }
+      });
+    });
+
+
+    $(window).resize(function(){
+      if($('.{{ phase.slug }}-slider').length){
+          $('.{{ phase.slug }}-slider').slick('refresh');
+          $('.{{ phase.slug }}-video-slider').slick('refresh');
+      }
+    });
+
+    $('.profile-link-img').click(function(e) {
+      e.preventDefault();
+      var url = $(this).attr('data-url');
+      $('#profile').load(url);
+      history.pushState(null, null, url);
+    });
+
+    $('.readAloud').click(function(event){
+      const soundIcon = this.querySelector(".sound");
+
+      if (soundIcon.classList.contains("fa-volume-up")) {
+        soundIcon.classList.remove("fa-volume-up");
+        soundIcon.classList.add("fa-volume-mute");
+      } else {
+        $(".fa-volume-mute").addClass("fa-volume-up");
+        $(".fa-volume-mute").removeClass("fa-volume-mute");
+        soundIcon.classList.remove("fa-volume-mute");
+        soundIcon.classList.add("fa-volume-up");
+      } 
+    });
+
+    $(".forum_button").on("click", function (e) {
+      $(".main-container").removeClass("show-emotions");
+      $(".main-container").removeClass("show-achievements");
+      $(".main-container").removeClass("show-phases");
+      $(".main-container").removeClass("show-profile");
+      $(".main-container").removeClass("show-donations");
+      $(".main-container").removeClass("show-article");
+      $(".main-container").addClass("show-forum");
+      $(".main-container").scrollTop(0);
+      $(".sidebar-link").removeClass("is-active");
+    });
+
+    $('.subscribe-btn').click(function() {
+      $.ajax({
+        url: '{% url "subscription" phase.slug %}',
+        type: 'POST',
+        dataType: 'json',
+        success: function(response) {
+          if (response.message === 'Subscribed to phase successfully.') {
+            $('.subscribe-btn').text('UnSubscribe');
+            $('.subscribe-btn').removeClass('button-18');
+            $('.subscribe-btn').addClass('button-unsubscribe');
+            showNotification(response.message);
+          } else {
+            $('.subscribe-btn').text('Subscribe');
+            $('.subscribe-btn').removeClass('button-unsubscribe');
+            $('.subscribe-btn').addClass('button-18');
+            showNotification(response.message);
+          }
+        },
+        error: function(xhr, errmsg, err) {
+          alert('Error occurred. Please try again.');
+        }
+      });
+    });
+
+  });
+</script>
+

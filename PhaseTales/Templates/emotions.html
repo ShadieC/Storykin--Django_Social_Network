@@ -1,0 +1,120 @@
+{% load static %}
+<section class="site-wrap heading one-heading" id="Emotions_Heading2" style="padding-bottom: 0px;">
+  <div class="my-big-header phase-header anim" style="--delay: 0s">
+    Emotion Phases
+  </div>
+  <div class="anim" style="position: relative;display: flex;--delay: 0.1s;">
+    <div class="" id="left_slideLeft">
+      <svg viewBox="0 0 100 100" fill="#fff" height="21" width="30" class="category-svg-left"><path d="M 50,0 L 60,10 L 20,50 L 60,90 L 50,100 L 0,50 Z" class="arrow" transform="translate(15,0)"></path></svg>
+    </div>
+    <section class="category-section" id="left">
+      {% for phase in subscribed_emotionalphases %}
+        <button class="category emo-btn {% if phase.name == first.name %}active{% endif %}" href="#{{ phase.name }}" role="button" data-url="{% url 'emo-phasecontent' phase.slug %}" for="{{ phase.slug }}">{{ phase.name }}</button>
+      {% endfor %}
+      {% for phase in unsubscribed_emotionalphases %}
+        <button class="category emo-btn {% if phase.name == first.name %}active{% endif %}" href="#{{ phase.name }}" role="button" data-url="{% url 'emo-phasecontent' phase.slug %}" for="{{ phase.slug }}">{{ phase.name }}</button>
+      {% endfor %}
+
+    </section>
+    <div class="" id="left_slideRight">
+      <svg viewBox="0 0 100 100" fill="#fff" height="21" width="30" class="category-svg-right"><path d="M 50,0 L 60,10 L 20,50 L 60,90 L 50,100 L 0,50 Z" class="arrow" transform="translate(85,100) rotate(180)"></path></svg>
+    </div>
+  </div>
+</section>
+<div class="stream-area">
+  <div class="main-stream" id="emotions_stream" style="display: flex;flex-flow: column;">
+    <section class="site-wrap abstract one-heading anim" style="--delay: 0.1s"></section>
+    <section class="site-wrap heading snd-heading" id="Emotions_Heading">
+      <div class="my-big-header anim" style="--delay: 0s">
+        Emotion Phases
+      </div>
+      <div class="anim" style="position: relative;display: flex;--delay: 0.1s;">
+        <div class="blurry-prev" id="slideLeft">
+          <svg viewBox="0 0 100 100" fill="#fff" height="21" width="30" class="category-svg-left"><path d="M 50,0 L 60,10 L 20,50 L 60,90 L 50,100 L 0,50 Z" class="arrow" transform="translate(15,0)"></path></svg>
+        </div>
+        <section class="category-section" id="categories">
+          {% for phase in subscribed_emotionalphases %}
+            <button class="category emo-btn {% if phase.name == first.name %}active{% endif %}" href="#{{ phase.slug }}" role="button" data-url="{% url 'emo-phasecontent' phase.slug %}" for="{{ phase.slug }}">{{ phase.name }}</button>
+          {% endfor %}
+          {% for phase in unsubscribed_emotionalphases %}
+            <button class="category emo-btn {% if phase.name == first.name %}active{% endif %}" href="#{{ phase.slug }}" role="button" data-url="{% url 'emo-phasecontent' phase.slug %}" for="{{ phase.slug }}">{{ phase.name }}</button>
+          {% endfor %}
+        </section>
+        <div class="blurry-next" id="slideRight">
+          <svg viewBox="0 0 100 100" fill="#fff" height="21" width="30" class="category-svg-right"><path d="M 50,0 L 60,10 L 20,50 L 60,90 L 50,100 L 0,50 Z" class="arrow" transform="translate(85,100) rotate(180)"></path></svg>
+        </div>
+      </div>
+    </section>
+    <div class="phase_container">
+      {% for phase in subscribed_emotionalphases %}
+        <section class="boxz {% if phase.name == first.name %}on-spot{% endif %}" id="{{ phase.slug }}"></section>
+      {% endfor %} 
+      {% for phase in unsubscribed_emotionalphases %}
+        <section class="boxz {% if phase.name == first.name %}on-spot{% endif %}" id="{{ phase.slug }}"></section>
+      {% endfor %} 
+    </div>
+  </div>
+  <div class="side-stream">
+    Phase Related Ads
+  </div>
+</div>
+<script>
+  $(document).ready(function() {
+    window.addEventListener('DOMContentLoaded', function() {
+      var buttons = document.getElementsByClassName("active");
+     
+      // Loop through the collection of elements
+      for (var i = 0; i < buttons.length; i++) {
+        buttons[i].scrollIntoView({
+          behavior: "auto",
+          block: "center"
+        });
+      }
+    });
+    $('#{{ first.slug }}').load('{% url "emo-phasecontent" first.slug %}');
+
+    $('.emo-btn').click(function(e) {
+      e.preventDefault();
+      var url = $(this).attr('data-url');
+      var tab = $(this).attr('for');
+      history.pushState(null, null, url);
+      var loader = '<div class="overlay"><div class="overlayDoor"></div><div class="overlayContent"><div class="loader"><div class="inner"></div></div></div></div>'
+      $('#'+tab).html(loader);
+      $('#'+tab).load($(this).attr('data-url'));
+    });
+
+    [...document.querySelectorAll('.emo-btn')].forEach(function(button) {
+      button.addEventListener('click', function() {
+        if ( button.classList.contains('active') ) {
+
+        } else {
+          $(".active").removeClass("active");
+          $(button).addClass("active");
+          const content_id = button.getAttribute("for");
+          const buttons = document.querySelectorAll('button[for=content_id]');
+          buttons.forEach(btn => {
+            btn.classList.add('active');
+          });
+          const content = document.getElementById(content_id);
+          $(".on-spot").removeClass("on-spot");
+          $(content).addClass("on-spot");
+        }
+      });
+    });
+
+    ExchangeCategoriesBlurry()
+    scrollCategories();
+    fixCategoriesBlurry();
+
+
+    const create = document.querySelector(".first");
+    if($(".first").length){
+      if (create.classList.contains('remove')) {
+        $(".second").addClass("remove");
+        $(".first").removeClass("remove");
+      }
+    }
+
+
+  });
+</script>

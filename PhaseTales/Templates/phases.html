@@ -1,0 +1,122 @@
+{% load static %}
+<section class="site-wrap heading one-heading" id="Phases_Heading_One" style="padding-bottom: 0px;">
+  <div class="my-big-header phase-header anim" style="--delay: 0s">
+    Life Phases
+  </div>
+  <div class="anim" style="position: relative;display: flex;--delay: 0.1s;">
+    <div class="" id="life_left_slideLeft">
+      <svg viewBox="0 0 100 100" fill="#fff" height="21" width="30" class="category-svg-left"><path d="M 50,0 L 60,10 L 20,50 L 60,90 L 50,100 L 0,50 Z" class="arrow" transform="translate(15,0)"></path></svg>
+    </div>
+    <section class="category-section" id="lifeleft">
+      {% for phase in subscribed_lifephases %}
+        <button class="category phase-btn {% if phase.name == first.name %}activel{% endif %}" href="#{{ phase.slug }}" role="button" data-url="{% url 'life-phasecontent' phase.slug %}" for="{{ phase.slug }}" >{{ phase.name }}</button>
+      {% endfor %}
+      {% for phase in unsubscribed_lifephases %}
+        <button class="category phase-btn {% if phase.name == first.name %}activel{% endif %}" href="#{{ phase.slug }}" role="button" data-url="{% url 'life-phasecontent' phase.slug %}" for="{{ phase.slug }}" >{{ phase.name }}</button>
+      {% endfor %}
+    </section>
+    <div class="" id="life_left_slideRight">
+      <svg viewBox="0 0 100 100" fill="#fff" height="21" width="30" class="category-svg-right"><path d="M 50,0 L 60,10 L 20,50 L 60,90 L 50,100 L 0,50 Z" class="arrow" transform="translate(85,100) rotate(180)"></path></svg>
+    </div>
+  </div>
+</section>
+<div class="stream-area">
+  <div class="main-stream" id="phases_stream" style="display: flex;flex-flow: column;">
+    <section class="site-wrap abstract one-heading anim" style="--delay: 0.1s"></section>
+    <section class="site-wrap heading snd-heading" id="Phases_Heading_Two" style="flex-direction: column;">
+      <div class="my-big-header anim" style="--delay: 0s">
+        Life Phases
+      </div>
+      <div class="anim" style="position: relative;display: flex;--delay: 0.1s;">
+        <div class="blurry-prev life-prev" id="lifeslideLeft">
+          <svg viewBox="0 0 100 100" fill="#fff" height="21" width="30" class="category-svg-left"><path d="M 50,0 L 60,10 L 20,50 L 60,90 L 50,100 L 0,50 Z" class="arrow" transform="translate(15,0)"></path></svg>
+        </div>
+        <section class="category-section" id="lifecategories">
+          {% for phase in subscribed_lifephases %}
+            <button class="category phase-btn {% if phase.name == first.name %}activel{% endif %}" href="#{{ phase.slug }}" role="button" data-url="{% url 'life-phasecontent' phase.slug %}" for="{{ phase.slug }}" >{{ phase.name }}</button>
+          {% endfor %}
+          {% for phase in unsubscribed_lifephases %}
+            <button class="category phase-btn {% if phase.name == first.name %}activel{% endif %}" href="#{{ phase.slug }}" role="button" data-url="{% url 'life-phasecontent' phase.slug %}" for="{{ phase.slug }}" >{{ phase.name }}</button>
+          {% endfor %}
+        </section>
+        <div class="life-next blurry-next" id="lifeslideRight">
+          <svg viewBox="0 0 100 100" fill="#fff" height="21" width="30" class="category-svg-right"><path d="M 50,0 L 60,10 L 20,50 L 60,90 L 50,100 L 0,50 Z" class="arrow" transform="translate(85,100) rotate(180)"></path></svg>
+        </div>
+      </div>
+    </section>
+    <div class="phase_container">
+      {% for phase in subscribed_lifephases %}
+        <section class="boxz {% if phase.name == first.name %}on-spotl{% endif %}" id="{{ phase.slug }}" phase-name="{{ phase.name }}"></section>
+      {% endfor %}
+      {% for phase in unsubscribed_lifephases %}
+        <section class="boxz {% if phase.name == first.name %}on-spotl{% endif %}" id="{{ phase.slug }}" phase-name="{{ phase.name }}"></section>
+      {% endfor %}         
+    </div>
+  </div>
+  <div class="side-stream">
+    <h1>Phase Related Ads</h1>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    window.addEventListener('DOMContentLoaded', function() {
+      var buttons = document.getElementsByClassName("activel");
+     
+      // Loop through the collection of elements
+      for (var i = 0; i < buttons.length; i++) {
+        buttons[i].scrollIntoView({
+          behavior: "auto",
+          block: "center"
+        });
+      }
+    });
+       
+    $('#{{ first.slug }}').load('{% url "life-phasecontent" first.slug %}');
+
+    $('.phase-btn').click(function(e) {
+      e.preventDefault();
+      var url = $(this).attr('data-url');
+      var tab = $(this).attr('for');
+      history.pushState(null, null, url);
+      var loader = '<div class="overlay"><div class="overlayDoor"></div><div class="overlayContent"><div class="loader"><div class="inner"></div></div></div></div>'
+      $('#'+tab).html(loader);
+      $('#'+tab).load($(this).attr('data-url'));
+    });
+
+    [...document.querySelectorAll('.phase-btn')].forEach(function(button) {
+      button.addEventListener('click', function() {
+        if ( button.classList.contains('activel') ) {
+
+        } else {
+            $(".activel").removeClass("activel");
+            $(button).addClass("activel");
+            const content_id = button.getAttribute("for");
+            const buttons = document.querySelectorAll('button[for=content_id]');
+            buttons.forEach(btn => {
+              btn.classList.add('activel');
+            });
+            const content = document.getElementById(content_id);
+            $(".on-spotl").removeClass("on-spotl");
+            $(content).addClass("on-spotl");
+        }
+      });
+    });
+
+
+    $(".blurry-after").removeClass("blurry-before");
+    ExchangeLifeCategoriesBlurry();
+    scrollLifeCategories();
+    fixLifeCategoriesBlurry();
+    clear();
+
+    const create = document.querySelector(".first");
+    if($(".first").length){
+      if (create.classList.contains('remove')) {
+        $(".second").addClass("remove");
+        $(".first").removeClass("remove");
+      }
+    }
+
+  });
+</script>

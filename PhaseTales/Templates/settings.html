@@ -1,0 +1,338 @@
+{% load static %}
+<!-- Edit info -->
+<div class="container" style="height: max-content;">
+
+  <!-- Vertical navs -->
+  <div class="row">
+    <div class="col-md-2 mb-3" style="max-width: 100% !important;flex: 0 0 100% !important;">
+      <ul class="nav-vertical nav nav-pills flex-column" id="myTab" role="tablist" style="display: flex;flex-direction: row !important;">
+        <li class="nav-item" style="width: calc(1/3*100%);text-align: center;">
+          <a class="nav-link active" id="home-tab" data-toggle="tab" style="border-left-width: 0;" href="#settings-profile" role="tab" aria-controls="home" aria-selected="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h274.9c-2.4-6.8-3.4-14-2.6-21.3l6.8-60.9 1.2-11.1 7.9-7.9 77.3-77.3c-24.5-27.7-60-45.5-99.9-45.5zm45.3 145.3l-6.8 61c-1.1 10.2 7.5 18.8 17.6 17.6l60.9-6.8 137.9-137.9-71.7-71.7-137.9 137.8zM633 268.9L595.1 231c-9.3-9.3-24.5-9.3-33.8 0l-37.8 37.8-4.1 4.1 71.8 71.7 41.8-41.8c9.3-9.4 9.3-24.5 0-33.9z"/></svg>
+            <span>Edit profile</span>
+          </a>
+        </li>
+        <li class="nav-item" style="width: calc(1/3*100%);text-align: center;">
+          <a class="nav-link" id="profile-tab" data-toggle="tab" href="#settings-account" role="tab" aria-controls="profile" aria-selected="false">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M487.4 315.7l-42.6-24.6c4.3-23.2 4.3-47 0-70.2l42.6-24.6c4.9-2.8 7.1-8.6 5.5-14-11.1-35.6-30-67.8-54.7-94.6-3.8-4.1-10-5.1-14.8-2.3L380.8 110c-17.9-15.4-38.5-27.3-60.8-35.1V25.8c0-5.6-3.9-10.5-9.4-11.7-36.7-8.2-74.3-7.8-109.2 0-5.5 1.2-9.4 6.1-9.4 11.7V75c-22.2 7.9-42.8 19.8-60.8 35.1L88.7 85.5c-4.9-2.8-11-1.9-14.8 2.3-24.7 26.7-43.6 58.9-54.7 94.6-1.7 5.4.6 11.2 5.5 14L67.3 221c-4.3 23.2-4.3 47 0 70.2l-42.6 24.6c-4.9 2.8-7.1 8.6-5.5 14 11.1 35.6 30 67.8 54.7 94.6 3.8 4.1 10 5.1 14.8 2.3l42.6-24.6c17.9 15.4 38.5 27.3 60.8 35.1v49.2c0 5.6 3.9 10.5 9.4 11.7 36.7 8.2 74.3 7.8 109.2 0 5.5-1.2 9.4-6.1 9.4-11.7v-49.2c22.2-7.9 42.8-19.8 60.8-35.1l42.6 24.6c4.9 2.8 11 1.9 14.8-2.3 24.7-26.7 43.6-58.9 54.7-94.6 1.5-5.5-.7-11.3-5.6-14.1zM256 336c-44.1 0-80-35.9-80-80s35.9-80 80-80 80 35.9 80 80-35.9 80-80 80z"/></svg>
+            <span>User Settings</span>
+          </a>
+        </li>
+        <li class="nav-item" style="width: calc(1/3*100%);text-align: center;">
+          <a class="nav-link" id="contact-tab" data-toggle="tab" href="#settings-password" role="tab" aria-controls="contact" aria-selected="false">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M512 176.001C512 273.203 433.202 352 336 352c-11.22 0-22.19-1.062-32.827-3.069l-24.012 27.014A23.999 23.999 0 0 1 261.223 384H224v40c0 13.255-10.745 24-24 24h-40v40c0 13.255-10.745 24-24 24H24c-13.255 0-24-10.745-24-24v-78.059c0-6.365 2.529-12.47 7.029-16.971l161.802-161.802C163.108 213.814 160 195.271 160 176 160 78.798 238.797.001 335.999 0 433.488-.001 512 78.511 512 176.001zM336 128c0 26.51 21.49 48 48 48s48-21.49 48-48-21.49-48-48-48-48 21.49-48 48z"/></svg>
+            <span>Password</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Pages -->
+    <div class="col-md-10" style="max-width: 100% !important;flex: 0 0 100% !important;">
+      <div class="tab-content" id="myTabContent">
+        
+        <!-- Page : Edit profile -->
+        <div class="tab-pane fade show active" id="settings-profile" role="tabpanel" aria-labelledby="home-tab">
+          <div class="profile-pic">
+            <label class="-label" for="profile-image">
+              <span class="fas fa-camera"></span>
+              <span>Change Image</span>
+            </label>
+            <input type="file" name="pro_image" accept="image/*" id="profile-image" onchange="editProImage(this)"/>
+            {% if profile.pro_image %}
+              <img src="{{ profile.pro_image.url }}" id="output" width="200" />
+            {% else %}
+              <img src="{% static 'images/default.jpg' %}" id="output" width="200" />
+            {% endif %}
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label>First name</label>
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="Firstname" maxlength="100" id="profile-firstname" aria-label="" value="{{ user.first_name }}" onkeypress="restrictToText(event)" />
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label>Last name</label>
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="Lastname" maxlength="100" id="profile-lastname" aria-label="" value="{{ user.last_name }}" onkeypress="restrictToText(event)" />
+              </div>
+            </div>
+          </div>
+
+          <br />
+          <label>About you</label>
+          <div class="input-group">
+            <textarea class="form-control" placeholder="Tell us something about you!" maxlength="200" aria-label="" id="profile-bio">{{ profile.bio }}</textarea>
+          </div>
+          <br />
+        </div>
+
+        <!-- Page : Account -->
+        <div class="tab-pane fade" id="settings-account" role="tabpanel" aria-labelledby="profile-tab">
+          <form id="account-form" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label>Username</label>
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Username" id="profile-username" name="username" value="{{ user.username }}" aria-label="" />
+            </div>
+            <p class="username-password-error dissapear" ></p>
+            <br />
+            <label>Email</label>
+            <div class="input-group">
+              <input type="email" class="form-control" id="emailInput" placeholder="Email" aria-label="" name="email" value="{{ user.email }}" />
+            </div>
+            <p class="email-password-error dissapear"></p>
+            <br />  
+            <div class="box-section bg-light">
+              <h3 style="font-size: 1.4rem;">Delete Account</h3>
+              Delete your account and all the associated information.&nbsp;<button style="float: right" class="btn btn-danger">Delete Account</button>
+            </div>
+          </form>
+        </div>
+        <!-- Page : Password -->
+        <div class="tab-pane fade" id="settings-password" role="tabpanel" aria-labelledby="contact-tab">
+          <form id="password-form" method="POST" >
+            {% csrf_token %}
+            <label>Old password</label>
+            <div class="input-group">
+              <input type="password" class="form-control" placeholder="Old password" aria-label="" name="old_password" />
+            </div>
+            <p class="old-password-error dissapear">Old password is incorrect</p>
+            <br />
+            <label>New password</label>
+            <div class="input-group">
+              <input type="password" class="form-control" placeholder="New password" aria-label="" name="new_password1" />
+            </div>
+            <br />
+            <label>Confirm New password</label>
+            <div class="input-group">
+              <input type="password" class="form-control" placeholder="Confirm New password" aria-label="" name="new_password2" />
+            </div>
+            <p class="new-password-error dissapear">New passwords do not match</p>
+            <br />
+            <button class="btn btn-danger" type="submit">Change password</button>
+            <br/><br/>
+          </form>
+
+        </div>
+
+      </div>
+    </div>
+    <!-- /.col-md-8 -->
+  </div>
+
+</div>
+<!-- Edit info -->
+  
+<div class="modal-footer">
+  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+  <button type="button" class="btn btn-primary" id="save-changes">Save changes</button>
+</div>
+      
+<!-- partial -->
+
+<script type="text/javascript">
+$(document).ready(function() {
+  // Get the CSRF token from the cookie
+  function getCSRFToken() {
+    const cookieValue = document.cookie.match(/csrftoken=([^;]+)/);
+    return cookieValue ? cookieValue[1] : '';
+  }
+  $('#save-changes').click(function(e) {
+    e.preventDefault();
+    var returnValue = validateForm();
+
+    // If the return value is true, continue with logic
+    if (returnValue === true) {
+      // Create a FormData object to store the form data and image data
+      var formData = new FormData();
+     
+      // Get the form data and append it to the FormData object
+      var form = $('#account-form')[0];
+      var formDataFields = $(form).serializeArray();
+      $.each(formDataFields, function(index, field) {
+        formData.append(field.name, field.value);
+      });
+
+      // Retrieve data from other inputs
+      var first_name = $('#profile-firstname').val();
+      var last_name = $('#profile-lastname').val();
+      var bio = $('#profile-bio').val();
+      var imageBase64 = $('#profile-image')[0].src;
+      formData.append('first_name', first_name);
+      formData.append('last_name', last_name);
+      formData.append('bio', bio);
+      formData.append('pro_image', base64ToBlob(imageBase64));
+
+      var url = "{% url 'edit_profile' %}";
+      const csrfToken = getCSRFToken();
+
+      // Make an AJAX request to your Django view
+      $.ajax({
+        url: url,
+        type: 'POST',
+        data: formData,
+        headers: {
+          'X-CSRFToken': csrfToken, // Include the CSRF token in the request header
+        },
+        processData: false,
+        contentType: false,
+        success: function(response) {
+          if (response.status === 'error') {
+            showUsername();
+            $('.username-password-error').removeClass('dissapear');
+            const usernameError = document.querySelector(".username-password-error")
+            usernameError.textContent = response.error;
+          } else {
+            $('#basicModal').modal('hide');
+            showNotification('Changes made successfully');
+          }             
+          
+        },
+        error: function(xhr, textStatus, error) {
+          alert('Error occurred. Please try again.');
+        }
+      });
+    } 
+  });
+
+  $('#password-form').on('submit', function(e) {
+    e.preventDefault(); // prevent form submission
+
+    var form = $(this);
+    var url = "{% url 'change_password' %}";
+
+    $.ajax({
+      type: 'POST',
+      url: url,
+      data: form.serialize(),
+      success: function(response) {
+        if (response.success) {
+          // Handle success
+          $('#basicModal').modal('hide');
+          showNotification('Password changed successfully');
+          // Redirect to a success page or display a success message
+        } else if (response.error) {
+          // Handle form errors
+          if (response.error === 'New passwords do not match') {
+            hideErrors();
+            $('.new-password-error').removeClass('dissapear');
+          } else if (response.error === 'Old password is incorrect') {
+            hideErrors();
+            $('.old-password-error').removeClass('dissapear');
+          }
+        }
+      }
+    });
+  });
+}); 
+function restrictToText(event) {
+  const regex = /^[a-zA-Z\s]*$/; // Only allow alphabets and spaces
+
+  const key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+  if (!regex.test(key)) {
+    event.preventDefault();
+    return false;
+  }
+}
+
+
+function validateForm() {
+  const emailInput = document.getElementById('emailInput');
+  if (!validateEmail(emailInput.value)) {
+    showUsername();
+    hideErrors();
+    $('.email-password-error').removeClass('dissapear');
+    const emailError = document.querySelector(".email-password-error")
+    emailError.textContent = 'Please enter a valid email address.';
+    return false;
+  } else if ($('#profile-username').val() === '') {
+    showUsername();
+    hideErrors();
+    $('.username-password-error').removeClass('dissapear');
+    const usernameError = document.querySelector(".username-password-error")
+    usernameError.textContent = 'Username cannot be empty.';
+    return false;
+  }
+  return true;
+}
+
+function showUsername() {
+  $('#home-tab').removeClass('active');
+  $('#contact-tab').removeClass('active');
+  $('#settings-profile').removeClass('active');
+  $('#settings-profile').removeClass('show');
+  $('#settings-password').removeClass('active');
+  $('#settings-password').removeClass('show');
+  $('#profile-tab').addClass('active');
+  $('#settings-account').addClass('active');
+  $('#settings-account').addClass('show');
+}
+
+function hideErrors() {
+  $('.email-password-error').addClass('dissapear');
+  $('.username-password-error').addClass('dissapear');
+  $('.old-password-error').addClass('dissapear');
+  $('.new-password-error').addClass('dissapear');
+}
+
+function validateEmail(email) {
+  const regex = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+  return regex.test(email);
+}
+
+function editProImage(sel) {
+  if (sel.files && sel.files[0]) {  
+    // Get the selected image file
+    const uneditedFile = sel.files[0];
+
+    // Create a new FileReader object
+    const reader = new FileReader();
+
+    // Set up the onload event handler
+    reader.onload = function(event) {
+      const image = new Image();
+      image.src = event.target.result;
+      image.addEventListener('load', function() {
+
+        const config = {
+          cloudimage: {
+            token: 'ccnbbxqsda'
+          }
+        };
+
+        const onError = (url, file) => {
+          showNotification('Error occurred during image editing:', error);
+          getval(sel)
+        }
+        
+        const onBeforeComplete = (props) => {
+          let imageBase64 = props.canvas.toDataURL();
+          const imageBlob = base64ToBlob(imageBase64);
+          const imageURL = URL.createObjectURL(imageBlob);
+
+          // Update the input field's value with the edited image file
+          sel.src = imageBase64 
+
+
+          var output = document.getElementById("output");
+          output.src = imageURL;
+        }
+
+        const ImageEditor = new FilerobotImageEditor(config, {
+          onBeforeComplete: onBeforeComplete,
+          onError: onError,
+          onClose: () => {
+            ImageEditor.unmount()
+          },
+        });
+        ImageEditor.open(image.src);
+        
+      });
+    };
+    reader.readAsDataURL(uneditedFile);
+  }
+}
+
+</script>

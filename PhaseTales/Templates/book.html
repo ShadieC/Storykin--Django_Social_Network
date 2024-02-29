@@ -1,0 +1,440 @@
+{% load static %}
+{% load custom_filters %}
+<div class="post-box-header" style="background-color: #2d3748;">
+  <h2 class="box-header-text">Book Details</h2>
+  <div class="header-svg-box" onclick="closeFun()" style="right: 1.5rem;">
+    <svg xmlns="http://www.w3.org/2000/svg" class="ht-6 wh-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+    </svg>
+  </div>
+</div>
+<div class="modal-scrollable-container">
+  <div class="product_popup" style="-webkit-box-shadow: none;box-shadow: none;">
+    <picture class="product_popup__img"><source media="(min-width: 600px)" srcset="{{ book.image.url }}"> <img alt=" Book Cover Image" src="{{ book.image.url }}"></picture>
+    <div class="product_popup__content">
+      <p class="product_popup__category">{{ book.phase.name }} Phase Book</p>
+      <h1 class="product_popup__title">{{ book.title }}</h1>
+      <p>{{ book.description }}</p>
+      <div class="flex-group">
+        <p class="product_popup__price"><span class="visually-hidden">Current price:</span> ${{ book.new_price }}</p>
+        <p class="product_popup__original-price"><span class="visually-hidden">Original price:</span> <s>${{ book.old_price }}</s></p>
+      </div>
+      <div class="flex-group-b">
+        <a href="{{ book.link }}"><button class="product-button" data-icon="shopping-cart">Amazon Buy</button></a>
+      </div>
+    </div>
+  </div>
+  <div class="comment-thread" id="book-comment-thread">
+    <!-- Comment 1 start -->
+    {% for comment in comments %}
+    <div class="comment full-comment comment-list-{{ comment.id }}" id="comment-{{ comment.id }}">
+      <div class="comment-container" style="margin-bottom: 8px;">
+        <div class="comment-heading">
+          <div class="comment-head-left">
+            <div class="avatar-image-container">
+              <a href="#">
+                {% if comment.author.pro_image %}
+                  <img src="{{ comment.author.pro_image.url }}" style="width:64px;min-height:64px;">
+                {% else %}
+                  <img src="{% static 'images/default.jpg' %}">
+                {% endif %}
+              </a>
+            </div>
+            <div class="comment-info">
+              <a class="comment-author" href="#">{{ comment.author.username }}</a>
+              <p class="m-0"><span class="comment-like-count">{{ comment.likes.count }}</span> likes &bull; {{ comment.created_at| shorten_time }}</p>
+            </div>
+          </div>
+          <div class="modal_more" data-url="{% url 'book_review_options' comment.id %}">
+            <img alt="more" src="/static/images/more3.png">
+          </div>
+        </div>
+        <div class="comment-body">
+          <p>{{ comment.body }}</p><i class="fa fa-reply" origin="Comment" author="{{ comment.author.username }}" for="{{ comment.id }}"></i>
+          {% if user in comment.likes.all %}
+            <i data-url="{% url 'like_book_review' comment.id %}" class="fa fa-heart comment-like text-red"></i>
+          {% else %}
+            <i data-url="{% url 'like_book_review' comment.id %}" class="fa fa-heart comment-like"></i>
+          {% endif  %}   
+        </div>
+      </div><!-- Comment 2 end -->
+      {% if comment.replies.all.exists %}
+        <div class="show-replies">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-forward" width="44" height="44" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M15 11l4 4l-4 4m4 -4h-11a4 4 0 0 1 0 -8h1" />
+          </svg>
+          <span class="show-replies-text">Show</span> all {{ comment.replies.all.count }} replies
+        </div>
+      {% endif %}
+      <div class="replies dissapear" id="replies-for-{{ comment.id }}">
+        <!-- Comment 2 start -->
+        {% for reply in comment.replies.all %}
+        <div class="comment comment-list-{{ reply.id }}" >
+          <div class="comment-container">
+            <div class="comment-heading">
+              <div class="comment-head-left">
+                <div class="avatar-image-container">
+                  <a href="#">
+                    {% if reply.author.pro_image %}
+                      <img src="{{ comment.author.pro_image.url }}" style="width:64px;min-height:64px;">
+                    {% else %}
+                      <img src="{% static 'images/default.jpg' %}">
+                    {% endif %}
+                  </a>
+                </div>
+                <div class="comment-info">
+                  <a class="comment-author" href="#">{{ reply.author.username }}</a>
+                  <p class="m-0"><span class="comment-like-count">{{ reply.likes.count }}</span> likes &bull; {{ reply.created_at| shorten_time }}</p>
+                </div>
+              </div>
+              <div class="modal_more" data-url="{% url 'book_review_options' reply.id %}">
+                <img alt="more" src="/static/images/more3.png">
+              </div>
+            </div>
+            <div class="comment-body">
+              <p>{{ reply.body }}</p><i class="fa fa-reply" author="{{ reply.author.username }}" origin="Reply" for="{{ comment.id }}"></i> 
+              {% if user in reply.likes.all %}
+                <i data-url="{% url 'like_book_review' reply.id %}" class="fa fa-heart comment-like text-red"></i>
+              {% else %}
+                <i data-url="{% url 'like_book_review' reply.id %}" class="fa fa-heart comment-like"></i>
+              {% endif  %}   
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div><!-- Comment 1 end -->
+    {% empty %}
+      <br>
+       <h6 class="title is-5">Post does not have any comments!</h6>              
+    {% endfor %}
+  </div>
+  <div class="modal_option">
+    <!-- Content of the modal option -->
+  </div>
+</div>
+<div class="sender-area">
+  <div class="comment-s">
+    <div class="comment-area">
+      <div class="comment-profile-pic"><img alt="user" src="{% static 'images/user-c.png' %}"></div>
+      <form id="comment-book-form" class="comment-input-area" action="{% url 'book_reviews' book.id %}" method="POST" novalidate>        
+        {% csrf_token %}
+        <input placeholder="Add a comment for {{ book.author.username }}'s Post" type="text" name="content" class="shadieINPUT">
+        <div class="comment-icon equalizer dissapear" onclick="equalize()" style="right: 1.5rem;">
+          <svg xmlns="http://www.w3.org/2000/svg" class="ht-6 wh-6" fill="currentColor" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </div>
+        <button type="submit" class="comment-icon">              
+          <div class="send">
+            <svg class="send-icon" id="Capa_1" style="enable-background:new 0 0 512 512;" version="1.1" viewbox="0 0 512 512" x="0px" xmlns="http://www.w3.org/2000/svg" y="0px">
+              <g>
+                <g>
+                  <path d="M481.508,210.336L68.414,38.926c-17.403-7.222-37.064-4.045-51.309,8.287C2.86,59.547-3.098,78.551,1.558,96.808 L38.327,241h180.026c8.284,0,15.001,6.716,15.001,15.001c0,8.284-6.716,15.001-15.001,15.001H38.327L1.558,415.193 c-4.656,18.258,1.301,37.262,15.547,49.595c14.274,12.357,33.937,15.495,51.31,8.287l413.094-171.409 C500.317,293.862,512,276.364,512,256.001C512,235.638,500.317,218.139,481.508,210.336z" fill="#6B6C7B"></path>
+                </g>
+              </g>
+            </svg>
+          </div>
+        </button>     
+      </form>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  // Get the CSRF token from the cookie
+  function getCSRFToken() {
+    const cookieValue = document.cookie.match(/csrftoken=([^;]+)/);
+    return cookieValue ? cookieValue[1] : '';
+  }
+  $(document).ready(function () {
+    $('.current-more').removeClass('current-more');
+    clear();
+    // Handle form submission
+    $(document).on('submit','#comment-book-form', function(event){
+      event.preventDefault();
+      const csrfToken = getCSRFToken();
+      var data = $(this).serialize();
+      var url = "{% url 'book_reviews' book.id %}"
+  
+      $.ajax({
+        url: url,
+        type: 'POST',
+        headers: {
+          'X-CSRFToken': csrfToken, // Include the CSRF token in the request header
+        },
+        data: data,
+        success: function () {
+          $(this).trigger('reset');
+          $('.shadieINPUT').val('');
+          loadComments();
+        },
+        error: function () {
+          alert('Error occurred. Please try again.');
+        }
+      });
+    });
+
+    $('.like').click(function(event){
+      const $this = this
+      const url = $(this).attr("data-url");
+      const likeIcon = this.querySelector(".fa-heart");
+      const likeCount = this.querySelector(".like-count");
+      const csrfToken = getCSRFToken();
+
+      $.ajax({
+          type:"GET",
+          url: url,
+          headers: {
+            'X-CSRFToken': csrfToken, // Include the CSRF token in the request header
+          },
+          success: function(response) 
+          {
+            let likes = likeCount.innerText;
+            likes = parseInt( likes );
+            if (response.success === 'Post liked successfully.') {
+              likes++;
+              $this.classList.add("liked");
+              likeIcon.classList.remove("far");
+              likeIcon.classList.add("fas");
+            } else {
+              likes--;
+              $this.classList.remove("liked");
+              likeIcon.classList.remove("fas");
+              likeIcon.classList.add("far");
+            }
+            likeCount.innerHTML = likes
+          } 
+      })
+    });
+
+    $('.comment-like').click(function(event){
+      const $this = this
+      const url = $(this).attr("data-url");
+      const container = this.closest('.comment-container');
+      const likeCount = container.querySelector(".comment-like-count");
+      const csrfToken = getCSRFToken();
+
+      $.ajax({
+          type:"GET",
+          url: url,
+          headers: {
+            'X-CSRFToken': csrfToken, // Include the CSRF token in the request header
+          },
+          success: function(response) 
+          {
+            let likes = likeCount.innerText;
+            likes = parseInt( likes );
+            if (response.success === 'Comment liked successfully.') {
+              likes++;
+              $this.classList.add("text-red");
+            } else {
+              likes--;
+              $this.classList.remove("text-red");
+            }
+            likeCount.innerHTML = likes
+          } 
+      })
+    });
+
+    $('.modal_more').click(function(e) {
+      e.preventDefault();
+      var url = $(this).attr('data-url');
+      var loader = '<div class="overlay"><div class="overlayDoor"></div><div class="overlayContent"><div class="loader"><div class="inner"></div></div></div></div>'
+      modal_toggle_option(this);
+      $('.modal_option').html(loader);
+      $('.modal_option').load($(this).attr('data-url'));
+    });
+
+    $('.show-replies').click(function(e) {
+      const container = this.closest('.full-comment');
+      const show_text = this.querySelector(".show-replies-text");
+      const repliesBox = container.querySelector(".replies");
+      let text = show_text.innerText;
+      if (repliesBox.classList.contains("dissapear")) {
+        repliesBox.classList.remove('dissapear')
+        text = 'Hide'
+        show_text.innerHTML = text
+      } else {
+        repliesBox.classList.add('dissapear')
+        text = 'Show'
+        show_text.innerHTML = text
+      }
+    });
+
+    $('.readAloud').click(function(event){
+      const soundIcon = this.querySelector(".sound");
+
+      if (soundIcon.classList.contains("fa-volume-mute")) {
+        soundIcon.classList.remove("fal");
+        soundIcon.classList.add("fas");
+        $(".fa-volume-up").removeClass("fas");
+        $(".fa-volume-up").addClass("fal");
+        $(".fa-volume-up").addClass("fa-volume-mute");
+        $(".fa-volume-up").removeClass("fa-volume-up");
+        soundIcon.classList.remove("fa-volume-mute");
+        soundIcon.classList.add("fa-volume-up");
+      } else {
+        soundIcon.classList.remove("fas");
+        soundIcon.classList.add("fal");
+        soundIcon.classList.remove("fa-volume-up");
+        soundIcon.classList.add("fa-volume-mute");
+      } 
+    });
+
+    document.querySelectorAll('.fa-reply').forEach(function(button) {
+      button.addEventListener('click', function() {
+        var form = document.getElementById('comment-book-form');
+        var inputToDelete = form.querySelector('input[name="parent"]');
+      
+        if (inputToDelete) {
+          inputToDelete.parentNode.removeChild(inputToDelete);
+        }
+      
+        var newInput = document.createElement('input');
+        newInput.type = 'hidden';
+        newInput.name = 'parent'; // Name your input field as per your requirement
+        newInput.value = button.getAttribute('for');
+
+        if ( button.getAttribute('origin') === 'Comment' ) {
+          var inputElement = form.querySelector(".shadieINPUT");
+          inputElement.value = ""
+          inputElement.placeholder = 'Replying to ' + button.getAttribute('author') + "'s comment";
+          var equalizer = form.querySelector(".equalizer");
+          equalizer.classList.remove('dissapear');
+        } else if ( button.getAttribute('origin') === 'Reply' ) {
+          var inputElement = form.querySelector(".shadieINPUT");
+          inputElement.placeholder = 'Replying to ' + button.getAttribute('author') + "'s reply";
+          inputElement.value = '@' + button.getAttribute('author') + ' ';
+          var equalizer = form.querySelector(".equalizer");
+          equalizer.classList.remove('dissapear');
+        }
+      
+        form.appendChild(newInput);
+      }); 
+    });
+
+  });
+
+  function equalize() {
+    var form = document.getElementById('comment-book-form');
+    var inputToDelete = form.querySelector('input[name="parent"]');
+  
+    if (inputToDelete) {
+      inputToDelete.parentNode.removeChild(inputToDelete);
+    }
+
+    var inputElement = form.querySelector(".shadieINPUT");
+    inputElement.value = ""
+    inputElement.placeholder = "Add a comment for {{ book.author.username }}'s Post";
+    var equalizer = form.querySelector(".equalizer");
+    equalizer.classList.add('dissapear');
+  }
+  
+  function loadComments() {
+    const csrfToken = getCSRFToken();
+    var url = "{% url 'book_reviews' book.id %}";
+  
+    $.ajax({
+      url: url,
+      type: 'GET',
+      headers: {
+        'X-CSRFToken': csrfToken, // Include the CSRF token in the request header
+      },
+      success: function (data) {
+        $('#book-comment-thread').replaceWith($('#book-comment-thread',data));
+
+        $('.modal_more').click(function(e) {
+          e.preventDefault();
+          var url = $(this).attr('data-url');
+          var loader = '<div class="overlay"><div class="overlayDoor"></div><div class="overlayContent"><div class="loader"><div class="inner"></div></div></div></div>'
+          modal_toggle_option(this);
+          $('.modal_option').html(loader);
+          $('.modal_option').load($(this).attr('data-url'));
+        });
+
+        document.querySelectorAll('.fa-reply').forEach(function(button) {
+          button.addEventListener('click', function() {
+            var form = document.getElementById('comment-book-form');
+            var inputToDelete = form.querySelector('input[name="parent"]');
+          
+            if (inputToDelete) {
+              inputToDelete.parentNode.removeChild(inputToDelete);
+            }
+          
+            var newInput = document.createElement('input');
+            newInput.type = 'hidden';
+            newInput.name = 'parent'; // Name your input field as per your requirement
+            newInput.value = button.getAttribute('for');
+
+            if ( button.getAttribute('origin') === 'Comment' ) {
+              var inputElement = form.querySelector(".shadieINPUT");
+              inputElement.value = ""
+              inputElement.placeholder = 'Replying to ' + button.getAttribute('author') + "'s comment";
+              var equalizer = form.querySelector(".equalizer");
+              equalizer.classList.remove('dissapear');
+            } else if ( button.getAttribute('origin') === 'Reply' ) {
+              var inputElement = form.querySelector(".shadieINPUT");
+              inputElement.placeholder = 'Replying to ' + button.getAttribute('author') + "'s reply";
+              inputElement.value = '@' + button.getAttribute('author') + ' ';
+              var equalizer = form.querySelector(".equalizer");
+              equalizer.classList.remove('dissapear');
+            }
+          
+            form.appendChild(newInput);
+          }); 
+        });
+
+        $('.comment-like').click(function(event){
+          const $this = this
+          const url = $(this).attr("data-url");
+          const container = this.closest('.comment-container');
+          const likeCount = container.querySelector(".comment-like-count");
+          const csrfToken = getCSRFToken();
+
+          $.ajax({
+            type:"GET",
+            url: url,
+            headers: {
+              'X-CSRFToken': csrfToken, // Include the CSRF token in the request header
+            },
+            success: function(response) 
+            {
+              let likes = likeCount.innerText;
+              likes = parseInt( likes );
+              if (response.success === 'Comment liked successfully.') {
+                likes++;
+                $this.classList.add("text-red");
+              } else {
+                likes--;
+                $this.classList.remove("text-red");
+              }
+              likeCount.innerHTML = likes
+            } 
+          })
+        });
+
+        $('.show-replies').click(function(e) {
+          const container = this.closest('.full-comment');
+          const show_text = this.querySelector(".show-replies-text");
+          const repliesBox = container.querySelector(".replies");
+          let text = show_text.innerText;
+          if (repliesBox.classList.contains("dissapear")) {
+            repliesBox.classList.remove('dissapear')
+            text = 'Hide'
+            show_text.innerHTML = text
+          } else {
+            repliesBox.classList.add('dissapear')
+            text = 'Show'
+            show_text.innerHTML = text
+          }
+        });
+      },
+      error: function () {
+        alert('Error occurred. Please try again.');
+      }
+    });
+  }
+</script>
+

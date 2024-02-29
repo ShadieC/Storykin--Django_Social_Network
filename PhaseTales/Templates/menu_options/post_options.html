@@ -1,0 +1,269 @@
+{% load static %}
+<div class="container">
+  <ul style="margin-bottom:0px;">
+    <input type="hidden" id="django-post-url" value="shadreck" readonly>
+    {% if post.author == user %}
+      <li class="turn_off_post" onclick="copyToClipboard('django-post-url')">
+        <img class="icon" src="{% static 'assets/hide_post.png' %}"> <span class="option-title">Copy Link</span>
+      </li>
+      <li class="options delete-post">
+        <img class="icon" src="{% static 'assets/snooze.png' %}"> <span class="option-title">Delete Post</span>
+        <p class="option-title">Delete this post permanently.</p>
+      </li>
+    {% else %}
+      <li class="turn_off_post admire" data-url="{% url 'admire_post' post.id %}">
+        <img class="icon" src="{% static 'assets/notification.png' %}">
+        {% if user in post.admirers.all %}
+          <span class="option-title">Turn off notification for this post.</span>
+        {% else %}
+          <span class="option-title">Turn on notification for this post.</span>
+        {% endif  %}
+      </li>
+      <li class="options" onclick="copyToClipboard('django-post-url')">
+        <img class="icon" src="{% static 'assets/hide_post.png' %}"> <span class="option-title">Copy Link</span>
+        <p class="option-title">Copy post's link to you clipboard</p>
+      </li>
+      <li class="options hide_post">
+        <img class="icon" src="{% static 'assets/hide_post.png' %}"> 
+        {% if post in user_profile.posts_blacklist.all %}
+          <span class="option-title">UnHide Post</span>
+          <p class="option-title">See more posts like this.</p>
+        {% else %}
+          <span class="option-title">Hide Post</span>
+          <p class="option-title">See fewer posts like this.</p>
+        {% endif  %}
+      </li>
+      <li class="options follow_unfollow" data-url="{% url 'follow_profile' post.author.username %}">
+        <img class="icon" src="{% static 'assets/unfollow.png' %}">
+        {% if user in post_author_profile.followers.all %}
+          <span class="option-title">Unfollow {{ post.author.username }}</span>
+          <p class="option-title">Stop receiving notifications about this user.</p>
+        {% else %}
+          <span class="option-title">Follow {{ post.author.username }}</span>
+          <p class="option-title">Start receiving notifications about this user.</p>
+        {% endif  %}
+      </li>
+      <li class="options {% if post_author in user_profile.blocked.all %}unblock-post{% else %}block-post{% endif  %}">
+        <img class="icon" src="{% static 'assets/unfollow.png' %}"> 
+        {% if post_author in user_profile.blocked.all %}
+          <span class="option-title">UnBlock {{ post.author.username }}</span>
+          <p class="option-title">You will be able to see posts from user.</p>
+        {% else %}
+          <span class="option-title">Block {{ post.author.username }}</span>
+          <p class="option-title">You won't be able to see posts from user.</p>
+        {% endif  %}
+      </li>
+      <li class="options report-post">
+        <img class="icon" src="{% static 'assets/find_post.png' %}"> <span class="option-title">Report post</span>
+        <p class="option-title">I'm concerned about this post.</p>
+      </li>
+    {% endif %}
+  </ul>
+</div>
+<script type="text/javascript">
+  $(document).ready(function () {
+    function getCSRFToken() {
+      const cookieValue = document.cookie.match(/csrftoken=([^;]+)/);
+      return cookieValue ? cookieValue[1] : '';
+    }
+
+    var popupText = document.getElementById("cd-popup-text");
+
+    $('.delete-post').on('click', function(event){
+      event.preventDefault();
+      popupText.innerHTML = "Are you sure you want to delete this post?";
+      $('.cd-popup').addClass('is-visible');
+      clear();
+    });
+
+    $('.report-post').on('click', function(event){
+      event.preventDefault();
+      popupText.innerHTML = "Are you sure you want to report this post?";
+      $('.cd-popup-yes').addClass('cd-popup-report');
+      $('.cd-popup-report').removeClass('cd-popup-yes');
+      $('.cd-popup').addClass('is-visible');      
+      clear();
+    });
+
+    $('.block-post').on('click', function(event){
+      event.preventDefault();
+      popupText.innerHTML = "Are you sure you want to block this post's author?";
+      $('.cd-popup-yes').addClass('cd-popup-block');
+      $('.cd-popup-block').removeClass('cd-popup-yes');
+      $('.cd-popup').addClass('is-visible');      
+      clear();
+    });
+
+    $('.unblock-post').on('click', function(event){
+      event.preventDefault();
+      popupText.innerHTML = "Are you sure you want to unblock this post's author?";
+      $('.cd-popup-yes').addClass('cd-popup-block');
+      $('.cd-popup-block').removeClass('cd-popup-yes');
+      $('.cd-popup').addClass('is-visible');      
+      clear();
+    });
+
+    //close popup
+    $('.cd-popup').on('click', function(event){
+      if( $(event.target).is('.cd-popup-yes') ) {
+        event.preventDefault();
+        const csrfToken = getCSRFToken();
+        $.ajax({
+          url: '{% url "delete_post" post.id %}',
+          type: 'GET',
+          headers: {
+            'X-CSRFToken': csrfToken, // Include the CSRF token in the request header
+          },
+          dataType: 'json', // get the form data
+          success: function(response) {
+            $('.cd-popup').removeClass('is-visible');
+            var postElements = document.getElementsByClassName("post-list-"+ {{ post.id }});
+            for (var i = 0; i < postElements.length; i++) {
+              postElements[i].classList.add('dissapear');
+            }
+            showNotification(response.success); 
+          },
+          error: function(xhr, errmsg, err) {
+            alert('Error occurred. Please try again.');
+          }
+        });  
+      } 
+    });
+
+    $('.admire').on('click', function(event){
+      const url = $(this).attr("data-url");
+      const csrfToken = getCSRFToken();
+      $.ajax({
+        type: 'GET',
+        url: url,
+        headers: {
+          'X-CSRFToken': csrfToken, // Include the CSRF token in the request header
+        },
+        dataType: 'json', // get the form data
+        success: function(response) {
+          clear();
+          showNotification(response.success);      
+        },
+        error: function(xhr, errmsg, err) {
+          alert('Error occurred. Please try again.');
+        }
+      }); 
+    });
+
+    //close popup
+    $('.hide_post').on('click', function(event){
+      event.preventDefault();
+      const csrfToken = getCSRFToken();
+      $.ajax({
+        url: '{% url "hide_post" post.id %}',
+        type: 'GET',
+        headers: {
+          'X-CSRFToken': csrfToken, // Include the CSRF token in the request header
+        },
+        dataType: 'json', // get the form data
+        success: function(response) {
+          var data = response.data;
+          data.forEach(function(post) {
+            var postElements = document.getElementsByClassName("post-list-"+  post.id );
+            for (var i = 0; i < postElements.length; i++) {
+              postElements[i].classList.add('dissapear');
+            }
+          });
+          var message = response.message;
+          if (message.success === 'Post and similar posts have been hidden successfully.') {
+            var originalPostElements = document.getElementsByClassName("post-list-"+ {{ post.id }});
+            for (var i = 0; i < originalPostElements.length; i++) {
+              originalPostElements[i].classList.add('dissapear');
+            }
+          }
+          clear();
+          showNotification(message.success);
+        },
+        error: function(xhr, errmsg, err) {
+          alert('Error occurred. Please try again.');
+        }
+      }); 
+    });
+
+    $('.follow_unfollow').on('click', function(event){
+      const url = $(this).attr("data-url");
+      const csrfToken = getCSRFToken();
+      $.ajax({
+        url: url,
+        type: 'GET',
+        headers: {
+          'X-CSRFToken': csrfToken, // Include the CSRF token in the request header
+        },
+        dataType: 'json', // get the form data
+        success: function(response) {
+          clear();
+          showNotification(response.success); 
+        },
+        error: function(xhr, errmsg, err) {
+          alert('Error occurred. Please try again.');
+        }
+      });  
+    });
+
+    $('.cd-popup').on('click', function(event){
+      if( $(event.target).is('.cd-popup-report') ) {
+        event.preventDefault();
+        const csrfToken = getCSRFToken();
+        $.ajax({
+          url: '{% url "report_post" post.id %}',
+          type: 'GET',
+          headers: {
+            'X-CSRFToken': csrfToken, // Include the CSRF token in the request header
+          },
+          dataType: 'json', // get the form data
+          success: function(response) {
+            $('.cd-popup').removeClass('is-visible');
+            $('.cd-popup-report').addClass('cd-popup-yes');
+            $('.cd-popup-yes').removeClass('cd-popup-report');
+            var postElements = document.getElementsByClassName("post-list-"+ {{ post.id }});
+            for (var i = 0; i < postElements.length; i++) {
+              postElements[i].classList.add('dissapear');
+            }
+            showNotification(response.success); 
+          },
+          error: function(xhr, errmsg, err) {
+            alert('Error occurred. Please try again.');
+          }
+        });  
+      } 
+    });
+
+    $('.cd-popup').on('click', function(event){
+      if( $(event.target).is('.cd-popup-block') ) {
+        event.preventDefault();
+        const csrfToken = getCSRFToken();
+        $.ajax({
+          url: '{% url "block_profile" post.author.username %}',
+          type: 'GET',
+          headers: {
+            'X-CSRFToken': csrfToken, // Include the CSRF token in the request header
+          },
+          dataType: 'json', // get the form data
+          success: function(response) {
+            $('.cd-popup').removeClass('is-visible');
+            $('.cd-popup-block').addClass('cd-popup-yes');
+            $('.cd-popup-yes').removeClass('cd-popup-block');
+            var data = response.data;
+            data.forEach(function(post) {
+              var postElements = document.getElementsByClassName("post-list-"+  post.id );
+              for (var i = 0; i < postElements.length; i++) {
+                postElements[i].classList.add('dissapear');
+              }
+            });
+            showNotification(response.success); 
+          },
+          error: function(xhr, errmsg, err) {
+            alert('Error occurred. Please try again.');
+          }
+        });  
+      } 
+    });
+
+  });
+
+</script>

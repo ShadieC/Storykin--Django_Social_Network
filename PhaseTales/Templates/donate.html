@@ -1,0 +1,221 @@
+  {% load static %}
+  <div class="stream-area">
+    <div class="main-stream">
+      <div class="site-wrap heading" id="DonateHeading">
+        <div class="my-big-header anim" style="--delay: 0s;display: flex;">
+          <span>$</span>Donate
+        </div>
+      </div>
+      <div class="donate anim" style="--delay: 0.1s">
+        <div class="donate-black">
+          <p>Help keep our ad-free haven alive! By donating to our website, you empower individuals to share their life experiences and learn from others, fostering a supportive community. As a university student on a tight budget, I rely on your generosity to maintain, improve, and keep this initiative of an enriching platform for knowledge exchange alive and thriving. Together, let's continue to grow and uplift each other through our shared stories, articles, and books. Your support makes a difference!<br>
+          Choose the amount you wish to donate with paypal, as one-time or monthly payment.</p>
+        </div>
+        <form action="#" method="POST" id="donate-form" novalidate>{% csrf_token %}
+          <div class="donate-blue">
+            <h3>Donation amount*</h3>
+            <div class="donate-amount-box">
+              <div class="donate-amount">
+                <div class="denomination selected">
+                  <input autocomplete="off" checked id="amount5" name="amount" type="radio" value="5"> <label for="amount5">$5</label>
+                </div>
+                <div class="denomination">
+                  <input autocomplete="off" id="amount10" name="amount" type="radio" value="10"> <label for="amount10">$10</label>
+                </div>
+                <div class="denomination">
+                  <input autocomplete="off" id="amount15" name="amount" type="radio" value="15"> <label for="amount15">$15</label>
+                </div>
+                <div class="denomination">
+                  <input autocomplete="off" id="amount25" name="amount" type="radio" value="25"> <label for="amount25">$25</label>
+                </div>
+                <div class="denomination">
+                  <input autocomplete="off" id="amount50" name="amount" type="radio" value="50"> <label for="amount50">$50</label>
+                </div>
+                <div class="denomination">
+                  <input autocomplete="off" id="amount100" name="amount" type="radio" value="100"> <label for="amount100">$100</label>
+                </div>
+              </div>
+              <div class="denomination-other">
+                <input autocomplete="off" name="amount" placeholder="Enter Other Amount" type="text" value="">
+                <input autocomplete="off" name="realAmount" id="realAmount" type="number" value="5" style="visibility: hidden;" />
+              </div>
+            </div>
+          </div>
+          <div class="donate-black donate-type">
+            <h3>Donation type*</h3><label><input autocomplete="off" checked="checked" class="required" name="donation_type" type="radio" value="single"> One-Time</label> <label><input autocomplete="off" class="required" name="donation_type" type="radio" value="recurring"> Monthly</label>
+          </div>
+          <div class="donate-blue donate-payment">
+            <h3>Payment Method</h3>
+            <div>
+              <label><input autocomplete="off" checked="checked" name="payment_method" type="radio" value="paypal" onchange="handleSelection(this)">PayPal</label> 
+              <label><input autocomplete="off" name="payment_method" type="radio" value="card" onchange="handleSelection(this)">Credit/Debit card</label>
+            </div>
+            <div id="details" class="dissapear">
+              <div id="dropin-container"></div>
+            </div>
+            <div class="donate-submit">
+              <button id="donate_btn" type="submit" id="submit" name="submit">Donate $5</button>
+              <p><small>Please note that contributions are not tax-deductible.</small></p>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="side-stream"></div>
+  </div>
+  <script>
+    $(document).ready(function() {
+
+      $("#realAmount").prop("value", (5/1.0).toFixed(2) );
+      
+      const create = document.querySelector(".first");
+      if($(".first").length){
+        if (create.classList.contains('remove')) {
+          $(".second").addClass("remove");
+          $(".first").removeClass("remove");
+        }
+      }  
+      clear();
+      // Get the CSRF token from the cookie
+      function getCSRFToken() {
+        const cookieValue = document.cookie.match(/csrftoken=([^;]+)/);
+        return cookieValue ? cookieValue[1] : '';
+      }
+
+      $(".denomination").click(function(event) {
+        $(".denomination").removeClass("selected").prop('checked', false);
+        $(".denomination-other input").removeClass("selected").val('');
+        $(this).addClass("selected");
+        $(this).children(":first").prop('checked', true);
+        $("#donate_btn").text('Donate $' + $(this).children(":first").val());
+        $("#realAmount").prop("value", $(this).children(":first").val() );
+
+      });
+
+      $(".denomination-other input").on('keypress', function (event) {
+        // allow only int values
+        // TODO: remove leading 0
+        var regex = new RegExp("^[0-9]+$");
+        var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+        if (!regex.test(key)) {
+          event.preventDefault();
+          return false;
+        }
+        
+        $(".denomination").removeClass("selected").prop('checked', false);
+        $(this).addClass("selected");
+        $("#donate_btn").text('Donate $' + $(this).val() + key );
+        $("#realAmount").prop("value", $(this).val() + key);
+      });
+
+      $('#donate-form').submit(function(e){
+        var formId = $(this).attr('id');
+        const csrfToken = getCSRFToken();
+        var submitBtn = $(this).find('input[type=submit]');
+        submitBtn.prop('disabled', true);
+        e.preventDefault();
+
+        var formData = {
+          'amount': $('#realAmount').val(),
+          'donation_type': $('input[name=donation_type]:checked').val(),
+          'payment_method': $('input[name=payment_method]:checked').val(),
+          // ... other form fields
+        };
+
+        $.ajax({
+          url: '{% url "donation" %}',
+          type: 'POST',
+          headers: {
+            'X-CSRFToken': csrfToken, // Include the CSRF token in the request header
+          },
+          data: formData,
+          dataType: 'json', // get the form data
+          success: function(response) {
+            if (response.status === 'recurring') {
+              var myID = response.id
+              var myURL = '/donation/recurring/'+ myID + '/'
+              $.ajax({
+                url: myURL,
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    var redirectUrl = response.redirect_url;
+                    window.location.href = redirectUrl;  // Redirect to the new URL
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log("Error:", textStatus, errorThrown);
+                }
+              });          
+            } else {
+              var myID = response.id
+              var myURL = '/donation/one_time/'+ myID + '/'
+              $.ajax({
+                url: myURL,
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                  var redirectUrl = response.redirect_url;
+                  window.location.href = redirectUrl;  // Redirect to the new URL
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                  console.log("Error:", textStatus, errorThrown);
+                }
+              });  
+            }
+          },
+          error: function(xhr, errmsg, err) {
+            alert('Error occurred. Please try again.');
+          }
+        });
+      });
+
+
+
+    });
+  </script>
+  <script >
+    var authorizationToken = '{{ client_token }}';
+
+    braintree.dropin.create({
+      authorization: authorizationToken,
+      container: '#dropin-container'
+    }, function (err, dropinInstance) {
+      if (err) {
+        console.error(err);
+        return;
+      }
+
+      document.getElementById('submit-button').addEventListener('click', function () {
+        dropinInstance.requestPaymentMethod(function (err, payload) {
+          if (err) {
+            console.error(err);
+            return;
+          }
+
+          var form = document.createElement('form');
+          form.action = '/process-donation/';
+          form.method = 'POST';
+
+          var hiddenField = document.createElement('input');
+          hiddenField.type = 'hidden';
+          hiddenField.name = 'payment_method_nonce';
+          hiddenField.value = payload.nonce;
+
+          form.appendChild(hiddenField);
+
+          document.body.appendChild(form);
+          form.submit();
+        });
+      });
+    });
+    function handleSelection(radio) {
+      if (radio.checked) {
+          var selectedMethod = radio.value;
+          if (selectedMethod == 'card') {
+            $("#details").removeClass("dissapear");
+          } else {
+            $("#details").addClass("dissapear"); 
+          }
+      }
+    }
+  </script>

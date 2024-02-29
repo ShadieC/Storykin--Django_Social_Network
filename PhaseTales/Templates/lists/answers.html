@@ -1,0 +1,190 @@
+{% load static %}
+{% load custom_filters %}
+{% for answer in answers %}
+  <div class="card answer-list-{{ answer.id }}">
+    <div class="card-content tweets">
+      <article class="media tweet">
+        <figure class="media-left">
+          <p class="image is-64x64 is-circle">
+            <a class="profile-link-img" onclick="user()" data-url="{% url 'profile' answer.author.username %}">
+              {% if answer.author.profile.pro_image %}
+                <img src="{{ answer.author.profile.pro_image.url }}" style="width:64px;min-height:64px;">
+              {% else %}
+                <img src="{% static 'images/default.jpg' %}">
+              {% endif %}
+            </a>
+          </p>
+        </figure>
+        <div class="media-content">
+          <div class="content">
+            <div class="user-name">
+              <div class="psuedo-name">
+                <strong>{{ answer.author.username }}</strong>
+                <div class="dot"></div><small style="color: #7c7c7c;">Answered {{ answer.created_at| shorten_forum_time }}</small>
+              </div>
+              <div class="more" data-url="{% url 'answer_options' answer.id %}">
+                <img alt="more" src="{% static 'images/more3.png' %}">
+              </div>
+            </div>
+            <div class="question">
+              {{ answer.question.title }}
+            </div>
+            <p id="{{ answer.id }}_answer_body">{{ answer.content }}</p>
+          </div>
+          <div class="comments">
+            <ul>
+              <li>
+                <div class="flex flex-row text-center pt-2">
+                  {% if user in answer.upvotes.all %}
+                    <i class="fas fa-arrow-alt-up vote-red" data-url="{% url 'upvote_answer' answer.id %}"></i>
+                  {% else %}
+                    <i class="fas fa-arrow-alt-up vote-grey" data-url="{% url 'upvote_answer' answer.id %}"></i>
+                  {% endif  %}
+                  
+
+                  <span class="question-vote-text">{{ answer.aggregate_count }}</span>
+
+                  {% if user in answer.downvotes.all %}
+                    <i class="fas fa-arrow-alt-down vote-red" data-url="{% url 'downvote_answer' answer.id %}"></i>
+                  {% else %}
+                    <i class="fas fa-arrow-alt-down vote-grey" data-url="{% url 'downvote_answer' answer.id %}"></i>
+                  {% endif  %}
+                </div>
+              </li>
+              <li class="answer_details" data-url="{% url 'answer' answer.id %}" onclick="openPost()"><img alt="" src="{% static 'images/speech-bubble.png' %}">{{ answer.comments_count }}</li>
+              <li data-toggle="modal" data-target="#myModal" share-url="{% url 'share_answer' answer.id %}" onclick="share(this.getAttribute('share-url'))"><img alt="" src="{% static 'images/share.png' %}"></li>
+              <li onclick="readAloud('{{ answer.id }}_answer_body')" class="readAloud"><i class="fal fa-volume-up sound"></i></li>
+            </ul>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+{% empty %}
+  <br>
+   <h6 class="title is-5">No Answers Yet!</h6>              
+{% endfor %}
+<script>
+  $(document).ready(function() {
+    // Get the CSRF token from the cookie
+    function getCSRFToken() {
+      const cookieValue = document.cookie.match(/csrftoken=([^;]+)/);
+      return cookieValue ? cookieValue[1] : '';
+    }
+
+    $('.more').click(function(e) {
+      e.preventDefault();
+      var url = $(this).attr('data-url');
+      var loader = '<div class="overlay"><div class="overlayDoor"></div><div class="overlayContent"><div class="loader"><div class="inner"></div></div></div></div>'
+      toggle_option(this);
+      $('#option').html(loader);
+      $('#option').load($(this).attr('data-url'));
+    });
+
+    $('.readAloud').click(function(event){
+      const soundIcon = this.querySelector(".sound");
+
+      if (soundIcon.classList.contains("fa-volume-up")) {
+        soundIcon.classList.remove("fa-volume-up");
+        soundIcon.classList.add("fa-volume-mute");
+      } else {
+        $(".fa-volume-mute").addClass("fa-volume-up");
+        $(".fa-volume-mute").removeClass("fa-volume-mute");
+        soundIcon.classList.remove("fa-volume-mute");
+        soundIcon.classList.add("fa-volume-up");
+      } 
+    });
+
+    $('.profile-link-img').click(function(e) {
+      e.preventDefault();
+      user();
+      var url = $(this).attr('data-url');
+      $('#profile').load(url);
+      history.pushState(null, null, url);
+    });
+
+    $('.fa-arrow-alt-up').click(function(event){
+      const $this = this
+      const url = $(this).attr("data-url");
+      const container = $this.closest(".flex-row");
+      const oppIcon = container.querySelector(".fa-arrow-alt-down");
+      const voteCount = container.querySelector(".question-vote-text");
+      const csrfToken = getCSRFToken();
+
+      $.ajax({
+        type:"GET",
+        url: url,
+        headers: {
+          'X-CSRFToken': csrfToken, // Include the CSRF token in the request header
+        },
+        success: function(response) 
+        {
+          let votes = voteCount.innerText;
+          votes = parseInt( votes );
+          if (response.success === 'Answer upvoted successfully.') {
+            votes++;
+            $this.classList.remove("vote-grey");
+            $this.classList.add("vote-red");
+            if ( oppIcon.classList.contains('vote-red') ) {
+              votes++;
+              oppIcon.classList.remove("vote-red");
+              oppIcon.classList.add("vote-grey");
+            }
+          } else {
+            votes--;
+            $this.classList.remove("vote-red");
+            $this.classList.add("vote-grey");
+          }
+          voteCount.innerHTML = votes
+        } 
+      })
+    });
+
+    $('.answer_details').click(function(e) {
+      e.preventDefault();
+      var url = $(this).attr('data-url');
+      openPost()
+      var loader = '<div class="overlay"><div class="overlayDoor"></div><div class="overlayContent"><div class="loader"><div class="inner"></div></div></div></div>'
+      $('#PostModelBox').html(loader);
+      $('#PostModelBox').load($(this).attr('data-url'));
+    });
+
+    $('.fa-arrow-alt-down').click(function(event){
+      const $this = this
+      const url = $(this).attr("data-url");
+      const container = $this.closest(".flex-row");
+      const oppIcon = container.querySelector(".fa-arrow-alt-up");
+      const voteCount = container.querySelector(".question-vote-text");
+      const csrfToken = getCSRFToken();
+
+      $.ajax({
+        type:"GET",
+        url: url,
+        headers: {
+          'X-CSRFToken': csrfToken, // Include the CSRF token in the request header
+        },
+        success: function(response) 
+        {
+          let votes = voteCount.innerText;
+          votes = parseInt( votes );
+          if (response.success === 'Answer downvoted successfully.') {
+            votes--;
+            $this.classList.remove("vote-grey");
+            $this.classList.add("vote-red");
+            if ( oppIcon.classList.contains('vote-red') ) {
+              votes--;
+              oppIcon.classList.remove("vote-red");
+              oppIcon.classList.add("vote-grey");
+            }
+          } else {
+            votes++;
+            $this.classList.remove("vote-red");
+            $this.classList.add("vote-grey");
+          }
+          voteCount.innerHTML = votes
+        } 
+      })
+    });
+
+  });
+</script>

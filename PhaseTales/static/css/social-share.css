@@ -1,0 +1,137 @@
+/* social share */
+
+.custom-icon {
+  -webkit-border-radius: 1100%;
+  -moz-border-radius: 100%;
+  -o-border-radius: 100%;
+  border-radius: 100%;
+  /* border:2px solid #CB50CC; */
+  color: #fff;
+
+  width: 60px;
+  height: 60px;
+  -moz-transition: .5s;
+  -webkit-transition: .5s;
+  -o-transition: .5s;
+  transition: .5s;
+}
+
+.fix-editor {
+  display: none;
+}
+
+.icon-wrapper {
+  margin-bottom: 20px;
+}
+
+.icon-wrapper .fa {
+  /*   color: #CB50CC; */
+  font-size: 25px;
+  padding: 15px;
+}
+
+.icon-wrapper .fab {
+  /*   color: #CB50CC; */
+  font-size: 25px;
+  padding: 15px;
+}
+
+.icon-wrapper .fas {
+  /*   color: #CB50CC; */
+  font-size: 25px;
+  padding: 15px;
+}
+
+.mesg_options_icon {
+  border: 2px solid #CB50CC;
+  color: #CB50CC;
+}
+
+.mail_options_icon {
+  border: 2px solid #F47857;
+  color: #F47857;
+}
+
+.link_options_icon {
+  border: 2px solid #F6BD35;
+  color: #F6BD35;
+}
+
+.fb_options_icon {
+  border: 2px solid #3E5895;
+  color: #3E5895;
+}
+
+.twit_options_icon {
+  border: 2px solid #2CA9E3;
+  color: #2CA9E3;
+}
+
+.linkedin_options_icon {
+  border: 2px solid #0077b5;
+  color: #0077b5;
+}
+
+.reddit_options_icon {
+  border: 2px solid orangered;
+  color: orangered;
+}
+
+.whatsapp_options_icon {
+  border: 2px solid green;
+  color: green;
+}
+
+.telegram_options_icon {
+  border: 2px solid #0077b5;
+  color: #0077b5;
+}
+
+.gplus_options_icon {
+  border: 2px solid #0077b5;
+  color: #0077b5;
+}
+
+.pinterest_options_icon {
+  border: 2px solid #0077b5;
+  color: #0077b5;
+}
+
+.share-header {
+  background-color: #EFF2F5;
+}
+
+
+.share-header h4 {
+  font-size: 20px;
+  font-weight: 700;
+  text-align: center;
+  color: #282C35;
+  border-radius: 5px;
+  text-transform: capitalize;
+}
+
+
+.share-footer {
+  padding: 10px 0;
+}
+
+.btn-close {
+  cursor:pointer;
+}
+.btn-close:hover {
+  text-decoration: none;
+}
+.share-name {
+  margin-top: 7px;
+}
+
+.share_options {
+  text-align: center;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.share_options input {
+  width: 100%;
+}

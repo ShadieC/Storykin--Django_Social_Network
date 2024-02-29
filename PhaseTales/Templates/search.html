@@ -1,0 +1,133 @@
+{% load static %}
+<div class="stream-area">
+  <div class="main-stream">
+    <div class="search-main anim" style="--delay: 0.1s">
+      <div class="mysearch-prev blurry-prev" id="searchslideLeft">
+        <svg viewBox="0 0 100 100" fill="#fff" height="21" width="30" class="category-svg-left"><path d="M 50,0 L 60,10 L 20,50 L 60,90 L 50,100 L 0,50 Z" class="arrow" transform="translate(15,0)"></path></svg>
+      </div>
+      <div class="search-menu" id="searchcategories">
+        <a class="search-menu-link search-active-link" data-url="/posts/" id="search-posts-btn" for="search-posts">Posts</a>
+        <a class="search-menu-link" id="search-reads-btn" data-url="/reads/" for="search-reads">Reads</a>
+        <a class="search-menu-link" id="search-questions-btn" data-url="/questions/" for="search-questions">Questions</a> 
+        <a class="search-menu-link" id="search-answers-btn" data-url="/answers/" for="search-answers">Answers</a> 
+        <a class="search-menu-link" id="search-profiles-btn" data-url="/profiles/" for="search-profiles">Users</a> 
+        <a class="search-menu-link" id="search-phases-btn" data-url="/phases/" for="search-phases">Phases</a>
+      </div>
+      <div class="mysearch-next blurry-next" id="searchslideRight">
+        <svg viewBox="0 0 100 100" fill="#fff" height="21" width="30" class="category-svg-right"><path d="M 50,0 L 60,10 L 20,50 L 60,90 L 50,100 L 0,50 Z" class="arrow" transform="translate(85,100) rotate(180)"></path></svg>
+      </div>
+    </div>
+    <section class="site-wrap anim" id="Phases'_Insights" style="--delay: 0.2s">
+      <div class="site-section">
+        <div class="container-fluid destruction-fluid">
+          <div class="search-box selected-box" id="search-posts">
+            {{ search_posts_content_template|safe }}
+          </div>
+          <div class="search-box" id="search-reads">
+            {{ search_reads_content_template|safe }}
+          </div>
+          <div class="search-box" id="search-questions">
+            {{ search_questions_content_template|safe }}
+          </div>
+          <div class="search-box" id="search-answers">
+            {{ search_answers_content_template|safe }}
+          </div>
+          <div class="search-box" id="search-profiles">
+            {{ search_profiles_content_template|safe }}
+          </div>
+          <div class="search-box" id="search-phases">
+            {{ search_phases_content_template|safe }}
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <div class="side-stream"></div>
+</div>
+<script>
+  $(document).ready(function() {
+    var currentURL = window.location.href;
+
+    if (currentURL.includes('/posts/')) {
+      fixActive("search-posts-btn");
+    } else if (currentURL.includes('/reads/')) {
+      fixActive("search-reads-btn");
+    } else if (currentURL.includes('/questions/')) {
+      fixActive("search-questions-btn");
+    } else if (currentURL.includes('/answers/')) {
+      fixActive("search-answers-btn");
+    } else if (currentURL.includes('/profiles/')) {
+      fixActive("search-profiles-btn");
+    } else if (currentURL.includes('/phases/')) {
+      fixActive("search-phases-btn");
+    }
+
+    $('.search-menu-link').click(function(e) {
+      e.preventDefault();
+      var url = window.location.href;
+
+      if (url.includes('/posts/')) {
+        url = url.replace('/posts/', $(this).attr('data-url'));
+      } else if (url.includes('/reads/')) {
+        url = url.replace('/reads/', $(this).attr('data-url'));
+      } else if (url.includes('/questions/')) {
+        url = url.replace('/questions/', $(this).attr('data-url'));
+      } else if (url.includes('/answers/')) {
+        url = url.replace('/answers/', $(this).attr('data-url'));
+      } else if (url.includes('/profiles/')) {
+        url = url.replace('/profiles/', $(this).attr('data-url'));
+      } else if (url.includes('/phases/')) {
+        url = url.replace('/phases/', $(this).attr('data-url'));
+      }
+      history.pushState(null, null, url);
+    });
+
+    document.getElementById("searchTextbox").value = "{{ kerko }}";
+    fixSearchCategoriesBlurry();
+    scrollSearchCategories();
+
+    $('.lookupBtn').click(function(e) {
+      e.preventDefault();
+      var searchvalue = document.getElementById("searchTextbox").value;
+      var url = '/search/posts/?q=' + searchvalue;
+      search();
+      $('#search').load(url);
+      history.pushState(null, null, url);
+    });
+
+    document.querySelectorAll('.search-menu-link').forEach(function(button) {
+      button.addEventListener('click', function() {
+          if ( button.classList.contains('search-active-link') ) {
+
+          } else {
+              $(".search-active-link").removeClass("search-active-link");
+              $(button).addClass("search-active-link");
+              const content_id = button.getAttribute("for");
+              const content = document.getElementById(content_id);
+              $(".selected-box").removeClass("selected-box");
+              $(content).addClass("selected-box");
+          }
+
+          if ( button.id = 'search-reads-btn' ) {
+            if($('.listedreads').length){
+              $('.listedreads').slick('refresh');
+            }
+          }
+      });
+    });
+    clear();
+  });
+
+  function fixActive(argument){
+    const button = document.getElementById(argument);
+    $(".search-active-link").removeClass("search-active-link");
+    $(button).addClass("search-active-link");
+    const content_id = button.getAttribute("for");
+    const content = document.getElementById(content_id);
+    $(".selected-box").removeClass("selected-box");
+    $(content).addClass("selected-box");
+    if($('.listedreads').length){
+      $('.listedreads').slick('refresh');
+    }
+  }
+</script>

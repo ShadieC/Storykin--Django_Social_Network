@@ -1,0 +1,39 @@
+{% load static %}
+<div class="stream-area">
+  <div class="main-stream">
+    <div class="site-wrap phase-header heading" id="Heading">
+      <div class="my-big-header anim" style="--delay: 0s;">
+        Achievements
+      </div>
+    </div>
+    <ol class="anim" role="list" style="--length: 5;--delay: 0s">
+      {% for achievement in achievements %}
+        <li style="--i: {{ achievement.aggregate }}">
+          <h3>{{ achievement.name }}</h3>
+          <p class="achievements-control achievements-description">{{ achievement.description }}</p>
+        </li>
+      {% endfor %}
+    </ol>
+  </div>
+  <div class="side-stream"></div>
+</div>
+<script>
+  $(document).ready(function() {
+    $('.achievements-description').click(function(event){ 
+      if (this.classList.contains("achievements-control")) {
+        this.classList.remove("achievements-control");
+      } else {
+        this.classList.add("achievements-control");
+      }
+    });
+
+    const create = document.querySelector(".first");
+    if($(".first").length){
+      if (create.classList.contains('remove')) {
+        $(".second").addClass("remove");
+        $(".first").removeClass("remove");
+      }
+    } 
+    clear(); 
+  });
+</script>

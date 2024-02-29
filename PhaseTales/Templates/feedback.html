@@ -1,0 +1,34 @@
+{% load static %}
+{% load humanize %}
+<div class="stream-area">
+  <div class="main-stream" id="phases_stream" style="display: flex;flex-flow: column;">
+    <section class="site-wrap heading" style="flex-direction: column;">
+      <div class="my-big-header anim" style="--delay: 0s">
+        Write Feedback
+      </div>
+    </section>
+    <div class="phase_container">
+		<section id="contact" style="padding-top: 30px;">
+		  <div class="container-fluid">
+		    <div class="block"></div>
+		    <form action="#" method="POST" id="contact-form" novalidate>{% csrf_token %}
+		      <div class="rowy">
+		        <div class="six columns">
+		          <label for="exampleRecipientInput">Name</label> <input class="u-full-width" type="text" name="name">
+		        </div>
+		        <div class="six columns">
+		          <label for="exampleEmailInput">Email</label> <input class="u-full-width" type="email" name="email">
+		        </div>
+		      </div>
+		      <div class="rowy">
+		        <label for="exampleMessage">Message</label> 
+		        <textarea placeholder="Write your feedback or questions here ..."  class="u-full-width" name="message"></textarea> 
+		        <button id="contact_btn" class="button-primary" type="submit" id="submit" name="submit">Submit</button>
+		      </div>
+		    </form>
+		  </div>
+		</section>     
+    </div>
+  </div>
+  <div class="side-stream"></div>
+</div>

@@ -1,0 +1,134 @@
+{% load static %}
+{% load custom_filters %}
+{% for post in posts %}
+  <div class="card post-list-{{ post.id }}">
+    <div class="card-content tweets">
+      <article class="media tweet">
+        <figure class="media-left">
+          <p class="image is-64x64 is-circle">
+            <a class="profile-link-img" onclick="user()" data-url="{% url 'profile' post.author.username %}">
+              {% if post.author.profile.pro_image %}
+                <img src="{{ post.author.profile.pro_image.url }}" style="width:64px;min-height:64px;">
+              {% else %}
+                <img src="{% static 'images/default.jpg' %}">
+              {% endif %}
+            </a>
+          </p>
+        </figure>
+        <div class="media-content">
+          <div class="content">
+            <div class="user-name">
+              <div class="psuedo-name">
+                <strong>{{ post.author.username }}</strong> 
+                <div class="dot"></div><small style="color: #7c7c7c;">{{ post.created_at|shorten_time }}</small>
+              </div>
+              <div class="more" data-url="{% url 'post_options' post.id %}">
+                <img alt="more" src="{% static 'images/more3.png' %}">
+              </div>
+            </div>
+            <div class="question">
+              {{ post.title }}
+            </div>
+            <p id="{{ post.id }}_body">{{ post.body }}</p>
+          </div>
+          <div class="comments">
+            <ul>
+              <li class="post_details" data-url="{% url 'post' post.id %}" onclick="openPost()"><img alt="" src="{% static 'images/speech-bubble.png' %}">{{ post.comments_count }}</li>
+              {% if user in post.likes.all %}
+                <li class="like liked" data-url="{% url 'like_post' post.id %}"><i class="fas fa-heart"></i><div class="like-count">{{ post.likes_count }}</div></li>
+              {% else %}
+                <li class="like" data-url="{% url 'like_post' post.id %}"><i class="far fa-heart"></i><div class="like-count">{{ post.likes_count }}</div></li>
+              {% endif  %}
+              <li data-toggle="modal" data-target="#myModal" share-url="{% url 'share_post' post.id %}" onclick="share(this.getAttribute('share-url'))"><img alt="" src="{% static 'images/share.png' %}"></li>
+              <li onclick="readAloud('{{ post.id }}_body')" class="readAloud"><i class="fal fa-volume-up sound"></i></li>
+            </ul>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+{% empty %}
+  <br>
+   <h6 class="title is-5">You do not have any Hoodposts!</h6>              
+{% endfor %}
+<script>
+  $(document).ready(function() {
+    // Get the CSRF token from the cookie
+    function getCSRFToken() {
+      const cookieValue = document.cookie.match(/csrftoken=([^;]+)/);
+      return cookieValue ? cookieValue[1] : '';
+    }
+
+    $('.more').click(function(e) {
+      e.preventDefault();
+      var url = $(this).attr('data-url');
+      var loader = '<div class="overlay"><div class="overlayDoor"></div><div class="overlayContent"><div class="loader"><div class="inner"></div></div></div></div>'
+      toggle_option(this);
+      $('#option').html(loader);
+      $('#option').load($(this).attr('data-url'));
+    });
+
+    $('.readAloud').click(function(event){
+      const soundIcon = this.querySelector(".sound");
+
+      if (soundIcon.classList.contains("fa-volume-up")) {
+        soundIcon.classList.remove("fa-volume-up");
+        soundIcon.classList.add("fa-volume-mute");
+      } else {
+        $(".fa-volume-mute").addClass("fa-volume-up");
+        $(".fa-volume-mute").removeClass("fa-volume-mute");
+        soundIcon.classList.remove("fa-volume-mute");
+        soundIcon.classList.add("fa-volume-up");
+      } 
+    });
+
+    $('.post_details').click(function(e) {
+      e.preventDefault();
+      var url = $(this).attr('data-url');
+      openPost()
+      var loader = '<div class="overlay"><div class="overlayDoor"></div><div class="overlayContent"><div class="loader"><div class="inner"></div></div></div></div>'
+      $('#PostModelBox').html(loader);
+      $('#PostModelBox').load($(this).attr('data-url'));
+    });
+
+    $('.profile-link-img').click(function(e) {
+      e.preventDefault();
+      var url = $(this).attr('data-url');
+      $('#profile').load(url);
+      history.pushState(null, null, url);
+    });
+
+    $('.like').click(function(event){
+      const $this = this
+      const url = $(this).attr("data-url");
+      const likeIcon = this.querySelector(".fa-heart");
+      const likeCount = this.querySelector(".like-count");
+      const csrfToken = getCSRFToken();
+
+      $.ajax({
+          type:"GET",
+          url: url,
+          headers: {
+            'X-CSRFToken': csrfToken, // Include the CSRF token in the request header
+          },
+          success: function(response) 
+          {
+            let likes = likeCount.innerText;
+            likes = parseInt( likes );
+            if (response.success === 'Post liked successfully.') {
+              likes++;
+              $this.classList.add("liked");
+              likeIcon.classList.remove("far");
+              likeIcon.classList.add("fas");
+            } else {
+              likes--;
+              $this.classList.remove("liked");
+              likeIcon.classList.remove("fas");
+              likeIcon.classList.add("far");
+            }
+            likeCount.innerHTML = likes
+          } 
+      })
+    });
+  });
+</script>

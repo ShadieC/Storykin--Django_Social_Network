@@ -1,0 +1,269 @@
+{% load static %}
+<div class="container">
+  <ul style="margin-bottom:0px;">
+    <input type="hidden" id="django-answer-url" value="shadreck" readonly>
+    {% if answer.author == user %}
+      <li class="turn_off_post" onclick="copyToClipboard('django-answer-url')">
+        <img class="icon" src="{% static 'assets/hide_post.png' %}"> <span class="option-title">Copy Link</span>
+      </li>
+      <li class="options delete-answer">
+        <img class="icon" src="{% static 'assets/snooze.png' %}"> <span class="option-title">Delete Answer</span>
+        <p class="option-title">Delete this answer permanently.</p>
+      </li>
+    {% else %}
+      <li class="turn_off_post admire" data-url="{% url 'admire_answer' answer.id %}">
+        <img class="icon" src="{% static 'assets/notification.png' %}">
+        {% if user in answer.admirers.all %}
+          <span class="option-title">Turn off notification for this answer.</span>
+        {% else %}
+          <span class="option-title">Turn on notification for this answer.</span>
+        {% endif  %}
+      </li>
+      <li class="options" onclick="copyToClipboard('django-answer-url')">
+        <img class="icon" src="{% static 'assets/hide_post.png' %}"> <span class="option-title">Copy Link</span>
+        <p class="option-title">Copy answer's link to you clipboard</p>
+      </li>
+      <li class="options hide_answer">
+        <img class="icon" src="{% static 'assets/hide_post.png' %}"> 
+        {% if answer in user_profile.answers_blacklist.all %}
+          <span class="option-title">UnHide Answer</span>
+          <p class="option-title">See more answers like this.</p>
+        {% else %}
+          <span class="option-title">Hide Answer</span>
+          <p class="option-title">See fewer answers like this.</p>
+        {% endif  %}
+      </li>
+      <li class="options follow_unfollow" data-url="{% url 'follow_profile' answer.author.username %}">
+        <img class="icon" src="{% static 'assets/unfollow.png' %}">
+        {% if user in answer_author_profile.followers.all %}
+          <span class="option-title">Unfollow {{ answer.author.username }}</span>
+          <p class="option-title">Stop receiving notifications about this user.</p>
+        {% else %}
+          <span class="option-title">Follow {{ answer.author.username }}</span>
+          <p class="option-title">Start receiving notifications about this user.</p>
+        {% endif  %}
+      </li>
+      <li class="options {% if answer_author in user_profile.blocked.all %}unblock-answer{% else %}block-answer{% endif  %}">
+        <img class="icon" src="{% static 'assets/unfollow.png' %}"> 
+        {% if answer_author in user_profile.blocked.all %}
+          <span class="option-title">UnBlock {{ answer.author.username }}</span>
+          <p class="option-title">You will be able to see answers from user.</p>
+        {% else %}
+          <span class="option-title">Block {{ answer.author.username }}</span>
+          <p class="option-title">You won't be able to see answers from user.</p>
+        {% endif  %}
+      </li>
+      <li class="options report-answer">
+        <img class="icon" src="{% static 'assets/find_post.png' %}"> <span class="option-title">Report answer</span>
+        <p class="option-title">I'm concerned about this answer.</p>
+      </li>
+    {% endif %}
+  </ul>
+</div>
+<script type="text/javascript">
+  $(document).ready(function () {
+    function getCSRFToken() {
+      const cookieValue = document.cookie.match(/csrftoken=([^;]+)/);
+      return cookieValue ? cookieValue[1] : '';
+    }
+
+    var popupText = document.getElementById("cd-popup-text");
+
+    $('.delete-answer').on('click', function(event){
+      event.preventDefault();
+      popupText.innerHTML = "Are you sure you want to delete this answer?";
+      $('.cd-popup').addClass('is-visible');
+      clear();
+    });
+
+    $('.report-answer').on('click', function(event){
+      event.preventDefault();
+      popupText.innerHTML = "Are you sure you want to report this answer?";
+      $('.cd-popup-yes').addClass('cd-popup-report');
+      $('.cd-popup-report').removeClass('cd-popup-yes');
+      $('.cd-popup').addClass('is-visible');      
+      clear();
+    });
+
+    $('.block-answer').on('click', function(event){
+      event.preventDefault();
+      popupText.innerHTML = "Are you sure you want to block this answer's author?";
+      $('.cd-popup-yes').addClass('cd-popup-block');
+      $('.cd-popup-block').removeClass('cd-popup-yes');
+      $('.cd-popup').addClass('is-visible');      
+      clear();
+    });
+
+    $('.unblock-answer').on('click', function(event){
+      event.preventDefault();
+      popupText.innerHTML = "Are you sure you want to unblock this answer's author?";
+      $('.cd-popup-yes').addClass('cd-popup-block');
+      $('.cd-popup-block').removeClass('cd-popup-yes');
+      $('.cd-popup').addClass('is-visible');      
+      clear();
+    });
+
+    //close popup
+    $('.cd-popup').on('click', function(event){
+      if( $(event.target).is('.cd-popup-yes') ) {
+        event.preventDefault();
+        const csrfToken = getCSRFToken();
+        $.ajax({
+          url: '{% url "delete_answer" answer.id %}',
+          type: 'GET',
+          headers: {
+            'X-CSRFToken': csrfToken, // Include the CSRF token in the request header
+          },
+          dataType: 'json', // get the form data
+          success: function(response) {
+            $('.cd-popup').removeClass('is-visible');
+            var answerElements = document.getElementsByClassName("answer-list-"+ {{ answer.id }});
+            for (var i = 0; i < answerElements.length; i++) {
+              answerElements[i].classList.add('dissapear');
+            }
+            showNotification(response.success); 
+          },
+          error: function(xhr, errmsg, err) {
+            alert('Error occurred. Please try again.');
+          }
+        });  
+      } 
+    });
+
+    $('.admire').on('click', function(event){
+      const url = $(this).attr("data-url");
+      const csrfToken = getCSRFToken();
+      $.ajax({
+        type: 'GET',
+        url: url,
+        headers: {
+          'X-CSRFToken': csrfToken, // Include the CSRF token in the request header
+        },
+        dataType: 'json', // get the form data
+        success: function(response) {
+          clear();
+          showNotification(response.success);      
+        },
+        error: function(xhr, errmsg, err) {
+          alert('Error occurred. Please try again.');
+        }
+      }); 
+    });
+
+    //close popup
+    $('.hide_answer').on('click', function(event){
+      event.preventDefault();
+      const csrfToken = getCSRFToken();
+      $.ajax({
+        url: '{% url "hide_answer" answer.id %}',
+        type: 'GET',
+        headers: {
+          'X-CSRFToken': csrfToken, // Include the CSRF token in the request header
+        },
+        dataType: 'json', // get the form data
+        success: function(response) {
+          var data = response.data;
+          data.forEach(function(answer) {
+            var answerElements = document.getElementsByClassName("answer-list-"+  answer.id );
+            for (var i = 0; i < answerElements.length; i++) {
+              answerElements[i].classList.add('dissapear');
+            }
+          });
+          var message = response.message;
+          if (message.success === 'Answer and similar answers have been hidden successfully.') {
+            var originalAnswerElements = document.getElementsByClassName("answer-list-"+ {{ answer.id }});
+            for (var i = 0; i < originalAnswerElements.length; i++) {
+              originalAnswerElements[i].classList.add('dissapear');
+            }
+          }
+          clear();
+          showNotification(message.success);
+        },
+        error: function(xhr, errmsg, err) {
+          alert('Error occurred. Please try again.');
+        }
+      }); 
+    });
+
+    $('.follow_unfollow').on('click', function(event){
+      const url = $(this).attr("data-url");
+      const csrfToken = getCSRFToken();
+      $.ajax({
+        url: url,
+        type: 'GET',
+        headers: {
+          'X-CSRFToken': csrfToken, // Include the CSRF token in the request header
+        },
+        dataType: 'json', // get the form data
+        success: function(response) {
+          clear();
+          showNotification(response.success); 
+        },
+        error: function(xhr, errmsg, err) {
+          alert('Error occurred. Please try again.');
+        }
+      });  
+    });
+
+    $('.cd-popup').on('click', function(event){
+      if( $(event.target).is('.cd-popup-report') ) {
+        event.preventDefault();
+        const csrfToken = getCSRFToken();
+        $.ajax({
+          url: '{% url "report_answer" answer.id %}',
+          type: 'GET',
+          headers: {
+            'X-CSRFToken': csrfToken, // Include the CSRF token in the request header
+          },
+          dataType: 'json', // get the form data
+          success: function(response) {
+            $('.cd-popup').removeClass('is-visible');
+            $('.cd-popup-report').addClass('cd-popup-yes');
+            $('.cd-popup-yes').removeClass('cd-popup-report');
+            var answerElements = document.getElementsByClassName("answer-list-"+ {{ answer.id }});
+            for (var i = 0; i < answerElements.length; i++) {
+              answerElements[i].classList.add('dissapear');
+            }
+            showNotification(response.success); 
+          },
+          error: function(xhr, errmsg, err) {
+            alert('Error occurred. Please try again.');
+          }
+        });  
+      } 
+    });
+
+    $('.cd-popup').on('click', function(event){
+      if( $(event.target).is('.cd-popup-block') ) {
+        event.preventDefault();
+        const csrfToken = getCSRFToken();
+        $.ajax({
+          url: '{% url "block_profile" answer.author.username %}',
+          type: 'GET',
+          headers: {
+            'X-CSRFToken': csrfToken, // Include the CSRF token in the request header
+          },
+          dataType: 'json', // get the form data
+          success: function(response) {
+            $('.cd-popup').removeClass('is-visible');
+            $('.cd-popup-block').addClass('cd-popup-yes');
+            $('.cd-popup-yes').removeClass('cd-popup-block');
+            var data = response.data;
+            data.forEach(function(answer) {
+              var answerElements = document.getElementsByClassName("answer-list-"+  answer.id );
+              for (var i = 0; i < answerElements.length; i++) {
+                answerElements[i].classList.add('dissapear');
+              }
+            });
+            showNotification(response.success); 
+          },
+          error: function(xhr, errmsg, err) {
+            alert('Error occurred. Please try again.');
+          }
+        });  
+      } 
+    });
+
+  });
+
+</script>

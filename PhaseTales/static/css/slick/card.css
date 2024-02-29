@@ -1,0 +1,290 @@
+*
+{
+  box-sizing: border-box;
+  font-family: 'Open Sans', 'Arial', sans-serif;
+}
+
+
+    .carousel-control-prev, .carousel-control-next {
+      height: 100px;
+      width: 35px;
+      background: none;
+      margin: auto -8px;
+      background: #d3d3d391;
+      display: block;
+    }
+    .carousel-control-prev i, .carousel-control-next i {
+      font-size: 30px;
+      position: absolute;
+      top: 50%;
+      display: inline-block;
+      margin: -16px 0 0 0;
+      z-index: 5;
+      left: 0;
+      right: 0;
+      color: rgba(0, 0, 0, 0.8);
+      text-shadow: none;
+      font-weight: bold;
+    }
+    .carousel-control-prev i {
+      margin-left: -3px;
+    }
+    .carousel-control-next i {
+      margin-right: -3px;
+    }
+
+    .slider {
+        width: 100%;
+        margin: 30px auto;
+    }
+
+    .video-slider {
+      width: 100%;
+      margin: 30px auto;
+    }
+
+
+    .slick-slide {
+      margin: 0px 20px;
+    }
+
+    .slick-slide .product {
+      width: 100%;
+    }
+
+
+    .slick-slide {
+      transition: all ease-in-out .3s;
+      opacity: .2;
+    }
+    
+    .slick-active {
+      opacity: 1;
+    }
+
+    .slick-current {
+      opacity: 1;
+    }
+
+.listing
+{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  
+  /*just for pen positioning*/
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 900px;
+}
+
+.product
+{
+  width: 240px;
+  position: relative;
+}
+
+.product a
+{
+  text-decoration: none;
+}
+
+.img-wrapper
+{
+  display: block;
+  width: 100%;
+  height: 240px;
+  background: #000000;
+  border-bottom: 0;
+  overflow: hidden;
+  text-align: center;
+}
+
+.img-wrapper img
+{
+  
+}
+
+.info
+{
+  width: 100%;
+  background: #000;
+  color: #fff;
+  position: relative;
+  padding: 40px 10px 20px 10px;
+  text-align: center;
+  
+  vertical-align: middle;
+  transform: translateZ(0);
+  box-shadow: 0 0 1px rgba(0,0,0,0);
+  backface-visibility: hidden;
+  transition-property: color,height;
+  transition-duration: 0.3s,0.4s;
+  transition-timing-function: ease-out;
+  height: 90px;
+}
+
+.info:before
+{
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  transform: scaleY(0);
+  transform-origin: 50%;
+  transition: transform 0.3s ease-out;
+}
+
+.info:after
+{
+  visibility: hidden;
+  pointer-events: none;
+  position: absolute;
+  z-index: -1;
+  content: '';
+  border-style: solid;
+  transition-duration: 0.3s;
+  transition-property: transform;
+  left: calc(50% - 11px);
+  bottom: 0;
+  border-width: 10px 10px 0 10px;
+  border-color: black transparent transparent transparent;
+}
+
+.product:hover .info
+{
+  height: 40px;
+}
+
+.product:hover .info:before
+{
+  transform: scaleY(0.7);
+}
+
+.product:hover .info:after
+{
+  visibility: visible;
+  transform: translateY(10px);
+}
+
+.product:hover  .booktitle {
+  max-height: 2.0em;
+}
+
+.title
+{
+  transition: transform 0.3s ease-out;
+}
+.title a
+{
+  color: inherit;
+}
+.product:hover .title
+{
+  transform: translateY(-18px);
+  font-weight: bold;
+  color: #000;
+}
+
+.price
+{
+  background: #e32d2c;
+  position: absolute;
+  font-size: 1.1em;
+  padding: 4px 13px;
+  top: -15px;
+  right: 10px;
+}
+
+.price.sale
+{
+  background: #00ba2f;
+}
+
+.price.old
+{
+  font-size: 0.95em;
+  padding: 4px 6px;
+  text-decoration: line-through;
+  top: -43px;
+}
+
+.actions-wrapper
+{
+  margin-top: 14px;
+  display: flex;
+  justify-content: space-around;
+  visibility: hidden;
+}
+
+.actions-wrapper *
+{
+  width: 50%;
+  padding: 2px 0;
+  text-align: center;
+  color: #fefefe;
+  font-size: 0.95em;
+  font-weight: bold;
+}
+.actions-wrapper *:before
+{
+  font-family: "Font Awesome 5 Pro";
+  margin-right: 8px;
+}
+.wishlist
+{
+  border-right: 1px solid #afafaf;
+}
+.wishlist:hover
+{
+  color: #e32d2c;
+}
+.wishlist:before
+{
+  content: "\f022";
+}
+
+.cart:hover
+{
+  color: #0a75b9;
+}
+.cart:before
+{
+  content: "\f07a";
+}
+
+.product:hover .actions-wrapper *
+{
+  visibility: visible;
+}
+
+.note
+{
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 4px 8px;
+  font-size: 0.9em;
+}
+
+.note.on-sale
+{
+  background: #00ba2f;
+  color: #fff;
+}
+
+.note.no-stock
+{
+  background: #191919;
+  color: #fff;
+}
+

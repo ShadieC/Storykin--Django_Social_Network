@@ -1,0 +1,281 @@
+{% load static %}
+<div class="container">
+  <ul style="margin-bottom:0px;">
+    <input type="hidden" id="django-question-url" value="shadreck" readonly>
+    {% if question.author == user %}
+      <li class="turn_off_post" onclick="copyToClipboard('django-question-url')">
+        <img class="icon" src="{% static 'assets/hide_post.png' %}"> <span class="option-title">Copy Link</span>
+      </li>
+      <li class="options delete-question">
+        <img class="icon" src="{% static 'assets/snooze.png' %}"> <span class="option-title">Delete Question</span>
+        <p class="option-title">Delete this question permanently.</p>
+      </li>
+    {% else %}
+      <li class="turn_off_post question_follow" data-url="{% url 'follow_question' question.id %}">
+        <img class="icon" src="{% static 'assets/notification.png' %}">
+        {% if user in question.followers.all %}
+          <span class="option-title">Turn off follow for this question.</span>
+        {% else %}
+          <span class="option-title">Turn on follow for this question.</span>
+        {% endif  %}
+      </li>
+      <li class="options" onclick="copyToClipboard('django-question-url')">
+        <img class="icon" src="{% static 'assets/hide_post.png' %}"> <span class="option-title">Copy Link</span>
+        <p class="option-title">Copy question's link to you clipboard</p>
+      </li>
+      <li class="options hide_question">
+        <img class="icon" src="{% static 'assets/hide_post.png' %}"> 
+        {% if question in user_profile.questions_blacklist.all %}
+          <span class="option-title">UnHide Question</span>
+          <p class="option-title">See more questions like this.</p>
+        {% else %}
+          <span class="option-title">Hide Question</span>
+          <p class="option-title">See fewer questions like this.</p>
+        {% endif  %}
+      </li>
+      <li class="options follow_unfollow" data-url="{% url 'follow_profile' question.author.username %}">
+        <img class="icon" src="{% static 'assets/unfollow.png' %}">
+        {% if user in question_author_profile.followers.all %}
+          <span class="option-title">Unfollow {{ question.author.username }}</span>
+          <p class="option-title">Stop receiving notifications about this user.</p>
+        {% else %}
+          <span class="option-title">Follow {{ question.author.username }}</span>
+          <p class="option-title">Start receiving notifications about this user.</p>
+        {% endif  %}
+      </li>
+      <li class="options {% if question_author in user_profile.blocked.all %}unblock-question{% else %}block-question{% endif  %}">
+        <img class="icon" src="{% static 'assets/unfollow.png' %}"> 
+        {% if question_author in user_profile.blocked.all %}
+          <span class="option-title">UnBlock {{ question.author.username }}</span>
+          <p class="option-title">You will be able to see questions from user.</p>
+        {% else %}
+          <span class="option-title">Block {{ question.author.username }}</span>
+          <p class="option-title">You won't be able to see questions from user.</p>
+        {% endif  %}
+      </li>
+      <li class="options report-question">
+        <img class="icon" src="{% static 'assets/find_post.png' %}"> <span class="option-title">Report question</span>
+        <p class="option-title">I'm concerned about this question.</p>
+      </li>
+    {% endif %}
+  </ul>
+</div>
+<script type="text/javascript">
+  $(document).ready(function () {
+    function getCSRFToken() {
+      const cookieValue = document.cookie.match(/csrftoken=([^;]+)/);
+      return cookieValue ? cookieValue[1] : '';
+    }
+
+    var popupText = document.getElementById("cd-popup-text");
+
+    $('.delete-question').on('click', function(event){
+      event.preventDefault();
+      popupText.innerHTML = "Are you sure you want to delete this question?";
+      $('.cd-popup').addClass('is-visible');
+      clear();
+    });
+
+    $('.report-question').on('click', function(event){
+      event.preventDefault();
+      popupText.innerHTML = "Are you sure you want to report this question?";
+      $('.cd-popup-yes').addClass('cd-popup-report');
+      $('.cd-popup-report').removeClass('cd-popup-yes');
+      $('.cd-popup').addClass('is-visible');      
+      clear();
+    });
+
+    $('.block-question').on('click', function(event){
+      event.preventDefault();
+      popupText.innerHTML = "Are you sure you want to block this question's author?";
+      $('.cd-popup-yes').addClass('cd-popup-block');
+      $('.cd-popup-block').removeClass('cd-popup-yes');
+      $('.cd-popup').addClass('is-visible');      
+      clear();
+    });
+
+    $('.unblock-question').on('click', function(event){
+      event.preventDefault();
+      popupText.innerHTML = "Are you sure you want to unblock this question's author?";
+      $('.cd-popup-yes').addClass('cd-popup-block');
+      $('.cd-popup-block').removeClass('cd-popup-yes');
+      $('.cd-popup').addClass('is-visible');      
+      clear();
+    });
+
+    //close popup
+    $('.cd-popup').on('click', function(event){
+      if( $(event.target).is('.cd-popup-yes') ) {
+        event.preventDefault();
+        const csrfToken = getCSRFToken();
+        $.ajax({
+          url: '{% url "delete_question" question.id %}',
+          type: 'GET',
+          headers: {
+            'X-CSRFToken': csrfToken, // Include the CSRF token in the request header
+          },
+          dataType: 'json', // get the form data
+          success: function(response) {
+            $('.cd-popup').removeClass('is-visible');
+            var questionElements = document.getElementsByClassName("question-list-"+ {{ question.id }});
+            for (var i = 0; i < questionElements.length; i++) {
+              questionElements[i].classList.add('dissapear');
+            }
+            showNotification(response.success); 
+          },
+          error: function(xhr, errmsg, err) {
+            alert('Error occurred. Please try again.');
+          }
+        });  
+      } 
+    });
+
+    $('.question_follow').on('click', function(event){
+      const url = $(this).attr("data-url");
+      const csrfToken = getCSRFToken();
+      $.ajax({
+        type: 'GET',
+        url: url,
+        headers: {
+          'X-CSRFToken': csrfToken, // Include the CSRF token in the request header
+        },
+        dataType: 'json', // get the form data
+        success: function(response) {
+          clear();
+          var $this = document.getElementById("question_follow_"+ {{ question.id }});
+          const followCount = $this.querySelector(".followers-count");
+          let follows = followCount.innerText;
+          follows = parseInt( follows );
+          if (response.success === 'Question has been followed successfully.') {
+            follows++;
+            $this.classList.add("liked");
+          } else {
+            follows--;
+            $this.classList.remove("liked");
+          }
+          followCount.innerHTML = follows
+          showNotification(response.success);      
+        },
+        error: function(xhr, errmsg, err) {
+          alert('Error occurred. Please try again.');
+        }
+      }); 
+    });
+
+    //close popup
+    $('.hide_question').on('click', function(event){
+      event.preventDefault();
+      const csrfToken = getCSRFToken();
+      $.ajax({
+        url: '{% url "hide_question" question.id %}',
+        type: 'GET',
+        headers: {
+          'X-CSRFToken': csrfToken, // Include the CSRF token in the request header
+        },
+        dataType: 'json', // get the form data
+        success: function(response) {
+          var data = response.data;
+          data.forEach(function(question) {
+            var questionElements = document.getElementsByClassName("question-list-"+  question.id );
+            for (var i = 0; i < questionElements.length; i++) {
+              questionElements[i].classList.add('dissapear');
+            }
+          });
+          var message = response.message;
+          if (message.success === 'Question and similar questions have been hidden successfully.') {
+            var originalQuestionElements = document.getElementsByClassName("question-list-"+ {{ question.id }});
+            for (var i = 0; i < originalQuestionElements.length; i++) {
+              originalQuestionElements[i].classList.add('dissapear');
+            }
+          }
+          clear();
+          showNotification(message.success);
+        },
+        error: function(xhr, errmsg, err) {
+          alert('Error occurred. Please try again.');
+        }
+      }); 
+    });
+
+    $('.follow_unfollow').on('click', function(event){
+      const url = $(this).attr("data-url");
+      const csrfToken = getCSRFToken();
+      $.ajax({
+        url: url,
+        type: 'GET',
+        headers: {
+          'X-CSRFToken': csrfToken, // Include the CSRF token in the request header
+        },
+        dataType: 'json', // get the form data
+        success: function(response) {
+          clear();
+          showNotification(response.success); 
+        },
+        error: function(xhr, errmsg, err) {
+          alert('Error occurred. Please try again.');
+        }
+      });  
+    });
+
+    $('.cd-popup').on('click', function(event){
+      if( $(event.target).is('.cd-popup-report') ) {
+        event.preventDefault();
+        const csrfToken = getCSRFToken();
+        $.ajax({
+          url: '{% url "report_question" question.id %}',
+          type: 'GET',
+          headers: {
+            'X-CSRFToken': csrfToken, // Include the CSRF token in the request header
+          },
+          dataType: 'json', // get the form data
+          success: function(response) {
+            $('.cd-popup').removeClass('is-visible');
+            $('.cd-popup-report').addClass('cd-popup-yes');
+            $('.cd-popup-yes').removeClass('cd-popup-report');
+            var questionElements = document.getElementsByClassName("question-list-"+ {{ question.id }});
+            for (var i = 0; i < questionElements.length; i++) {
+              questionElements[i].classList.add('dissapear');
+            }
+            showNotification(response.success); 
+          },
+          error: function(xhr, errmsg, err) {
+            alert('Error occurred. Please try again.');
+          }
+        });  
+      } 
+    });
+
+    $('.cd-popup').on('click', function(event){
+      if( $(event.target).is('.cd-popup-block') ) {
+        event.preventDefault();
+        const csrfToken = getCSRFToken();
+        $.ajax({
+          url: '{% url "block_profile" question.author.username %}',
+          type: 'GET',
+          headers: {
+            'X-CSRFToken': csrfToken, // Include the CSRF token in the request header
+          },
+          dataType: 'json', // get the form data
+          success: function(response) {
+            $('.cd-popup').removeClass('is-visible');
+            $('.cd-popup-block').addClass('cd-popup-yes');
+            $('.cd-popup-yes').removeClass('cd-popup-block');
+            var data = response.data;
+            data.forEach(function(question) {
+              var questionElements = document.getElementsByClassName("question-list-"+  question.id );
+              for (var i = 0; i < questionElements.length; i++) {
+                questionElements[i].classList.add('dissapear');
+              }
+            });
+            showNotification(response.success); 
+          },
+          error: function(xhr, errmsg, err) {
+            alert('Error occurred. Please try again.');
+          }
+        });  
+      } 
+    });
+
+  });
+
+</script>

@@ -1,0 +1,42 @@
+{% load static %}
+{% load humanize %}
+
+<div class="phases-control-fluid">
+  {% for profile in profiles %}
+    <figure class="fir-image-figure">
+      <div style="display:flex;flex-direction: row;">
+        <a class="fir-imageover" rel="noopener" target="_blank" href="https://twitter.com/_davideast">
+          {% if profile.pro_image %}
+            <img class="fir-author-image fir-clickcircle" src="{{ post.user.pro_image.url }}" style="width:64px;min-height:64px;">
+          {% else %}
+            <img class="fir-author-image fir-clickcircle" src="{% static 'images/default.jpg' %}">
+          {% endif %}
+          <div class="fir-imageover-color"></div>
+        </a>
+        <figcaption>
+          <div class="fig-author-figure-title">{{ profile.user.username }}</div>
+          <div class="fig-author-figure-title" style="color: var(--fir-color-grey);">Engineer at Google on Firebase.</div>
+        </figcaption>
+      </div>
+      <button class="button view-profile-btn" data-url="{% url 'profile' profile.user.username %}">
+        <span class="lable">View Profile</span>
+      </button>
+    </figure>
+  {% empty %}
+    <br>
+      <h6 class="title is-5">You do not have any Hoodposts!</h6>              
+  {% endfor %}
+</div>
+
+<script>
+  $(document).ready(function() {
+    $('.view-profile-btn').click(function(e) {
+      e.preventDefault();
+      var url = $(this).attr('data-url');
+      $('#profile').load(url);
+      history.pushState(null, null, url);
+      user();
+    });
+  });
+
+</script>

@@ -1,0 +1,59 @@
+{% load static %}
+  <div id="category-options" style="display: flex;grid-gap: 6px;">
+    <label>Select Category:</label><br>
+    <div>
+      <label><input autocomplete="off" checked="checked" name="category" type="radio" value="emotional" onchange="handleCategoryChange(this)">Emotional Phase</label> 
+      <label><input autocomplete="off" name="category" type="radio" value="life" onchange="handleCategoryChange(this)">Life Phase</label>
+    </div>
+  </div>
+
+  <div id="phase-options">
+    <label for="phases">Select Phase:</label>
+      <select name="phases" id="phaseSelectOptions" style="color: black;">
+        {% for phase in phase_options %}
+          <option value="{{ phase.slug }}">{{ phase.name }}</option>
+        {% endfor %}
+      </select>
+  </div>
+<script>
+$(document).ready(function() {
+  // On category change, fetch and populate the corresponding phase options
+  
+
+});
+  // Get the CSRF token from the cookie
+  function getCSRFToken() {
+    const cookieValue = document.cookie.match(/csrftoken=([^;]+)/);
+    return cookieValue ? cookieValue[1] : '';
+  }
+
+  function handleCategoryChange(radio) {
+    if (radio.checked) {
+      var selectedCategory = radio.value;
+      const phaseSelect  = document.getElementById("phaseSelectOptions");
+      const csrfToken = getCSRFToken();
+      var phaseOptionsContainer = $('#phase-options');
+
+      if (selectedCategory) {
+        // Make an AJAX request to get the phase options for the selected category
+        $.ajax({
+          url: "{% url 'get_phase_options' %}",
+          type: 'POST',
+          headers: {
+            'X-CSRFToken': csrfToken, // Include the CSRF token in the request header
+          },
+          data: {
+            category: selectedCategory
+          },
+          success: function(data) {
+            $(phaseSelect ).html("")  // Clear existing posts
+            // Append new posts to the container
+            data.forEach(function(phase) {
+              $(phaseSelect ).append('<option value="'+ phase.slug + '">' + phase.name + '</option>');
+            });
+          }
+        });
+      } 
+    }
+  }
+</script>

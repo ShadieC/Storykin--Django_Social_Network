@@ -1,0 +1,1039 @@
+{% load static %}
+{% load custom_filters %}
+<div class="main-header phase-header anim" id="mainheader" style="--delay: 0s;flex: 0 1 auto;">
+Home
+</div>
+<div class="main-blogs fo" id="mainblogs">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="heroism" id="heroism">
+        <div class="bgimg"></div>
+        <div class="intro-holder">
+          <div class="h-txt container-fluid">
+            Discover the power of <span class="bg-allan px-2 text-white rounded">shared experiences</span><br>
+            <div class="hero-section hero-section-control">
+              Are you going through a challenging phase in life and seeking support? Or have you triumphed over adversity and want to share your story to inspire others? Look no further than our website – the perfect platform for you to share your experiences and connect with a supportive community that can relate or is going through similar life and emotional phases. Whether you seek solace, inspiration, or simply a listening ear, our compassionate community is ready to embrace you. Join us in creating a space where everyone feels empowered and supported. Together, we can navigate life's hurdles, grow, heal, and learn from one another. You're not alone in your struggles – we're here to support you on your life journey. Start sharing your story today and let's make a difference together.
+            </div>
+          </div>
+        </div>
+        <div class="landing-page-buttons">
+          <a class="cs-btn-green-inverted" href="#Random Stories"  type="button">Explore Stories</a> <span style="padding: 0 12px;color: #fff;font-size: 18;display: flex;flex-wrap: wrap;align-content: center;">or</span> 
+
+          <button id="signup-btn2" class="cs-btn-green-outline website-signup" data-url="{% url 'register' %}" type="button" name="button">Become part of us</button>
+        </div><!--arrow ponting down to stories-->
+        <a href="#features">
+          <span id="explore-stories">
+            <svg class="bi bi-chevron-double-down" height="34" viewBox="0 0 16 16" fill="currentColor" width="34" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1.646 6.646a.5.5 0 0 1 .708 0L8 12.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" fill-rule="evenodd"></path>
+              <path d="M1.646 2.646a.5.5 0 0 1 .708 0L8 8.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" fill-rule="evenodd"></path>
+            </svg>
+          </span>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid" id="features" style="background: #1e2132;padding-top: 3em;padding-bottom: 4em;">
+    <div>
+      <div class="small-header anim" style="--delay: .2s;justify-content: center;display: flex;">
+        Website Features
+      </div>
+      <div style="margin-top: 2.5rem;margin-bottom: 2.5rem;">
+        <ul class="md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-10">
+          <li class="website-feature-box">
+            <div class="flex">
+              <div class="flex-shrink-0">
+                <div class="flex items-center justify-center hh-12 ww-12 rounded-md bg-indigo-500 text-white">
+                  <!-- Heroicon name: globe-alt -->
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-share-fill" viewBox="0 0 16 16">
+                    <path d="M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5z"/>
+                  </svg>
+                </div>
+              </div>
+              <div class="ml-4">
+                <h4 class="wf-heading">Share Your Story</h4>
+                <p class="mt-2 text-feature leading-6 text-gray-500">Whether you want to share a personal triumph, a difficult experience, or just a moment that changed your life, we want to hear it. You can share your story anonymously or with your name attached.</p>
+              </div>
+            </div>
+          </li>
+          <li class="mt-10 md:mt-0 website-feature-box">
+            <div class="flex">
+              <div class="flex-shrink-0">
+                <div class="flex items-center justify-center hh-12 ww-12 rounded-md bg-indigo-500 text-white">
+                  <!-- Heroicon name: scale -->
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-binoculars-fill" viewBox="0 0 16 16">
+                    <path d="M4.5 1A1.5 1.5 0 0 0 3 2.5V3h4v-.5A1.5 1.5 0 0 0 5.5 1h-1zM7 4v1h2V4h4v.882a.5.5 0 0 0 .276.447l.895.447A1.5 1.5 0 0 1 15 7.118V13H9v-1.5a.5.5 0 0 1 .146-.354l.854-.853V9.5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v.793l.854.853A.5.5 0 0 1 7 11.5V13H1V7.118a1.5 1.5 0 0 1 .83-1.342l.894-.447A.5.5 0 0 0 3 4.882V4h4zM1 14v.5A1.5 1.5 0 0 0 2.5 16h3A1.5 1.5 0 0 0 7 14.5V14H1zm8 0v.5a1.5 1.5 0 0 0 1.5 1.5h3a1.5 1.5 0 0 0 1.5-1.5V14H9zm4-11H9v-.5A1.5 1.5 0 0 1 10.5 1h1A1.5 1.5 0 0 1 13 2.5V3z"/>
+                  </svg>
+                </div>
+              </div>
+              <div class="ml-4">
+                <h4 class="wf-heading">Browse Stories</h4>
+                <p class="mt-2 text-feature leading-6 text-gray-500">Read stories from people who have gone through similar experiences and learn from their journeys, helping you navigate transitions and challenges and also enhance your emotional intelligence and self-awareness.</p>
+              </div>
+            </div>
+          </li>
+          <li class="mt-10 md:mt-0 website-feature-box">
+            <div class="flex">
+              <div class="flex-shrink-0">
+                <div class="flex items-center justify-center hh-12 ww-12 rounded-md bg-indigo-500 text-white">
+                  <!-- Heroicon name: lightning-bolt -->
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-book-fill" viewBox="0 0 16 16">
+                    <path d="M8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783z"/>
+                  </svg>
+                </div>
+              </div>
+              <div class="ml-4">
+                <h4 class="wf-heading">Learn from Articles and Books</h4>
+                <p class="mt-2 text-feature leading-6 text-gray-500">We also provide links to relevant articles and books that can help you unearth valuable lessons and inspiration to fuel your personal development and understanding of the world.</p>
+              </div>
+            </div>
+          </li>
+          <li class="mt-10 md:mt-0 website-feature-box">
+            <div class="flex">
+              <div class="flex-shrink-0">
+                <div class="flex items-center justify-center hh-12 ww-12 rounded-md bg-indigo-500 text-white">
+                  <!-- Heroicon name: lightning-bolt -->
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-people-fill" viewBox="0 0 16 16">
+                    <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7Zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-5.784 6A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216ZM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"/>
+                  </svg>
+                </div>
+              </div>
+              <div class="ml-4">
+                <h4 class="wf-heading">Interactive Community</h4>
+                <p class="mt-2 text-feature leading-6 text-gray-500">Connect with like-minded individuals, share experiences, and learn from others' wisdom, fostering a sense of belonging.</p>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <section class="about-section">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 col-lg-6 align-content-lg-stretch">
+          <header class="about-header">
+            <h2 class="entry-title">About Us</h2>
+            <p>We are a community of individuals who believe that everyone has a story to tell. Our website provides a safe and supportive space for people to share their life experiences and learn from others. Sharing your story on our website is easy. Simply create an account, write your story, and submit it for review. Once approved, your story will be published on our website for others to read and learn from. You can also browse through other people's stories, filter them by category or tag, and leave comments to show your support. We <span id="dots">...</span><span id="more">also offer a vast collection of books and articles covering a wide range of topics, from self-help to memoirs, to help you navigate through life's challenges and inspire you to live your best life. We value diversity and inclusivity and welcome people from all walks of life to join our community. Share your story and learn from others, together we can create a supportive and empowering space where everyone's voice is heard.<a class="website-signup" data-url="{% url 'register' %}" style="color: #007bff;">Click to Signup</a></span><span class="readmore-btn" id="myBtn" onclick="myFunction()">Read more</span></p>
+          </header><!-- .heading -->
+          <div class="entry-content our-stats"></div><!-- .our-stats -->
+        </div><!-- .col -->
+        <div class="col-12 col-lg-6 flex align-content-center mt-5 mt-lg-0">
+          <div class="our-video position-relative">
+          <div class="video-play-btn position-absolute"><img alt="Video Play" src="{% static 'images/video-icon.png' %}"></div><!-- .video-play-btn -->
+          <img alt="" src="{% static 'images/video-screenshot.png' %}"></div><!-- .our-video -->
+        </div><!-- .col -->
+      </div><!-- .row -->
+    </div><!-- .container -->
+  </section>
+  <section class="popular-phases" style="padding-bottom: 0;">
+    <div class="container anim" style="--delay: .2s;height: max-content;">
+      <div class="row justify-content-center mb-3">
+        <div class="col-md-7 heading-section text-center">
+          <span class="subheading">Our stories are organized into different categories and tags based on if they fall under a Life Phase such as Career growth or Emotional Phase such as love, this is to help you navigate and filter them. Here is a brief of categories in each phase.</span>
+          <div class="small-header" style="justify-content: center;display: flex;">
+            Popular Life Phases
+          </div>
+        </div>
+      </div>
+      <div class="row life-phase-links">
+        <div class="col-md-3 home-phase-links">
+          <ul class="row-category">
+            <li>
+              <a class="home-life-btn" data-url="{% url 'menace-life-phasecontent' 'relationships' %}" fake-url="{% url 'life-phasecontent' 'relationships' %}">
+                Relationships
+              </a>
+            </li>
+            <li>
+              <a class="home-life-btn" data-url="{% url 'menace-life-phasecontent' 'midlife-crisis' %}" fake-url="{% url 'life-phasecontent' 'midlife-crisis' %}">
+                Midlife Crisis
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-md-3 home-phase-links">
+          <ul class="row-category">
+            <li>
+              <a class="home-life-btn" data-url="{% url 'menace-life-phasecontent' 'financial-struggles' %}" fake-url="{% url 'life-phasecontent' 'financial-struggles' %}">
+                Financial Struggles
+              </a>
+            </li>
+            <li>
+              <a class="home-life-btn" data-url="{% url 'menace-life-phasecontent' 'career_building' %}" fake-url="{% url 'life-phasecontent' 'career_building' %}">
+                Career Building
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-md-3 home-phase-links">
+          <ul class="row-category">
+            <li>
+              <a class="home-life-btn" data-url="{% url 'menace-life-phasecontent' 'overcoming_addiction' %}" fake-url="{% url 'life-phasecontent' 'overcoming_addiction' %}">
+                Overcoming Addiction
+              </a>
+            </li>
+            <li>
+              <a class="home-life-btn" data-url="{% url 'menace-life-phasecontent' 'health_issues' %}" fake-url="{% url 'life-phasecontent' 'health_issues' %}">
+                Health Issues
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-md-3 home-phase-links">
+          <ul class="row-category">
+            <li>
+              <a class="home-life-btn" data-url="{% url 'menace-life-phasecontent' 'balancing-work-and-life' %}" fake-url="{% url 'life-phasecontent' 'balancing-work-and-life' %}">
+                Balancing Work and Life
+              </a>
+            </li>
+            <li>
+              <a class="home-life-btn" data-url="{% url 'menace-life-phasecontent' 'spiritual-awakening' %}" fake-url="{% url 'life-phasecontent' 'spiritual-awakening' %}">
+                Spiritual Awakening
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="row justify-content-center mb-5 pb-3">
+        <div class="my-button offer-button">
+          Explore All
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="popular-phases" style="padding-top: 0;--delay: .2s;">
+    <div class="container anim" style="--delay: .2s;height: max-content;">
+      <div class="row justify-content-center mb-3">
+        <div class="col-md-7 heading-section text-center">
+          <div class="small-header" style="justify-content: center;display: flex;">
+            Popular Emotion Phases
+          </div>
+        </div>
+      </div>
+      <div class="row emo-phase-links">
+        <div class="col-md-3 home-phase-links">
+          <ul class="row-category">
+            <li>
+              <a class="home-emo-btn" data-url="{% url 'menace-emo-phasecontent' 'loneliness' %}" fake-url="{% url 'emo-phasecontent' 'loneliness' %}">
+                Loneliness
+              </a>
+            </li>
+            <li>
+              <a class="home-emo-btn" data-url="{% url 'menace-emo-phasecontent' 'guilt' %}" fake-url="{% url 'emo-phasecontent' 'guilt' %}">
+                Guilt
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-md-3 home-phase-links">
+          <ul class="row-category">
+            <li>
+              <a class="home-emo-btn" data-url="{% url 'menace-emo-phasecontent' 'jealousy' %}" fake-url="{% url 'emo-phasecontent' 'jealousy' %}">
+                Jealousy
+              </a>
+            </li>
+            <li>
+              <a class="home-emo-btn" data-url="{% url 'menace-emo-phasecontent' 'fear' %}" fake-url="{% url 'emo-phasecontent' 'fear' %}"> 
+                Fear
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-md-3 home-phase-links">
+          <ul class="row-category">
+            <li>
+              <a class="home-emo-btn" data-url="{% url 'menace-emo-phasecontent' 'courage' %}" fake-url="{% url 'emo-phasecontent' 'courage' %}">
+                Courage
+              </a>
+            </li>
+            <li>
+              <a class="home-emo-btn" data-url="{% url 'menace-emo-phasecontent' 'empathy' %}" fake-url="{% url 'emo-phasecontent' 'empathy' %}">
+                Empathy
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-md-3 home-phase-links">
+          <ul class="row-category">
+            <li>
+              <a class="home-emo-btn" data-url="{% url 'menace-emo-phasecontent' 'inspiration' %}" fake-url="{% url 'emo-phasecontent' 'inspiration' %}">
+                Inspiration
+              </a>
+            </li>
+            <li>
+              <a class="home-emo-btn" data-url="{% url 'menace-emo-phasecontent' 'love' %}" fake-url="{% url 'emo-phasecontent' 'love' %}">
+                Love
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="row justify-content-center mb-5 pb-3">
+        <div class="my-button offer-button">
+          Explore All
+        </div>
+      </div>
+    </div>
+  </section>
+  <div id="shadie">
+    <div id="shadie-bg"></div>
+    <div class="shadie-wrapper shadie-centered">
+      <img class="slideInLeft animated" id="me" src="{% static 'images/shadie.jpg' %}">
+      <div id="intro">
+        <h2 style="color: #111235;">Hi, I'm the CEO & Founder.</h2>
+        <p></p>
+        <p><p class="about-me-text-control about-me-text">Hello, everyone! My name is Shadreck Ophard, a 20-year-old university student and self-taught web developer. Today, I want to share my strong belief in the transformative power of shared narratives and the positive impact they can have on individuals seeking support, inspiration, and guidance. Life is a series of ups and downs, and navigating through these challenges can be tough. Unfortunately, many people struggle to share their stories with others, which often leads to feelings of isolation and loneliness. It is for this reason that I have embarked on creating this website a passion project that stems from a deep desire to foster genuine connections, empathy, and personal growth. I envision it becoming not only a pillar of resources but also a sanctuary where people find solace in each other's stories, ultimately empowering one another on their respective journeys of self-discovery and personal development. I kindly ask for your support in spreading the word about the website. Your efforts to share your own stories and experiences will be invaluable in building a thriving community that supports, inspires, and uplifts.</p><span class="readmore-btn" id="meBtn">Read More</span></p>
+
+        <p style="color:#333;">Additionally, I invite you to follow me on social media to stay connected and be part of this transformative initiative.To show your support, please follow me on the following platforms:</p>
+        <p></p>
+        <ul class="ul-social-circle">
+          <li>
+            <a href="#" class="follow-link" data-platform="facebook"><span class="icon-facebook"></span></a>
+          </li>
+          <li>
+            <a href="#" class="follow-link" data-platform="twitter"><span class="icon-twitter"></span></a>
+          </li>
+          <li>
+            <a href="#" class="follow-link" data-platform="youtube"><span class="icon-youtube"></span></a>
+          </li>
+          <li>
+            <a href="#" class="follow-link" data-platform="instagram"><span class="icon-instagram"></span></a>
+          </li>
+        </ul>
+        <p></p>
+      </div>
+    </div>
+  </div>
+  <div class="site-wrap recommended-stories" id="Random Stories" style="padding-bottom: 5em;padding-top: 3em;background-color: #1e2132;">
+    <div class="site-section">
+      <div class="container-fluid ultra-destruction-fluid">
+        <div class="row justify-content-center mb-3">
+          <div class="col-md-7 heading-section text-center d">
+            <span class="subheading">Would you like to start browsing through other people's stories? , then here are some random stories to get you started. Leave comments to show your support. For specific stories about a certain subject either search or navigate to the Emotion and Life phases tabs.</span>
+            <div class="small-header anim" style="--delay: .2s;justify-content: center;display: flex;">
+              Random Stories
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <form class="add-post create-post-content js-add-post" id="home-create-post-form">
+            <input type="text" class="form-control create-post-title homeformInput" placeholder="Title:" maxlength="100" id="home-post-title" name="title" aria-label="" autocomplete="off"  />
+            <textarea class="form-control create-post-textarea homeformInput" id="home-post-body" placeholder="What's happening...?" name="content"></textarea>
+            <input class="js-upload-file-input" name="bait-image" type="file" id="home-image-upload" onchange="getImageEditor(this.id);" preview="home-preview"> 
+            <!-- Attached Files --> 
+            <label class="file-upload-link js-file-upload-link create-post-upload" for="home-image-upload"><i class="fa fa-paperclip js-file-upload-icon"></i></label>
+            <p class="website-error dissapear" id="home-post-error">Error: Both title and body fields should be filled and should not be left blank.</p>
+            <div class="create-post-content-controls">
+              <label><input class="js-anonymous" type="checkbox" name="anonymous">Anonymous</label> <button class="button-success button-mini js-save">Post</button> <a class="js-cancel" href="#">Cancel</a>
+              <div class="clearfix"></div>
+            </div>
+            <div class="attached-files js-attached-files" style="margin-top: 2em">
+              <div id="home-preview" style="position: relative;width: 200px;"></div>
+            </div>
+          </form>
+        </div>
+        <div style="padding: 10px;display: flex;justify-content: center;background-color: #f2f2f2;">
+          <div class="follow-buttons">
+            <button class="follow" id="home-following-btn" opposite="home-recommended-btn" for="home-following-posts">Following</button>
+            <button class="follow follow-option active" id="home-recommended-btn" opposite="home-following-btn" for="home-recommended-posts">For You</button>
+          </div>
+        </div>
+        <section id="home-recommended-posts" class="posts-box selected-posts-box">
+          {% for post in posts %}
+            <div class="card post-list-{{ post.id }}">
+              <div class="card-content tweets">
+                <article class="media tweet">
+                  <figure class="media-left">
+                    <p class="image is-64x64 is-circle">
+                      <a class="profile-link-img" onclick="user()" data-url="{% url 'profile' post.author.username %}">
+                        {% if post.author.pro_image %}
+                          <img src="{{ post.user.pro_image.url }}" style="width:64px;min-height:64px;">
+                        {% else %}
+                          <img src="{% static 'images/default.jpg' %}">
+                        {% endif %}
+                      </a>
+                    </p>
+                  </figure>
+                  <div class="media-content">
+                    <div class="content">
+                      <div class="user-name">
+                        <div class="psuedo-name">
+                          <strong>{{ post.author.username }}</strong> 
+                          <div class="dot"></div><small style="color: #7c7c7c;">{{ post.created_at| shorten_time }}</small>
+                        </div>
+                        <div class="more" data-url="{% url 'post_options' post.id %}">
+                          <img alt="more" src="{% static 'images/more3.png' %}">
+                        </div>
+                      </div>
+                      <div class="question">
+                        {{ post.title }}
+                      </div>
+                      <p id="{{ post.id }}_body">{{ post.body }}</p>
+                    </div>
+                    <div class="comments">
+                      <ul>
+                        <li class="post_details" data-url="{% url 'post' post.id %}" onclick="openPost()"><img alt="" src="{% static 'images/speech-bubble.png' %}">{{ post.comments_count }}</li>
+                        {% if user in post.likes.all %}
+                          <li class="like liked" data-url="{% url 'like_post' post.id %}"><i class="fas fa-heart"></i><div class="like-count">{{ post.likes_count }}</div></li>
+                        {% else %}
+                          <li class="like" data-url="{% url 'like_post' post.id %}"><i class="far fa-heart"></i><div class="like-count">{{ post.likes_count }}</div></li>
+                        {% endif  %}
+                        <li data-toggle="modal" data-target="#myModal" share-url="{% url 'share_post' post.id %}" onclick="share(this.getAttribute('share-url'))"><img alt="" src="{% static 'images/share.png' %}"></li>
+                        <li onclick="readAloud('{{ post.id }}_body')" class="readAloud"><i class="fal fa-volume-up sound"></i></li>
+                      </ul>
+                    </div>
+                  </div>
+                </article>
+              </div>
+            </div>
+          {% empty %}
+            <br>
+             <h6 class="title is-5">You do not have any Hoodposts!</h6>              
+          {% endfor %}
+          <div class="card">
+            <div class="load-more">
+              <svg id="meow" fill="currentColor" viewbox="0 0 341.333 341.333" xmlns="http://w3.org/2000/svg">
+              <path d="M341.227 149.333V0l-50.133 50.133C260.267 19.2 217.707 0 170.56 0 76.267 0 .107 76.373.107 170.667s76.16 170.667 170.453 170.667c79.467 0 146.027-54.4 164.907-128h-44.373c-17.6 49.707-64.747 85.333-120.533 85.333-70.72 0-128-57.28-128-128s57.28-128 128-128c35.307 0 66.987 14.72 90.133 37.867l-68.8 68.8h149.333z"></path></svg> Load More
+            </div>
+          </div>  
+        </section>
+
+        <section id="home-following-posts" class="posts-box">
+          <div class="card">
+            <div class="load-more">
+              <svg id="meow" fill="currentColor" viewbox="0 0 341.333 341.333" xmlns="http://w3.org/2000/svg">
+              <path d="M341.227 149.333V0l-50.133 50.133C260.267 19.2 217.707 0 170.56 0 76.267 0 .107 76.373.107 170.667s76.16 170.667 170.453 170.667c79.467 0 146.027-54.4 164.907-128h-44.373c-17.6 49.707-64.747 85.333-120.533 85.333-70.72 0-128-57.28-128-128s57.28-128 128-128c35.307 0 66.987 14.72 90.133 37.867l-68.8 68.8h149.333z"></path></svg> Load More
+            </div>
+          </div>     
+        </section> 
+
+      </div>
+    </div>
+  </div>
+  <div class="features-box" style="padding-top: 3em; background-color: #2c2f3d;--delay: .2s">
+    <div class="container-fluid">
+      <div class="row justify-content-center mb-3">
+        <div class="col-md-7 heading-section text-center d">
+          <span class="subheading">We offer a wide range of articles and books that can help you gain insights into different life and emotional phases. From self-help books to memoirs, we have something for everyone. You can purchase the books through my links so I can get a little commision.</span>
+          <div class="small-header anim" style="--delay: .2s;justify-content: center;display: flex;">
+            Recommended Reads
+          </div>
+        </div>
+      </div>
+      <p style="text-align: center;"></p>
+      <div class="row d-flex justify-content-center">
+        <div class="col-md-11" style="width: 92%;">
+          <section class="mustreads">
+            {% for book in books %}
+              <div>
+                <div class="product">
+                  <a class="img-wrapper" href="#"><img alt=" Book Cover Image" class="p-image" src="{{ book.image.url }}"></a>
+                  <div class="note on-sale">
+                    On sale
+                  </div>
+                  <div class="info">
+                    <div class="title">
+                      <a href="#" class="booktitle">{{ book.title }}</a>
+                    </div>
+                    <div class="price sale">
+                      ${{ book.new_price }}
+                    </div>
+                    <div class="price old">
+                      ${{ book.old_price }}
+                    </div>
+                  </div>
+                  <div class="actions-wrapper">
+                    <a class="add-btn wishlist" href="#" data-url="{% url 'book' book.id %}"  onclick="openFun()">Detail</a> <a class="add-btn cart" href="#">Buy</a>
+                  </div>
+                </div>
+              </div>
+            {% empty %}
+              <br>
+               <h6 class="title is-5">There are no books!</h6>              
+            {% endfor %}
+          </section><a class="carousel-control-prev musts-next"><i class="fa fa-angle-left"></i></a> <a class="carousel-control-next musts-prev"><i class="fa fa-angle-right"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <section class="site-wrap anim" id="Trending_Articles" style="padding-top: 3em; width: 100%; background-color: #2c2f3d;--delay: .3s">
+    <div class="site-section" style="padding-bottom: 3.7rem;">
+      <div class="container-fluid articulate">
+        <div class="anim" style="position: relative;display: flex;">
+          <div class="ta-before blurry-before"></div>
+          <nav class="tmln tmln--box tmln--hr" style="padding: 10px;">
+            <h3 class="tmln__header">Trending Articles</h3>
+            <ul class="tmln__list" id="home_article_list">
+              {% for article in articles %}
+                <li class="tmln__item {% if forloop.first %}tmln__item--active{% else %}{% cycle 'tmln__item--bg-lght' 'tmln__item--bg-dark' %}{% endif %}">
+                  <span data-title="">{{ article.created_at | shorten_time }}</span>
+                  <h3 class="tmln__item-headline">{{ article.title }}</h3>
+                  <p>{{ article.body }}</p><a class="my_article" href="" data-url="{% url 'article' article.id %}">Read more</a>
+                </li>
+              {% empty %}
+                <br>
+                 <h6 class="title is-5">There are no articles!</h6>              
+              {% endfor %}
+
+            </ul>
+          </nav>
+          <div class="ta-after blurry-after"></div>
+        </div>
+      </div>
+      <div></div>
+    </div>
+  </section><!--? Testimonial Start -->
+  <div class="testimonial-area testimonial-padding" data-background="{% static 'images/section.jpg' %}">
+    <div class="container" style="height: fit-content !important;max-height: fit-content !important;">
+      <div class="row d-flex justify-content-center">
+        <div class="col-xl-10 col-lg-10 col-md-9">
+          <button type="button" class="testimonial-prev testimonial-arrow" style="display: block;"><i class="ti-angle-left"></i></button>
+          <div class="h1-testimonial-active">
+            {% for testimonial in testimonials %}
+              <!-- Single Testimonial -->
+              <div class="single-testimonial text-center">
+                <!-- Testimonial Content -->
+                <div class="testimonial-caption">
+                  <div class="testimonial-top-cap">
+                    <svg class="testimonial-svg" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M57.053,48.209 L42.790,48.209 L52.299,29.242 L38.036,29.242 L38.036,0.790 L66.562,0.790 L66.562,29.242 L57.053,48.209 ZM4.755,48.209 L14.263,29.242 L0.000,29.242 L0.000,0.790 L28.527,0.790 L28.527,29.242 L19.018,48.209 L4.755,48.209 Z" fill="#fff" fill-rule="evenodd"></path></svg>
+                    <p>{{ testimonial.description }}</p>
+                  </div><!-- founder -->
+                  <div class="testimonial-founder d-flex align-items-center justify-content-center">
+                    <div class="founder-img">
+                      <img alt="" src="{% static 'images/default.jpg' %}">
+                    </div>
+                    <div class="founder-text">
+                      <span>{{ testimonial.username }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div><!-- Single Testimonial -->
+            {% endfor %} 
+          </div>
+          <button type="button" class="testimonial-next testimonial-arrow" style="display: block;"><i class="ti-angle-right"></i></button>
+        </div>
+      </div>
+    </div>
+  </div><!-- Testimonial End -->
+  <section id="contact">
+    <div class="container-fluid">
+      <h1 style="color: white;">Contact</h1>
+      <div class="block"></div>
+      <form action="#" method="POST" id="contact-form" novalidate>
+        {% csrf_token %}
+        <div class="rowy">
+          <div class="six columns">
+            <label for="exampleRecipientInput">Name</label> <input class="u-full-width" type="text" name="name">
+          </div>
+          <div class="six columns">
+            <label for="exampleEmailInput">Email</label> <input class="u-full-width" type="email" name="email">
+          </div>
+        </div>
+        <div class="rowy">
+          <label for="exampleMessage">Message</label> 
+          <textarea placeholder="Write your feedback or questions here ..."  class="u-full-width" name="message"></textarea> 
+          <button id="contact_btn" class="button-primary" type="submit" id="submit" name="submit">Submit</button>
+        </div>
+      </form>
+    </div>
+  </section>
+  <div class="">
+    <!-- Footer -->
+    <footer class="text-center text-lg-start text-white fortunate" style="background-color: #1a1e25">
+      <!-- Grid container -->
+      <div class="container-fluid p-4 pb-0" style="padding-bottom: 78px !important;">
+        <!-- Section: Links -->
+        <section class="">
+          ****** Credit: All illustrtions used on this site are from Freepik.com ******
+          <!--Grid row-->
+          <div class="row">
+            <!-- Grid column -->
+            <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
+              <h6 class="start text-uppercase mb-4 font-weight-bold">Storikyn</h6>
+              <p class="start">Our website is a platform where individuals can freely share their personal stories, experiences and lessons learned during various life and emotional phases.</p>
+            </div><!-- Grid column -->
+            <hr class="w-100 clearfix d-md-none">
+            <!-- Grid column -->
+            <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mt-3">
+              <h6 class="start text-uppercase mb-4 font-weight-bold">Useful links</h6>
+              <p class="start feedback-dropdown-link" data-url="{% url 'feedback' %}"><a class="text-white">Provide Feedback</a></p>
+              <p class="start" data-toggle="modal" data-target="#myModal" share-url="{% url 'share_website' %}" onclick="share(this.getAttribute('share-url'))"><a class="text-white">Invite Friends</a></p>
+              <p class="start"><a class="text-white">SignUp or Login</a></p>
+              <p class="start"><a class="text-white">Help</a></p>
+            </div><!-- Grid column -->
+            <hr class="w-100 clearfix d-md-none">
+            <!-- Grid column -->
+            <div class="col-lg-3 col-md-6 mx-auto mt-3">
+              <div class="footer-widget">
+                <h6 class="start text-uppercase mb-4 font-weight-bold">NewsLetter</h6>
+                <p style="text-align:left;">Get E-mail updates about our latest news and special offers.</p>
+                <form class="news-form" method="POST" id="news-form">
+                  {% csrf_token %}
+                  <input placeholder="Enter your mail" name="email" type="text" id="homeEmailInput"> 
+                  <p class="email-password-error home-email dissapear"></p>
+                  <button class="button-primary newado" type="submit">Subscribe</button>
+                </form>
+              </div>
+            </div><!-- Grid column -->
+            <hr class="w-100 clearfix d-md-none">
+            <!-- Grid column -->
+            <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
+              <h6 class="start text-uppercase mb-4 font-weight-bold">Contact</h6>
+              <p class="start"><i class="fa fa-home fac mr-3"></i> Harare, ZW</p>
+              <p class="start"><i class="fa fa-envelope fac mr-3"></i> info@storikyn.com</p>
+              <p class="start"><i class="fa fa-phone fac mr-3"></i> + 263 71 224 4791</p>
+            </div><!-- Grid column -->
+          </div><!--Grid row-->
+        </section><!-- Section: Links -->
+        <hr class="my-3">
+        <!-- Section: Copyright -->
+        <section class="p-3 pt-0">
+          <div class="row d-flex align-items-center">
+            <!-- Grid column -->
+            <div class="col-md-7 col-lg-8 text-center text-md-start">
+              <!-- Copyright -->
+              <div class="p-3">
+                © 2023 Copyright: <a class="text-white" href="https://mdbootstrap.com/">Storikyn.com</a>
+              </div><!-- Copyright -->
+            </div><!-- Grid column -->
+            <!-- Grid column -->
+            <div class="col-md-5 col-lg-4 ml-lg-0 text-center text-md-end">
+              <ul class="ul-social-circle">
+                <li>
+                  <a href="#"><span class="icon-facebook hre"></span></a>
+                </li>
+                <li>
+                  <a href="#"><span class="icon-twitter hre"></span></a>
+                </li>
+                <li>
+                  <a href="#"><span class="icon-linkedin hre"></span></a>
+                </li>
+                <li>
+                  <a href="#"><span class="icon-instagram hre"></span></a>
+                </li>
+              </ul>
+            </div><!-- Grid column -->
+          </div>
+        </section><!-- Section: Copyright -->
+      </div><!-- Grid container -->
+    </footer><!-- Footer -->
+  </div><!-- End of .container -->
+</div>
+
+<script>
+  $(document).ready(function() {
+        // Get the CSRF token from the cookie
+    function getCSRFToken() {
+      const cookieValue = document.cookie.match(/csrftoken=([^;]+)/);
+      return cookieValue ? cookieValue[1] : '';
+    }
+
+    const containerForm = document.getElementById("home-create-post-form");
+    const divToHide1 = containerForm.querySelector(".attached-files");
+    const divToHide2 = containerForm.querySelector(".create-post-content-controls");
+
+    $(document).on('input','.homeformInput', function(event){
+      event.preventDefault();
+      if (document.getElementById("home-post-body").value.length > 0 || document.getElementById("home-post-title").value.length > 0 || document.getElementById("home-image-upload").value.length > 0){
+        divToHide1.classList.remove('hide-part');
+        divToHide2.classList.remove('hide-part');
+      } else {
+        divToHide1.classList.add('hide-part')
+        divToHide2.classList.add('hide-part')
+      }
+    });
+
+    $(document).on('click','.homeformInput', function(event){
+      event.preventDefault();
+      if (document.getElementById("home-post-body").value.length > 0 || document.getElementById("home-post-title").value.length > 0 || document.getElementById("home-image-upload").value.length > 0){
+        divToHide1.classList.remove('hide-part');
+        divToHide2.classList.remove('hide-part');
+      } else {
+        divToHide1.classList.add('hide-part')
+        divToHide2.classList.add('hide-part')
+      }
+    });
+
+    $(document).on('change','#home-image-upload', function(event){
+      event.preventDefault();
+      if (document.getElementById("home-post-body").value.length > 0 || document.getElementById("home-post-title").value.length > 0 || document.getElementById("home-image-upload").value.length > 0){
+        divToHide1.classList.remove('hide-part');
+        divToHide2.classList.remove('hide-part');
+      } else {
+        divToHide1.classList.add('hide-part')
+        divToHide2.classList.add('hide-part')
+      }
+    });
+
+    $('.like').click(function(event){
+      const $this = this
+      const url = $(this).attr("data-url");
+      const likeIcon = this.querySelector(".fa-heart");
+      const likeCount = this.querySelector(".like-count");
+      const csrfToken = getCSRFToken();
+
+      $.ajax({
+          type:"GET",
+          url: url,
+          headers: {
+            'X-CSRFToken': csrfToken, // Include the CSRF token in the request header
+          },
+          success: function(response) 
+          {
+            let likes = likeCount.innerText;
+            likes = parseInt( likes );
+            if (response.success === 'Post liked successfully.') {
+              likes++;
+              $this.classList.add("liked");
+              likeIcon.classList.remove("far");
+              likeIcon.classList.add("fas");
+            } else {
+              likes--;
+              $this.classList.remove("liked");
+              likeIcon.classList.remove("fas");
+              likeIcon.classList.add("far");
+            }
+            likeCount.innerHTML = likes
+          } 
+      })
+    });
+
+    $('.readAloud').click(function(event){
+      const soundIcon = this.querySelector(".sound");
+
+      if (soundIcon.classList.contains("fa-volume-up")) {
+        soundIcon.classList.remove("fa-volume-up");
+        soundIcon.classList.add("fa-volume-mute");
+      } else {
+        $(".fa-volume-mute").addClass("fa-volume-up");
+        $(".fa-volume-mute").removeClass("fa-volume-mute");
+        soundIcon.classList.remove("fa-volume-mute");
+        soundIcon.classList.add("fa-volume-up");
+      } 
+    });
+
+    $(".mustreads").slick(getMustReadsSettings());
+    $('.musts-prev').click(function(e){ 
+      e.preventDefault(); 
+      $('.mustreads').slick('slickPrev');
+    } );
+    
+    $('.musts-next').click(function(e){
+      e.preventDefault(); 
+      $('.mustreads').slick('slickNext');
+    });
+
+    $(".h1-testimonial-active").slick(getTestimonialSettings());
+    $('.testimonial-prev').click(function(e){ 
+      e.preventDefault(); 
+      $('.h1-testimonial-active').slick('slickPrev');
+    } );
+    
+    $('.testimonial-next').click(function(e){
+      e.preventDefault(); 
+      $('.h1-testimonial-active').slick('slickNext');
+    });
+
+    fixTrendingArticlesBlurry();
+    var mainblogs = document.getElementById("mainblogs");
+    var heroism = document.getElementById("heroism");
+    style = window.getComputedStyle(mainblogs);
+    wdt = style.getPropertyValue('height');
+    heroism.style.height = wdt;
+
+    const reads_slider = document.querySelector(".mustreads");
+
+    if (reads_slider.classList.contains('slick-initialized')) {
+        $('.mustreads').slick('refresh');
+        $('.features').slick('refresh');
+        $('.h1-testimonial-active').slick('refresh');
+
+    } else {
+        $(".mustreads").slick(getMustReadsSettings());
+        $(".features").slick(getFeatureSettings());
+    }
+
+    const create = document.querySelector(".first");
+    if($(".first").length){
+      if (create.classList.contains('remove')) {
+        $(".second").addClass("remove");
+        $(".first").removeClass("remove");
+      }
+    }
+    
+    function scrollToDiv(divId) {
+      var div = document.getElementById(divId);
+      div.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    $(document).on('submit','#home-create-post-form', function(event){
+      event.preventDefault();
+      var returnValue = validateHomeForm();
+
+      // If the return value is true, continue with logic
+      if (returnValue === true) {
+        $('#home-post-error').addClass('dissapear');
+        openPhases()
+        var loader = '<div class="overlay"><div class="overlayDoor"></div><div class="overlayContent"><div class="loader"><div class="inner"></div></div></div></div>'
+        $('#PhasesModelBox').html(loader);
+        $('#PhasesModelBox').load("{% url 'get_phase_options' %}");
+        getHomePostPhase();
+      }
+    });
+
+    $('.profile-link-img').click(function(e) {
+      e.preventDefault();
+      closePost()
+      var url = $(this).attr('data-url');
+      $('#profile').load(url);
+      history.pushState(null, null, url);
+    });
+
+    function validateHomeForm() {
+      if ($('#home-post-title').val() === '' || $('#home-post-body').val() === '') {
+        $('#home-post-error').removeClass('dissapear');
+        showNotification("Error: Both title and body fields should be filled and should not be left blank.");
+        return false;
+      }
+      return true;
+    }
+
+    $('.more').click(function(e) {
+      e.preventDefault();
+      var url = $(this).attr('data-url');
+      var loader = '<div class="overlay"><div class="overlayDoor"></div><div class="overlayContent"><div class="loader"><div class="inner"></div></div></div></div>'
+      toggle_option(this);
+      $('#option').html(loader);
+      $('#option').load($(this).attr('data-url'));
+    });
+
+    $('.my_article').click(function(e) {
+      e.preventDefault();
+      var url = $(this).attr('data-url');
+      var loader = '<div class="overlay"><div class="overlayDoor"></div><div class="overlayContent"><div class="loader"><div class="inner"></div></div></div></div>'
+      article();
+      history.pushState(null, null, url);
+      $('#article').html(loader);
+      $('#article').load($(this).attr('data-url'));
+    });
+
+    $(document).on('click','#meBtn', function(event){
+      const text = document.querySelector(".about-me-text");
+
+      if (text.classList.contains("about-me-text-control")) {
+        text.classList.remove("about-me-text-control");
+        this.innerHTML = "Read Less"
+      } else {
+        text.classList.add("about-me-text-control");
+        this.innerHTML = "Read More"
+      }
+    });
+
+    function getHomePostPhase() {
+      var button = document.getElementById("HomeDoneBtn");
+      button.addEventListener('click', function() {
+        var inputToDelete = document.getElementById('home-post-phase-input');
+        if (inputToDelete) {
+          inputToDelete.parentNode.removeChild(inputToDelete);
+        }
+
+        var form = document.getElementById('home-create-post-form');
+        var newInput = document.createElement('input');
+        newInput.type = 'hidden';
+        newInput.name = 'phase'; // Name your input field as per your requirement
+        newInput.id = 'home-post-phase-input'
+        var selectMenu = document.getElementById("phaseSelectOptions");
+        newInput.value = selectMenu.value;
+        form.appendChild(newInput);
+        var formData = new FormData(form);
+        var imageBase64 = $('#home-image-upload')[0].src;
+        formData.append('image', base64ToBlob(imageBase64));
+        const csrfToken = getCSRFToken();
+
+        $.ajax({
+          url: "{% url 'create_post' %}",
+          type: 'POST',
+          headers: {
+            'X-CSRFToken': csrfToken, // Include the CSRF token in the request header
+          },
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function () {
+            $('#home-create-post-form').trigger('reset');
+            const preview_container = document.getElementById("home-preview");
+            $(preview_container).html("");
+            closePhases();
+            showNotification("Post created successfully");
+          },
+          error: function () {
+            alert('Error occurred. Please try again.');
+          }
+        });
+      });
+    }
+
+    $('.follow-link').click(function(e) {
+      e.preventDefault();
+      var platform = $(this).data('platform');
+
+      $.ajax({
+        type: 'POST',
+        url: '/follow/',
+        data: {
+          'platform': platform,
+          'csrfmiddlewaretoken': '{{ csrf_token }}'
+        },
+        success: function(response) {
+          if (response.status === 'success') {
+            alert('You have successfully followed on ' + platform);
+          } else {
+            alert('An error occurred while following on ' + platform);
+          }
+        },
+        error: function(xhr, status, error) {
+          console.error(xhr.responseText);
+        }
+      });
+    });
+
+    document.querySelectorAll('.follow').forEach(function(button) {
+      button.addEventListener('click', function() {
+          if ( button.classList.contains('active') ) {
+
+          } else {
+              const opposite_id = button.getAttribute("opposite");
+              const opposite = document.getElementById(opposite_id);
+              $(opposite).removeClass("active");
+              $(button).addClass("active");
+              const content_id = button.getAttribute("for");
+              const content = document.getElementById(content_id);
+              $(".selected-posts-box").removeClass("selected-posts-box");
+              $(content).addClass("selected-posts-box");
+          }
+      });
+    });
+
+    // Get the CSRF token from the cookie
+    function getCSRFToken() {
+      const cookieValue = document.cookie.match(/csrftoken=([^;]+)/);
+      return cookieValue ? cookieValue[1] : '';
+    }
+
+    $('.post_details').click(function(e) {
+      e.preventDefault();
+      var url = $(this).attr('data-url');
+      openPost()
+      var loader = '<div class="overlay"><div class="overlayDoor"></div><div class="overlayContent"><div class="loader"><div class="inner"></div></div></div></div>'
+      $('#PostModelBox').html(loader);
+      $('#PostModelBox').load($(this).attr('data-url'));
+    });
+
+    $('.wishlist').click(function(e) {
+      e.preventDefault();
+      var url = $(this).attr('data-url');
+      openFun()
+      var loader = '<div class="overlay"><div class="overlayDoor"></div><div class="overlayContent"><div class="loader"><div class="inner"></div></div></div></div>'
+      $('#BookModelBox').html(loader);
+      $('#BookModelBox').load($(this).attr('data-url'));
+    });
+
+    $('.home-emo-btn').click(function(e) {
+      e.preventDefault();
+      var url = $(this).attr('data-url');
+      var pushUrl = $(this).attr('fake-url');
+      history.pushState(null, null, pushUrl);
+      var loader = '<div class="overlay"><div class="overlayDoor"></div><div class="overlayContent"><div class="loader"><div class="inner"></div></div></div></div>'
+      $('#emotions').html(loader);
+      $('#emotions').load($(this).attr('data-url'));
+      emotions();
+    });
+
+    $('.home-life-btn').click(function(e) {
+      e.preventDefault();
+      var url = $(this).attr('data-url');
+      var pushUrl = $(this).attr('fake-url');
+      history.pushState(null, null, pushUrl);
+      var loader = '<div class="overlay"><div class="overlayDoor"></div><div class="overlayContent"><div class="loader"><div class="inner"></div></div></div></div>'
+      $('#phases').html(loader);
+      $('#phases').load($(this).attr('data-url'));
+      phases();
+    });
+
+    function validateEmail(email) {
+      const regex = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+      return regex.test(email);
+    }
+
+    function HomeEmailValidateForm() {
+      const emailInput = document.getElementById('homeEmailInput');
+      if (!validateEmail(emailInput.value)) {
+        $('.home-email').removeClass('dissapear');
+        const emailError = document.querySelector(".home-email")
+        emailError.textContent = 'Please enter a valid email address.';
+        return false;
+      } 
+      return true;
+    }
+
+    $('#news-form').submit(function(e){
+      e.preventDefault();
+      var returnValue = HomeEmailValidateForm();
+
+      // If the return value is true, continue with logic
+      if (returnValue === true) {
+        var url = "{% url 'newsletter_subscription' %}";
+        const csrfToken = getCSRFToken();
+
+        // Make an AJAX request to your Django view
+        $.ajax({
+          url: url,
+          type: 'POST',
+          data: $(this).serialize(),
+          headers: {
+            'X-CSRFToken': csrfToken, // Include the CSRF token in the request header
+          },
+          success: function(response) {
+            $('.home-email').addClass('dissapear');
+            $('#news-form').trigger('reset');
+            showNotification(response.success);            
+          },
+          error: function(xhr, textStatus, error) {
+            alert('Error occurred. Please try again.');
+          }
+        });
+      } 
+    });
+
+    $('#contact-form').submit(function(e){
+      var formId = $(this).attr('id');
+      const csrfToken = getCSRFToken();
+      var submitBtn = $(this).find('input[type=submit]');
+      submitBtn.prop('disabled', true);
+      e.preventDefault();
+
+      $.ajax({
+        url: '{% url "contact" %}',
+        type: 'POST',
+        headers: {
+          'X-CSRFToken': csrfToken, // Include the CSRF token in the request header
+        },
+        data: $(this).serialize(),
+        dataType: 'json', // get the form data
+        success: function(response) {
+          if (response.status === 'recurring') {
+                 
+          } else {
+            
+          }
+        },
+        error: function(xhr, errmsg, err) {
+          alert('Error occurred. Please try again.');
+        }
+      });
+    });
+  });
+
+
+
+</script>

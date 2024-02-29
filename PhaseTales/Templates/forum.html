@@ -1,0 +1,102 @@
+{% load static %}
+<div class="website-backButton" onclick="window.history.go(-1);">
+  <i class="fa fa-long-arrow-left website-backIcon"></i>
+</div>
+<div class="stream-area">
+
+  <div class="main-stream">
+    <div class="forum-main anim" style="--delay: 0.1s">
+      <div class="forum__title">{{ forum.name }} Forum</div>
+      <div class="forum-menu">
+        <a class="forum-menu-link active-link" id="{{ forum.name }}-questions-btn" data-url="{% url 'forum_questions' forum.slug %}" for="{{ forum.name }}-questions">Questions</a>
+        <a class="forum-menu-link" id="{{ forum.name }}-most-followed-btn" data-url="{% url 'forum_most_followed' forum.slug %}" for="{{ forum.name }}-most-followed">Most Followed</a> 
+        <a class="forum-menu-link" id="{{ forum.name }}-question-answers-btn" data-url="{% url 'forum_answers' forum.slug %}" for="{{ forum.name }}-question-answers">Answers</a> 
+        <a class="forum-menu-link" id="{{ forum.name }}-best-answers-btn" data-url="{% url 'forum_best_answers' forum.slug %}" for="{{ forum.name }}-best-answers">Best Answers</a>
+      </div>
+    </div>
+    <section class="site-wrap anim" id="Phases'_Insights" style="--delay: 0.2s">
+      <div class="site-section">
+        <div class="container-fluid destruction-fluid">
+          <div class="forum-box selected-box" id="{{ forum.name }}-questions">
+            {{ questions_content_template|safe }}
+          </div>
+          <div class="forum-box" id="{{ forum.name }}-most-followed">
+            {{ most_followed_content_template|safe }}
+          </div>
+          <div class="forum-box" id="{{ forum.name }}-question-answers">
+            {{ answers_content_template|safe }}
+          </div>
+          <div class="forum-box" id="{{ forum.name }}-best-answers">
+            {{ best_answers_content_template|safe }}
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <div class="side-stream"></div>
+</div>
+<script>
+  $(document).ready(function() {
+    var forumInput = document.getElementById("question-forum");
+    forumInput.value = "{{ forum.slug }}";
+
+    var currentURL = window.location.href;
+
+    if (currentURL.includes('/most-followed/')) {
+      fixActive("{{ forum.name }}-most-followed-btn");
+    } else if (currentURL.includes('/answers/')) {
+      fixActive("{{ forum.name }}-question-answers-btn");
+    } else if (currentURL.includes('/best-answers/')) {
+      fixActive("{{ forum.name }}-best-answers-btn");
+    } 
+
+    $('.forum-menu-link').click(function(e) {
+      e.preventDefault();
+      var url = $(this).attr('data-url');
+      var tab = $(this).attr('for');
+      history.pushState(null, null, url);
+      var loader = '<div class="overlay"><div class="overlayDoor"></div><div class="overlayContent"><div class="loader"><div class="inner"></div></div></div></div>'
+      $('#'+tab).html(loader);
+      $('#'+tab).load($(this).attr('data-url'));
+    });
+
+    $('website-backButton').click(function(e) {
+      e.preventDefault();
+      window.history.go(-1);
+    });
+
+    document.querySelectorAll('.forum-menu-link').forEach(function(button) {
+      button.addEventListener('click', function() {
+          if ( button.classList.contains('active-link') ) {
+
+          } else {
+              $(".active-link").removeClass("active-link");
+              $(button).addClass("active-link");
+              const content_id = button.getAttribute("for");
+              const content = document.getElementById(content_id);
+              $(".selected-box").removeClass("selected-box");
+              $(content).addClass("selected-box");
+          }
+      });
+    });
+  
+    const create = document.querySelector(".second");
+    if($(".second").length){
+      if (create.classList.contains('remove')) {
+        $(".second").removeClass("remove");
+        $(".first").addClass("remove");
+      }
+    } 
+    clear();
+  });
+
+  function fixActive(argument){
+    const button = document.getElementById(argument);
+    $(".active-link").removeClass("active-link");
+    $(button).addClass("active-link");
+    const content_id = button.getAttribute("for");
+    const content = document.getElementById(content_id);
+    $(".selected-box").removeClass("selected-box");
+    $(content).addClass("selected-box");
+  }
+</script>

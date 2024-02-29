@@ -1,0 +1,14 @@
+{% extends 'BASE.html' %}
+
+{% block content %}
+  <h1>Donate</h1>
+  {% if paypal_form %}
+    <form method="post" action="{{ paypal_form.form_target }}">
+      {% csrf_token %}
+      {{ paypal_form.as_p }}
+      <button type="submit" class="btn btn-primary">Donate</button>
+    </form>
+  {% else %}
+    <p>There was an error processing your donation. Please try again later.</p>
+  {% endif %}
+{% endblock %}

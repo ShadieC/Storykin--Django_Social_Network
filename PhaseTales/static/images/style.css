@@ -1,0 +1,429 @@
+@import url('https://fonts.googleapis.com/css2?family=Crete+Round&family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  outline: none;
+  border: none;
+  text-decoration: none;
+  list-style: none;
+}
+
+body {
+  font-family: Poppins, sans-serif;
+}
+
+:root {
+  --text-color: #0f1419;
+  --text2-color: #576975;
+  --twitter-blue: #1d9bf0;
+  --grey-bg: #f0f3f4;
+  --line-color: #eee;
+}
+
+h1 {
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 24px;
+}
+
+h2 {
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 24px;
+}
+
+h3 {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 20px;
+}
+
+h4 {
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+h5 {
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 20px;
+  color: var(--text2-color);
+}
+
+hr {
+  width: 100%;
+  border-bottom: 0.01px solid var(--line-color);
+}
+
+p {
+  font-size: 12px;
+  font-weight: normal;
+}
+
+.container {
+  padding: 0 10%;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* --------------left-sidebar starts---------------- */
+
+.left-sidebar {
+  flex-basis: 22%;
+  position: relative;
+  height: auto;
+  align-items: center;
+}
+
+.logo {
+  width: 12.5%;
+}
+
+.home-icon img {
+  width: 35px;
+}
+
+.home-icon ul li img::after {
+  content: '';
+  width: 24px;
+  height: 24px;
+  background: var(--twitter-blue);
+  position: absolute;
+  border-radius: 50%;
+  bottom: 20px;
+}
+
+.icon {
+  width: 30px;
+}
+
+span {
+  color: var(--text-color);
+  font-size: 17px;
+  margin-left: 10px;
+  align-items: center;
+}
+
+.left-sidebar ul li {
+  display: block;
+  padding: 19px 0.5em;
+}
+
+.btn {
+  padding: 10px 60px;
+  border-radius: 25px;
+  background-color: var(--twitter-blue);
+  color: #fff;
+  margin-bottom: 80px;
+}
+
+/* --------------Main-Content Starts---------------- */
+
+.main-content {
+  flex-basis: 47%;
+  border: solid 1px #eee;
+  height: auto;
+  padding: 0 15px;
+}
+
+.top img {
+  width: 5%;
+  display: flex;
+  float: right;
+}
+
+.top {
+  display: flex;
+  height: 1.8%;
+  width: 100%;
+  padding-top: 15px;
+  background: #fff;
+}
+
+.top h3 {
+  color: var(--text-color);
+}
+
+.home {
+  margin-bottom: 20px;
+}
+
+.user-pic {
+  width: 60px;
+  border-radius: 50%;
+  border: solid 2px #fff;
+}
+
+.user-details {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+}
+
+.name-tag {
+  margin-left: 10px;
+}
+
+.user-details h3 {
+  color: var(--text-color);
+}
+
+.Whts-happening {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--text2-color);
+  margin-bottom: 20px;
+}
+
+.media-icons {
+  padding: 20px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 50px;
+}
+
+.media-icons ul {
+  display: flex;
+  margin-left: 55px;
+}
+
+.media-icons img {
+  width: 15px;
+  margin-left: 20px;
+}
+
+.btn2 {
+  padding: 5px 15px;
+  border-radius: 25px;
+  background-color: var(--twitter-blue);
+  color: #fff;
+}
+
+.tweet-content {
+  display: flex;
+  flex-direction: column;
+  padding-top: 20px;
+  transition: 0.3 sec;
+}
+
+.tweet-content:hover {
+  background-color: var(--grey-bg);
+}
+
+.user-info {
+  margin-top: -20px;
+  margin-left: 80px;
+}
+
+.user-name {
+  display: flex;
+  margin-top: -50px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.psuedo-name {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.user-name h3 {
+  color: var(--text-color);
+}
+
+.dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--text2-color);
+  margin-top: 8px;
+}
+
+.user-name h5 {
+  font-size: 13px;
+  font-weight: normal;
+}
+
+.more {
+  display: flex;
+  float: right;
+}
+
+.more img {
+  width: 30px;
+}
+
+.post-section p {
+  font-size: 13px;
+  font-weight: normal;
+  line-height: 20px;
+  margin-top: 5px;
+}
+
+.post-image img {
+  width: 100%;
+  border-radius: 8px;
+  margin-top: 8px;
+}
+
+.comments ul {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 5px;
+  margin-bottom: 20px;
+}
+
+.comments ul li {
+  font-size: 13px;
+  color: var(--text2-color);
+  align-items: center;
+}
+
+.comments img {
+  width: 16px;
+  margin-right: 5px;
+}
+
+/* --------------Right-Sidebar Starts---------------- */
+
+.right-container {
+  padding: 15px;
+}
+
+.search-bar {
+  width: 100%;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  border-radius: 50px;
+  background: var(--grey-bg);
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 10px 20px;
+  font-size: 15px;
+  background: none;
+}
+
+.search-bar img {
+  width: 20px;
+}
+
+.right-sidebar {
+  flex-basis: 28%;
+  height: auto;
+}
+
+.trending {
+  background: var(--grey-bg);
+  margin-top: 20px;
+  border-radius: 25px;
+  padding: 20px;
+  height: 610px;
+}
+
+.location {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.location h3 {
+  font-size: 12px;
+  color: var(--text2-color);
+  font-weight: normal;
+}
+
+.trending h2 {
+  font-size: 15px;
+  font-weight: 700;
+  margin-top: -20px;
+}
+
+.trending h4 {
+  font-size: 12px;
+  color: var(--text2-color);
+}
+
+.show-more a {
+  color: var(--twitter-blue);
+  font-size: 14px;
+}
+
+.show-more {
+  margin-top: 20px;
+}
+
+.who-to-follow {
+  display: flex;
+  flex-direction: column;
+  background: var(--grey-bg);
+  margin-top: 20px;
+  border-radius: 25px;
+  padding: 20px;
+  height: 360px;
+}
+
+.who-to-follow .user-details {
+  margin-top: 20px;
+}
+
+.btn3 {
+  padding: 5px 15px;
+  border-radius: 25px;
+  background: #000;
+  float: right;
+}
+
+.btn3 h3 {
+  color: #fff;
+}
+
+.right-container p {
+  font-size: 13px;
+  font-weight: normal;
+  margin-top: 20px;
+  color: var(--text2-color);
+}
+
+/* -------------------------Media Query----------------------------- */
+
+@media only screen and (max-width: 768px) {
+  .container {
+    padding: 5px 2%;
+    display: block;
+  }
+
+  .top {
+    display: flex;
+    justify-content: space-between;
+    height: 5%;
+    width: 100%;
+    padding: 25px;
+    background: #fff;
+  }
+
+  .user-info {
+    margin-top: -20px;
+  }
+
+  .left-sidebar,
+  .right-sidebar {
+    display: none;
+  }
+}

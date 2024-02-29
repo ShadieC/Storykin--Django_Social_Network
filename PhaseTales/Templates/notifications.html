@@ -1,0 +1,13 @@
+{% load static %}
+{% load custom_filters %}
+{% for notification in notifications %}
+<div class="notufication">
+  <div class="profile-photo"><img alt="" src="{% static 'images/shadie.jpg' %}"></div>
+  <div class="notification-body">
+    {{ notification.message }}<small class="text-muted"> {{ notification.created_at| shorten_time }}</small>
+  </div>
+</div>
+{% empty %}
+  <br>
+   <h6 class="title is-5">You do not have any Hoodposts!</h6>              
+{% endfor %}

@@ -1,0 +1,115 @@
+
+.box-section {
+  margin-top:10px;
+  margin-bottom:10px;
+  padding: 5px;
+  border-style: solid;
+  border-radius: 5px;
+  border-color: lightgray;
+  border-width:1px;
+  //box-shadow: 0 0 0 1px lightgray;
+  overflow: auto;
+}
+
+.nav-vertical {}
+
+.nav-vertical .nav-item {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.nav-vertical .nav-link {
+  text-align: center;
+  text-align: -webkit-center;
+
+  color: darkgray !important;
+  font-weight: bold;
+  border: #f8f9fa 1px solid;
+  border-left-width: 0;
+  border-radius: 0 !important;
+  background-color: #f8f9fa!important;
+}
+.nav-link:first-child {
+  border-left: lightgray 1px solid;
+}
+
+.nav-vertical .nav-link.active {
+    color: black !important;
+    background-color: lightgray !important;
+    border: lightgray 1px solid;
+    /*-webkit-transition: all 0.4s;
+    -moz-transition: all 0.4s;
+    transition: all 0.4s;*/
+}
+
+.old-password-error {
+  margin-bottom: 0;
+  text-align: center;
+  color: red;
+}
+
+.new-password-error {
+  text-align: center;
+  color: red;
+}
+
+.username-password-error {
+  text-align: center;
+  color: red;
+}
+
+.email-password-error {
+  text-align: center;
+  color: red;
+}
+
+.dissapear {
+  display: none;
+}
+
+.profile-pic {
+  color: transparent;
+  transition: all 0.3s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  transition: all 0.3s ease;
+}
+.profile-pic input {
+  display: none;
+}
+.profile-pic img {
+  position: absolute;
+  object-fit: cover;
+  width: 165px;
+  height: 165px;
+  box-shadow: 0 0 10px 0 rgba(255, 255, 255, 0.35);
+  border-radius: 100px;
+  z-index: 0;
+}
+.profile-pic .-label {
+  cursor: pointer;
+  height: 165px;
+  width: 165px;
+}
+.profile-pic:hover .-label {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 10000;
+  color: #fafafa;
+  transition: background-color 0.2s ease-in-out;
+  border-radius: 100px;
+  margin-bottom: 0;
+}
+.profile-pic span {
+  display: inline-flex;
+  padding: 0.2em;
+  height: 2em;
+}
+
+.profile-pic a:hover {
+  text-decoration: none;
+}

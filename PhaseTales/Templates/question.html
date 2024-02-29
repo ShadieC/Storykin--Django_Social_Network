@@ -1,0 +1,87 @@
+{% load static %}
+{% load humanize %}
+<div class="stream-area">
+  <div class="main-stream">
+    <div class="site-wrap heading" id="Heading">
+      <div class="my-big-header anim" style="--delay: 0s;display: flex;">
+        Answers
+      </div>
+    </div>
+    <div class="card">
+      <form class="add-post create-post-content js-add-post" id="question-answer-form">
+        <textarea class="form-control create-post-textarea" id="question-answer-body" style="margin-top: 0px;padding-left: 3px;" placeholder="Would you like to answer this question...?" name="content"></textarea>
+        <input type="hidden" name="answer-question" id="answer-question" value="{{ question.id }}"> 
+        <input class="js-upload-file-input" name="bait-image" accept="image/*" type="file" id="answer-image-upload" onchange="getImageEditor(this.id);" preview="answer-preview"> <!-- Attached Files --> 
+        <label class="file-upload-link js-file-upload-link" style="top: 17px;right: 17px;" for="answer-image-upload"><i class="fa fa-paperclip js-file-upload-icon"></i></label>
+        <p class="website-error dissapear" id="question-answer-error">Error: Both title and body fields should be filled and should not be left blank.</p>
+        <div class="create-post-content-controls">
+          <label><input class="js-anonymous" name="anonymous" type="checkbox"> Anonymous</label> <button class="button-success button-mini js-save">Post</button> <a class="js-cancel" href="#">Cancel</a>
+          <div class="clearfix"></div>
+        </div>
+        <div class="attached-files js-attached-files" style="margin-top: 2em">
+          <div id="answer-preview" style="position: relative;width: 250px;"></div>
+        </div>
+      </form>
+    </div>
+    {{ answers_content_template|safe }}
+  </div>
+  <div class="side-stream"></div>
+</div>
+<script>
+  $(document).ready(function() {
+    var forumInput = document.getElementById("question-forum");
+    forumInput.value = "{{ question.forum.slug }}";
+
+    const create = document.querySelector(".second");
+    if($(".second").length){
+      if (create.classList.contains('remove')) {
+        $(".second").removeClass("remove");
+        $(".first").addClass("remove");
+      }
+    } 
+    clear(); 
+    $(document).on('submit','#question-answer-form', function(event){
+      event.preventDefault();
+      var returnValue = validateQuestionForm();
+
+      // If the return value is true, continue with logic
+      if (returnValue === true) {
+        const csrfToken = getCSRFToken();
+        var formData = new FormData(this);
+        var imageBase64 = $('#answer-image-upload')[0].src;
+        formData.append('image', base64ToBlob(imageBase64));
+        var url = "{% url 'answer_question' %}"
+    
+        $.ajax({
+          url: url,
+          type: 'POST',
+          headers: {
+            'X-CSRFToken': csrfToken, // Include the CSRF token in the request header
+          },
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function () {
+            $('#question-answer-form').trigger('reset');
+            const preview_container = document.getElementById("answer-preview");
+            $(preview_container).html("");
+            showNotification("Answer created successfully");
+          },
+          error: function () {
+            alert('Error occurred. Please try again.');
+          }
+        });
+      }
+    });
+
+    function validateQuestionForm() {
+      if ($('#question-answer-body').val() === '') {
+        $('#question-answer-error').removeClass('dissapear');
+        showNotification("Error: Body field should be filled and should not be left blank.");
+        return false;
+      }
+      return true;
+    }
+    
+  });
+</script>

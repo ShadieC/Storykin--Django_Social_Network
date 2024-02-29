@@ -1,0 +1,79 @@
+{% load social_share %}
+
+
+<div class="modal-header share-header">
+    <button type="button" class="close" data-dismiss="modal">&times;</button>
+    <h4 class="modal-title text-center">Share With Friends</h4>
+</div>
+<div class="modal-body text-center">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="icon-wrapper">
+                {% copy_to_clipboard link_url "<button><i class='fa fa-link custom-icon link_options_icon'><span class='fix-editor'>&nbsp;</span></i></button>" %}
+                {% add_copy_script %}
+                <p class="share-name">Link</p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="icon-wrapper">
+                {% send_email link_title "{{link_text}}" link_url "<i class='fas fa-envelope custom-icon mail_options_icon'><span class='fix-editor'>&nbsp;</span></i>" %}
+                <p class="share-name">Mail</p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="icon-wrapper">
+                {% post_to_facebook link_url "<i class='fab fa-facebook-f custom-icon fb_options_icon'><span class='fix-editor'>&nbsp;</span></i>" %}
+                <p class="share-name">Facebook</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="icon-wrapper">
+                {% post_to_twitter "{{link_text}}" link_url "<i class='fab fa-twitter custom-icon twit_options_icon'><span class='fix-editor'>&nbsp;</span></i>" %}
+                <p class="share-name">Twitter</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="icon-wrapper">
+                {% post_to_whatsapp link_url "<i class='fab fa-whatsapp custom-icon whatsapp_options_icon'><span class='fix-editor'>&nbsp;</span></i>" %}
+                <p class="share-name">Whatsapp</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="icon-wrapper">
+                {% post_to_reddit "{{link_text}}" link_url "<i class='fab fa-reddit custom-icon reddit_options_icon'><span class='fix-editor'>&nbsp;</span></i>" %}
+                <p class="share-name">Reddit</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="icon-wrapper">
+                {% post_to_telegram "{{link_text}}" link_url "<i class='fab fa-telegram custom-icon telegram_options_icon'><span class='fix-editor'>&nbsp;</span></i>" %}
+                <p class="share-name">Telegram</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="icon-wrapper">
+                {% post_to_linkedin link_url  %}
+                <p class="share-name">Linkedin</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="icon-wrapper">
+                {% save_to_pinterest link_url "<i class='fab fa-gplus custom-icon pinterest_options_icon'><span class='fix-editor'>&nbsp;</span></i>" %}
+                {% add_pinterest_script %}
+                <p class="share-name">Pinterest</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="share-footer text-center clearfix">
+    <button type="button" class="btn btn-primary" data-dismiss="modal">Maybe Later</button>
+</div>

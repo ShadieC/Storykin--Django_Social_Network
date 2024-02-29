@@ -1,0 +1,258 @@
+{% load static %}
+{% load custom_filters %}
+<div class="website-backButton" onclick="window.history.go(-1);">
+  <i class="fa fa-long-arrow-left website-backIcon"></i>
+</div>
+<div class="stream-area">
+  <div class="main-stream">
+    <div class="profile">
+      <img alt="" class="profile-cover" src="{% static 'images/background.jpg' %}">
+      <div class="profile-contact-info">
+        {% if profile.user.username != user.username %}
+          <div class="profile-contact messaging-feature">
+            <svg fill="currentColor" viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10.69 95.16C80.96 154.66 204.26 259.36 240.5 292c4.87 4.4 10.08 6.65 15.5 6.65 5.4 0 10.62-2.22 15.47-6.6 36.27-32.68 159.57-137.4 229.84-196.9a10.66 10.66 0 001.5-14.72A42.36 42.36 0 00469.33 64H42.67A42.36 42.36 0 009.19 80.44a10.66 10.66 0 001.5 14.72z"></path>
+            <path d="M505.81 127.4a10.62 10.62 0 00-11.37 1.55C416.5 195 317.05 279.69 285.76 307.89c-17.56 15.85-41.94 15.85-59.54-.03-33.36-30.05-145.04-125-208.66-178.91A10.67 10.67 0 000 137.08v268.25A42.7 42.7 0 0042.67 448h426.66A42.7 42.7 0 00512 405.33V137.08c0-4.15-2.42-7.93-6.19-9.67z"></path></svg>
+          </div>
+          <div class="profile-contact {{profile.user.username}}-blocking {% if profile_user in request_user_profile.blocked.all %}unblock-feature{% else %}block-feature{% endif  %}">
+            <svg fill="currentColor" viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10.69 95.16C80.96 154.66 204.26 259.36 240.5 292c4.87 4.4 10.08 6.65 15.5 6.65 5.4 0 10.62-2.22 15.47-6.6 36.27-32.68 159.57-137.4 229.84-196.9a10.66 10.66 0 001.5-14.72A42.36 42.36 0 00469.33 64H42.67A42.36 42.36 0 009.19 80.44a10.66 10.66 0 001.5 14.72z"></path>
+            <path d="M505.81 127.4a10.62 10.62 0 00-11.37 1.55C416.5 195 317.05 279.69 285.76 307.89c-17.56 15.85-41.94 15.85-59.54-.03-33.36-30.05-145.04-125-208.66-178.91A10.67 10.67 0 000 137.08v268.25A42.7 42.7 0 0042.67 448h426.66A42.7 42.7 0 00512 405.33V137.08c0-4.15-2.42-7.93-6.19-9.67z"></path></svg>
+          </div>
+        {% endif %}
+        <div class="profile-contact">
+          <svg fill="currentColor" viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+          <path d="M453.3 85.3a69.3 69.3 0 11-138.6 0 69.3 69.3 0 01138.6 0zm0 0"></path>
+          <path d="M384 170.7a85.4 85.4 0 11.2-170.9 85.4 85.4 0 01-.2 170.9zM384 32a53.4 53.4 0 10.1 106.8A53.4 53.4 0 00384 32zm0 0M453.3 426.7a69.3 69.3 0 11-138.6 0 69.3 69.3 0 01138.6 0zm0 0"></path>
+          <path d="M384 512a85.4 85.4 0 11.2-170.8A85.4 85.4 0 01384 512zm0-138.7a53.4 53.4 0 10.1 106.8 53.4 53.4 0 00-.1-106.8zm0 0M154.7 256A69.3 69.3 0 1116 256a69.3 69.3 0 01138.7 0zm0 0"></path>
+          <path d="M85.3 341.3a85.4 85.4 0 11.2-170.8 85.4 85.4 0 01-.2 170.8zm0-138.6a53.4 53.4 0 10.2 106.8 53.4 53.4 0 00-.2-106.8zm0 0"></path>
+          <path d="M135.7 245.8a21.3 21.3 0 01-10.6-40L323.1 93a21.3 21.3 0 1121 37.1L146.3 243c-3.3 1.9-7 2.8-10.5 2.8zm0 0M333.6 421.8c-3.6 0-7.2-1-10.5-2.8L125 306a21.4 21.4 0 0121.2-37l198 112.8a21.4 21.4 0 01-10.7 39.9zm0 0"></path></svg>
+        </div>
+        {% if profile.user.username == user.username %}
+          <div class="profile-contact modal-settings" data-toggle="modal" data-target="#basicModal">
+            <svg fill="currentColor" viewbox="0 0 515.6 515.6" xmlns="http://www.w3.org/2000/svg">
+            <path d="M496.7 212.2a64.4 64.4 0 11-91.2 91.1 64.4 64.4 0 0191.2-91M303.3 212.2a64.4 64.4 0 11-91 91.1 64.4 64.4 0 0191-91M110 212.2A64.4 64.4 0 1119 303.3a64.4 64.4 0 0191.1-91"></path></svg>
+          </div>
+        {% endif %}
+      </div>
+
+
+
+
+      <div class="profile-info">
+        <div class="profile-item">
+          <svg fill="currentColor" viewbox="0 0 469.33 469.33" xmlns="http://www.w3.org/2000/svg">
+          <path d="M320 213.33c35.3 0 63.79-28.69 63.79-64 0-35.3-28.48-64-63.79-64-35.3 0-64 28.7-64 64 0 35.31 28.7 64 64 64zM149.33 213.33c35.31 0 63.79-28.69 63.79-64 0-35.3-28.48-64-63.79-64-35.3 0-64 28.7-64 64 0 35.31 28.7 64 64 64zM149.33 256C99.52 256 0 280.96 0 330.67V384h298.67v-53.33c0-49.71-99.52-74.67-149.34-74.67zM320 256c-6.19 0-13.12.43-20.59 1.17 24.75 17.82 41.92 41.82 41.92 73.5V384h128v-53.33c0-49.71-99.52-74.67-149.33-74.67z"></path></svg>{{ phase_subscribed }}
+        </div>
+        <div class="profile-item">
+          <svg fill="currentColor" viewbox="0 0 469.33 469.33" xmlns="http://www.w3.org/2000/svg">
+          <path d="M234.67 170.67c-35.31 0-64 28.69-64 64s28.69 64 64 64 64-28.7 64-64-28.7-64-64-64z"></path>
+          <path d="M234.67 74.67C128 74.67 36.9 141 0 234.67c36.9 93.65 128 160 234.67 160 106.77 0 197.76-66.35 234.66-160-36.9-93.66-127.89-160-234.66-160zm0 266.66c-58.88 0-106.67-47.78-106.67-106.66S175.79 128 234.67 128s106.66 47.79 106.66 106.67-47.78 106.66-106.66 106.66z"></path></svg>{{ following }}
+        </div>
+        <div class="profile-item">
+          <svg fill="currentColor" viewbox="0 0 475.43 475.43" xmlns="http://www.w3.org/2000/svg">
+          <path d="M306.9 164.57l78.9-86.2a7.83 7.83 0 001.56-8.36 8.36 8.36 0 00-7.3-4.7h-253.4s-3.13 0-3.13.52v-9.4a26.12 26.12 0 0021.94-27.7A28.73 28.73 0 00117.26 0a29.78 29.78 0 00-29.78 28.73 30.82 30.82 0 0020.37 27.7v411.16a7.84 7.84 0 0015.68 0V263.84h256.52c3.2.2 6.17-1.7 7.31-4.7a8.36 8.36 0 00-1.56-8.36l-78.9-86.2z"></path></svg> {{ profile.created_at|glorified_time }}
+        </div>
+      </div>
+      <div class="profile-menu">
+        <div class="profile-avatar">
+          <img alt="" class="profile-img" src="{% static 'images/shadie.jpg' %}">
+          <div class="profile-name">
+            {{ profile.user.username }}
+          </div>
+        </div>
+        <div class="menu-items">
+          <a data-url="{% url 'user-posts' profile.user.username %}" class="profile-menu-link active-profile" id="posts-btn" for="posts">Posts <span  class="profile-span">{{ postscount }}</span></a>
+          <a data-url="{% url 'user-questions' profile.user.username %}" class="profile-menu-link " id="asked-questions-btn" for="asked-questions">Questions <span class="profile-span">{{ questionscount }}</span></a> 
+          <a data-url="{% url 'user-answers' profile.user.username %}" class="profile-menu-link" id="answers-btn" for="answers">Answers <span class="profile-span">{{ answerscount }}</span></a> 
+          <a data-url="{% url 'user-liked-posts' profile.user.username %}" class="profile-menu-link" id="saved-btn" for="saved">Liked <span class="profile-span">{{ likedcount }}</span></a>
+        </div>
+        {% if profile.user.username == user.username %}
+          <div class="follow-buttons">
+            <button class="followers">{{ followers }}  {% if followers == 1 %}Follower{% else %}Followers{% endif %}</button>
+          </div>
+        {% else %}
+          <div class="follow-buttons">
+            {% if user in profile.followers.all %}
+              <button class="follow nothing"><span class="followers-count">{{ followers }}</span></button> <div class="follow {{profile.user.username}}-follow follow-option " data-url="{% url 'follow_profile' profile.user.username %}">Following</div>
+            {% else %}
+              <button class="follow nothing"><span class="followers-count">{{ followers }}</span></button> <div class="follow {{profile.user.username}}-follow follow-option before-follow" data-url="{% url 'follow_profile' profile.user.username %}" role="button">Follow</div>
+            {% endif  %}    
+          </div>
+        {% endif %}
+      </div>
+    </div>
+    <section class="site-wrap anim" id="Phases'_Insights" style="--delay: 0.2s">
+      <div class="site-section">
+        <div class="container-fluid destruction-fluid">
+          <div class="profile-box selected-profile-box" id="posts">
+            {{ posts_content_template|safe }}
+          </div>
+          <div class="profile-box" id="asked-questions">
+            {{ questions_content_template|safe }}
+          </div>
+          <div class="profile-box" id="answers">
+            {{ answers_content_template|safe }}
+          </div>
+          <div class="profile-box" id="saved">
+            {{ liked_content_template|safe }}
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+  <div class="side-stream"></div>
+</div>
+<script>
+  $(document).ready(function() {
+
+    $('.modal-settings').click(function(e) {
+      e.preventDefault();
+      var loader = '<div class="overlay"><div class="overlayDoor"></div><div class="overlayContent"><div class="loader"><div class="inner"></div></div></div></div>'
+      $('#basicModalBody').html(loader);
+      $('#basicModalBody').load("{% url 'open_settings' %}");
+    });
+
+    $('.follow-option').on('click', function(event){
+      const url = $(this).attr("data-url");
+      const csrfToken = getCSRFToken();
+      $.ajax({
+        url: url,
+        type: 'GET',
+        headers: {
+          'X-CSRFToken': csrfToken, // Include the CSRF token in the request header
+        },
+        dataType: 'json', // get the form data
+        success: function(response) {
+          const followCount = document.querySelector(".followers-count");
+          let follows = followCount.innerText;
+          follows = parseInt( follows );
+          if (response.success === 'User has been followed successfully.') {
+            follows++;
+            $('.{{profile.user.username}}-follow').text('Following');
+            $('.{{profile.user.username}}-follow').removeClass('before-follow');
+          } else {
+            follows--;
+            $('.{{profile.user.username}}-follow').text('Follow');
+            $('.{{profile.user.username}}-follow').addClass('before-follow');
+          }
+          followCount.innerHTML = follows;
+          showNotification(response.success); 
+        },
+        error: function(xhr, errmsg, err) {
+          alert('Error occurred. Please try again.');
+        }
+      });  
+    });
+
+    $('.{{profile.user.username}}-blocking').on('click', function(event){
+      event.preventDefault();
+      var popupText = document.getElementById("cd-popup-text");
+      if (this.classList.contains('unblock-feature')){
+        popupText.innerHTML = "Are you sure you want to unblock this user?";
+      } else {
+        popupText.innerHTML = "Are you sure you want to block this user?";
+      }
+      $('.cd-popup-yes').addClass('cd-popup-block-feature');
+      $('.cd-popup-block-feature').removeClass('cd-popup-yes');
+      $('.cd-popup').addClass('is-visible');      
+      clear();
+    });
+
+    $('.cd-popup').on('click', function(event){
+      if( $(event.target).is('.cd-popup-block-feature') ) {
+        event.preventDefault();
+        const csrfToken = getCSRFToken();
+        $.ajax({
+          url: '{% url "block_profile" profile.user.username %}',
+          type: 'GET',
+          headers: {
+            'X-CSRFToken': csrfToken, // Include the CSRF token in the request header
+          },
+          dataType: 'json', // get the form data
+          success: function(response) {
+            $('.cd-popup').removeClass('is-visible');
+            $('.cd-popup-block-feature').addClass('cd-popup-yes');
+            $('.cd-popup-yes').removeClass('cd-popup-block');
+            if (response.message.success === 'User has been blocked successfully.') {
+              $('.{{profile.user.username}}-blocking').addClass('unblock-feature');
+              $('.{{profile.user.username}}-blocking').removeClass('block-feature');
+            } else {
+              $('.{{profile.user.username}}-blocking').removeClass('unblock-feature');
+              $('.{{profile.user.username}}-blocking').addClass('block-feature');
+            }
+            var data = response.data;
+            data.forEach(function(post) {
+              var postElements = document.getElementsByClassName("post-list-"+  post.id );
+              for (var i = 0; i < postElements.length; i++) {
+                postElements[i].classList.add('dissapear');
+              }
+            });
+            showNotification(response.message.success); 
+          },
+          error: function(xhr, errmsg, err) {
+            alert('Error occurred. Please try again.');
+          }
+        });  
+      } 
+    });
+
+    $('.messaging-feature').click(function(e) {
+      showNotification("This feauture has not yet been added but I am working on it");
+    });
+
+    var currentURL = window.location.href;
+
+    if (currentURL.includes('questions')) {
+      fixActive("asked-questions-btn");
+    } else if (currentURL.includes('answers')) {
+      fixActive("answers-btn");
+    } else if (currentURL.includes('liked-posts')) {
+      fixActive("saved-btn");
+    } 
+
+    $('.profile-menu-link').click(function(e) {
+      e.preventDefault();
+      var url = $(this).attr('data-url');
+      var tab = $(this).attr('for');
+      history.pushState(null, null, url);
+      var loader = '<div class="overlay"><div class="overlayDoor"></div><div class="overlayContent"><div class="loader"><div class="inner"></div></div></div></div>'
+      $('#'+tab).html(loader);
+      $('#'+tab).load($(this).attr('data-url'));;
+    });
+
+    [...document.querySelectorAll('.profile-menu-link')].forEach(function(button) {
+      button.addEventListener('click', function() {
+        if ( button.classList.contains('active-profile') ) {
+
+        } else {
+            $(".active-profile").removeClass("active-profile");
+            $(button).addClass("active-profile");
+            const content_id = button.getAttribute("for");
+            const content = document.getElementById(content_id);
+            $(".selected-profile-box").removeClass("selected-profile-box");
+            $(content).addClass("selected-profile-box");
+        }
+      });
+    });
+
+    const create = document.querySelector(".first");
+
+    if (create.classList.contains('remove')) {
+        $(".second").addClass("remove");
+        $(".first").removeClass("remove");
+    } 
+    clear();
+  });
+
+  function fixActive(argument){
+    const button = document.getElementById(argument);
+    $(".active-profile").removeClass("active-profile");
+    $(button).addClass("active-profile");
+    const content_id = button.getAttribute("for");
+    const content = document.getElementById(content_id);
+    $(".selected-profile-box").removeClass("selected-profile-box");
+    $(content).addClass("selected-profile-box");
+  }
+</script>

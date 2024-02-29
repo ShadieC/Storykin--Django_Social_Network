@@ -1,0 +1,111 @@
+{% extends template %}
+{% load bootstrap3 %}
+{% block title %}Create an account{% endblock %}
+{% block content %}
+    <div class="jumbotron" id="jumbo">
+        <h1>Sign up for Free</h1>
+        <p style="color: #333;text-align: center;">Or if you have an account already you can <a class="to-signin" href="" data-url="{% url 'ajax-login' %}">log in</a>.</p>
+    </div>
+
+    <form action="." method="post" class="form" id="registration-form">
+        {% csrf_token %}
+        {% bootstrap_form user_form %}
+        {% buttons %}
+            <button type="submit" class="btn btn-primary" style="align-self: center;">
+                Create my account
+            </button>
+        {% endbuttons %}
+    </form>
+
+    <div class="code-verification dissapear">
+        <h1 style="color: #151728;text-align: -webkit-center;font-size: 1.6rem;">Hello!</h1>
+        <p style="color: #333;">Fill in the code sent to your email to verify it or <a class="to-signin" href="" data-url="{% url 'ajax-login' %}">change email</a>.</p>
+        <input type="text" name="code" maxlength="6" class="form-control" placeholder="XXXXXX" title="" id="code">
+        <p id="code-error" class="dissapear" style="color: #ff0000;margin-top: 4px;">The code you entered is wrong try again</p>
+    </div>
+    <script>
+        $(document).ready(function() {
+            $('.to-signin').click(function(e) {
+              e.preventDefault();
+              var url = $(this).attr('data-url');
+              var loader = '<div class="overlay"><div class="overlayDoor"></div><div class="overlayContent"><div class="loader"><div class="inner"></div></div></div></div>'
+              $('#blank').html(loader);
+              $('#blank').load(url);
+            });
+            // Get the CSRF token from the cookie
+            function getCSRFToken() {
+              const cookieValue = document.cookie.match(/csrftoken=([^;]+)/);
+              return cookieValue ? cookieValue[1] : '';
+            }
+            $('#registration-form').submit(function(event) {
+                event.preventDefault(); // Prevent the form from submitting normally
+               
+                $.ajax({
+                    url: "{% url 'email_verification' %}",
+                    type: 'POST',
+                    data: $('#registration-form').serialize(),
+                    success: function(data) {
+                        if (data.error == 'true'){
+                            csrfToken = $('input[name="csrfmiddlewaretoken"]').val();
+                            $.ajax({
+                                url: "{% url 'register' %}",
+                                type: 'POST',
+                                data: $('#registration-form').serialize(),
+                                headers: {
+                                    'X-CSRFToken': csrfToken, // Include the CSRF token in the request header
+                                },
+                                success: function(data) {
+                                    $('#blank').html(data);
+                                },
+                                error: function(xhr, status, error) {
+                                    // Handle AJAX error
+                                    alert('Signup failed: ' + error);
+                                }
+                            });
+
+                        } else {
+                            $('.code-verification').removeClass('dissapear');
+                            $('#jumbo').addClass('dissapear');
+                            $('#registration-form').addClass('dissapear');
+                            $(document).on('input','#code', function(event){
+                                event.preventDefault();
+                                var code = document.getElementById("code").value;
+                                csrfToken = $('input[name="csrfmiddlewaretoken"]').val();
+                                if (code.length == 6){
+                                    if (code == data.verification_code) {
+                                        $.ajax({
+                                            url: "{% url 'register' %}",
+                                            type: 'POST',
+                                            data: $('#registration-form').serialize(),
+                                            headers: {
+                                                'X-CSRFToken': csrfToken, // Include the CSRF token in the request header
+                                            },
+                                            success: function(data) {
+                                                if (data.status == "success") {
+                                                    window.location.href = "{% url 'home' %}"
+                                                }
+                                            },
+                                            error: function(xhr, status, error) {
+                                                // Handle AJAX error
+                                                alert('Signup failed: ' + error);
+                                            }
+                                        });
+                                    } else {
+                                        $('#code-error').removeClass('dissapear');
+                                    }
+                                } else {
+                                    $('#code-error').addClass('dissapear');
+                                }
+                            });
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle AJAX error
+                        alert('Signup failed: ' + error);
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}
+

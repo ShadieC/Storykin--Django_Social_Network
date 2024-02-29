@@ -1,0 +1,1013 @@
+{% load static %}
+{% load bootstrap3 %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="height=device-height,width=device-width, initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,target-densitydpi=device-dpi" name="viewport">
+  <title>Storikyn &mdash; Empowering Lives Through Shared Stories and Expert Insights</title>
+  
+  <!--=============== ICONS ===============-->
+  <link href="{% static 'fonts/icomoon/style.css' %}" rel="stylesheet">
+  <link href="{% static 'fonts/fontawesome-pro-5.13.0/css/fontawesome.min.css' %}" rel="stylesheet">
+  <link href="{% static 'fonts/fontawesome-pro-5.13.0/css/all.min.css' %}" rel="stylesheet">
+  <!--=============== phone number ===============-->
+  <link href="{% static 'css/slick/slick.css' %}" rel="stylesheet" type="text/css">
+  <link href="{% static 'css/slick/slick-theme.css' %}" rel="stylesheet" type="text/css">
+  <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+  <link href="{% static 'css/app.css' %}" rel="stylesheet">
+  <link href="{% static 'css/main.css' %}" rel="stylesheet">
+  <link href="{% static 'css/images.css' %}" rel="stylesheet">
+  <link href="{% static 'css/settings.css' %}" rel="stylesheet">
+  <link href="{% static 'css/social-share.css' %}" rel="stylesheet">
+  <link href="{% static 'css/login.css' %}" rel="stylesheet">
+  <link href="{% static 'css/slick/card.css' %}" rel="stylesheet" type="text/css">
+  <script src="{% static 'js/responsivevoice.js' %}" type="text/javascript"></script>
+  <script src="{% static 'js/jquery-2.2.0.min.js' %}" type="text/javascript"></script> 
+  <script src="https://js.braintreegateway.com/web/dropin/1.30.1/js/dropin.min.js"></script>
+  <script src="{% static 'js/filerobot-image-editor/filerobot-image-editor.min.js' %}"></script>
+  <script src="{% static 'js/tabs.js' %}"></script>
+  <script src="{% static 'js/main.js' %}"></script> 
+    <script>
+      $(document).ready(function() {
+        // Load the first tab on page load
+          var currentURL = window.location.href;
+
+          if (currentURL.includes('home/')) {
+            home();
+          } else if (currentURL.includes('emotional-phases/')) {
+            emotions();
+          } else if (currentURL.includes('life-phases/')) {
+            phases();
+          } else if (currentURL.includes('donate/')) {
+            donations();
+          } else if (currentURL.includes('achievements/')) {
+            achievements();
+          } else if (currentURL.includes('component/like')) {
+            achievements();
+          } else if (currentURL.includes('profile/')) {
+            user();
+          } else if (currentURL.includes('article/')) {
+            article();
+          } else if (currentURL.includes('phases/forum')) {
+            forum();
+          } else if (currentURL.includes('component/post/')) {
+            openPost();
+            $('#home').load("{% url 'home' %}");
+            home();
+          } else if (currentURL.includes('component/book/')) {
+            openFun();
+            $('#home').load("{% url 'home' %}");
+            home();
+          } else if (currentURL.includes('component/question/')) {
+            question();
+          } else if (currentURL.includes('component/answer/')) {
+            openPost();
+            $('#home').load("{% url 'home' %}");
+            home();
+          } else if (currentURL.includes('/search/')) {
+            search();
+          } else if (currentURL.includes('write-feedback/')) {
+            feedback();
+          } else if (currentURL.includes('user-notifications/')) {
+            $('#home').load("{% url 'home' %}");
+            home();
+            notifications();
+          } else if (currentURL.includes('register/')) {
+            openRegistration();
+            $('#home').load("{% url 'home' %}");
+            home();
+          } else if (currentURL.includes('login/')) {
+            openRegistration();
+            $('#home').load("{% url 'home' %}");
+            home();
+          } else if (currentURL.includes('password-reset/')) {
+            openRegistration();
+            $('#home').load("{% url 'home' %}");
+            home();
+          } else {
+            $('#home').load("{% url 'home' %}");
+            home();
+          }
+       
+        // Load the content of each tab when it is clicked
+        $('#sidebar a').click(function(e) {
+          e.preventDefault();
+          var url = $(this).attr('data-url');
+          var tab = $(this).attr('href');
+          history.pushState(null, null, url);
+          var loader = '<div class="overlay"><div class="overlayDoor"></div><div class="overlayContent"><div class="loader"><div class="inner"></div></div></div></div>'
+          $(tab).html(loader);
+          $.ajax({
+            url: url,
+            success: function(data) {
+              $(tab).html(data);
+            },
+            error: function(xhr, status, error) {
+              console.error('Error loading tab content:' + error);
+            }
+          });
+        });
+
+        $('.nav__item').click(function(e) {
+          e.preventDefault();
+          var url = $(this).attr('data-url');
+          var tab = $(this).attr('href');
+          history.pushState(null, null, url);
+          var loader = '<div class="overlay"><div class="overlayDoor"></div><div class="overlayContent"><div class="loader"><div class="inner"></div></div></div></div>'
+          $(tab).html(loader);
+          $.ajax({
+            url: url,
+            success: function(data) {
+              $(tab).html(data);
+            },
+            error: function(xhr, status, error) {
+              alert('Error loading tab content:', error);
+            }
+          });
+        });
+
+        searchBar();
+
+        $('.user-img').click(function(e) {
+          if (window.innerWidth > 575) {
+            e.preventDefault();
+            var url = $(this).attr('data-url');
+            user();
+            $('#profile').load(url);
+            history.pushState(null, null, url);
+          } else {
+            const user_details = document.querySelector(".user-details");
+            if (user_details.classList.contains("open")) {
+              user_details.classList.remove('open');
+            } else {
+              clear(); 
+              user_details.classList.add('open');
+            } 
+          }
+        });
+
+        $('.user-dropdown-link').click(function(e) {
+          e.preventDefault();
+          var url = $(this).attr('data-url');
+          $('#profile').load(url);
+          history.pushState(null, null, url);
+        });
+
+        $('.feedback-dropdown-link').click(function(e) {
+          e.preventDefault();
+          var url = $(this).attr('data-url');
+          feedback();
+          $('#feedback').load(url);
+          history.pushState(null, null, url);
+        });
+
+        $('.notify_icon').click(function(e) {
+          var url = $(this).attr('data-url');
+          $('#notifications-container').load(url);
+        });
+
+        window.onpopstate = function() {          
+          var currentURL = window.location.pathname;
+
+          if (currentURL.includes('home')) {
+            home();
+          } else if (currentURL.includes('emotional-phases/')) {
+            const urlParts = location.pathname.split('/');
+            const lastPart = urlParts[urlParts.length - 2];
+            if (lastPart === 'emotional-phases') {
+              $('#emotions').load(location.pathname);
+            } else {
+              $('#emotions').load('/phases/menace/emotional-phases/' + lastPart + '/');
+            }   
+            emotions();
+          } else if (currentURL.includes('life-phases/')) {
+            const urlParts = location.pathname.split('/');
+            const lastPart = urlParts[urlParts.length - 2];
+            if (lastPart === 'life-phases') {
+              $('#phases').load(location.pathname);
+            } else {
+              $('#phases').load('/phases/menace/life-phases/' + lastPart + '/');
+            }  
+            phases();
+          } else if (currentURL.includes('donate')) {
+            $('#donations').load(location.pathname);
+            donations();
+          } else if (currentURL.includes('achievements')) {
+            $('#achievements').load(location.pathname);
+            achievements();
+          } else if (currentURL.includes('users/')) {
+            $('#profile').load(location.pathname + 'direct_load/');
+            user();
+          } else if (currentURL.includes('article')) {
+            $('#article').load(location.pathname);
+            article();
+          } else if (currentURL.includes('forum/')) {
+            $('#forum').load(location.pathname + 'direct_load/');
+            forum();
+          } else if (currentURL.includes('component/question/')) {
+            $('#user-question').load(location.pathname);
+            question();
+          } else if (currentURL.includes('/search/')) {
+            const urlParts = window.location.href.split('/');
+            const lastPart = urlParts[urlParts.length - 1];
+            $('#search').load(location.pathname + lastPart);
+            search();
+          } else if (currentURL.includes('write-feedback/')) {
+            $('#feedback').load(location.pathname);
+            feedback();
+          } else if (currentURL.includes('user-notifications/')) {
+            notifications();
+            $('#notifications-container').load(location.pathname);
+          }
+        };
+
+      });
+    </script>
+</head>
+<body class="p-0">
+  <!-- partial:index.partial.html -->
+  <div class="mycontainer">
+    <div class="sidebar" id="sidebar">
+      <span class="logo">S</span> <a class="logo-expand" href="#">Storikyn</a>
+      <div class="side-wrapper">
+        <div class="side-title">
+          MENU
+        </div>
+        <div class="side-menu">
+          <a class="sidebar-link home-button is-active" onclick="home()" href="#home" data-url="{% url 'home' %}">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 576 512"><path d="M280.37 148.26L96 300.11V464a16 16 0 0 0 16 16l112.06-.29a16 16 0 0 0 15.92-16V368a16 16 0 0 1 16-16h64a16 16 0 0 1 16 16v95.64a16 16 0 0 0 16 16.05L464 480a16 16 0 0 0 16-16V300L295.67 148.26a12.19 12.19 0 0 0-15.3 0zM571.6 251.47L318.47 43a48 48 0 0 0-61 0L4.34 251.47a12 12 0 0 0-1.6 16.9l25.5 31A12 12 0 0 0 45.15 301l235.22-193.74a12.19 12.19 0 0 1 15.3 0L530.9 301a12 12 0 0 0 16.9-1.6l25.5-31a12 12 0 0 0-1.7-16.93z"/></svg>
+            Home
+          </a>
+          <a class="sidebar-link phases-button" onclick="phases()" href="#phases" data-url="{% url 'phases' %}">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 384 512"><path d="M120 72c0-39.765 32.235-72 72-72s72 32.235 72 72c0 39.764-32.235 72-72 72s-72-32.236-72-72zm254.627 1.373c-12.496-12.497-32.758-12.497-45.254 0L242.745 160H141.254L54.627 73.373c-12.496-12.497-32.758-12.497-45.254 0-12.497 12.497-12.497 32.758 0 45.255L104 213.254V480c0 17.673 14.327 32 32 32h16c17.673 0 32-14.327 32-32V368h16v112c0 17.673 14.327 32 32 32h16c17.673 0 32-14.327 32-32V213.254l94.627-94.627c12.497-12.497 12.497-32.757 0-45.254z"/></svg> 
+            Life Phases
+          </a> 
+          <a class="sidebar-link emotions-button" onclick="emotions()" href="#emotions" data-url="{% url 'emotions' %}">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 496 512"><path d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm80 168c17.7 0 32 14.3 32 32s-14.3 32-32 32-32-14.3-32-32 14.3-32 32-32zm-160 0c17.7 0 32 14.3 32 32s-14.3 32-32 32-32-14.3-32-32 14.3-32 32-32zm194.8 170.2C334.3 380.4 292.5 400 248 400s-86.3-19.6-114.8-53.8c-13.6-16.3 11-36.7 24.6-20.5 22.4 26.9 55.2 42.2 90.2 42.2s67.8-15.4 90.2-42.2c13.4-16.2 38.1 4.2 24.6 20.5z"/></svg>
+            Emotions
+          </a> 
+          <a class="sidebar-link donations-button" onclick="donations()" href="#donations" data-url="{% url 'donate' %}">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 512 512"><path d="M256 416c114.9 0 208-93.1 208-208S370.9 0 256 0 48 93.1 48 208s93.1 208 208 208zM233.8 97.4V80.6c0-9.2 7.4-16.6 16.6-16.6h11.1c9.2 0 16.6 7.4 16.6 16.6v17c15.5.8 30.5 6.1 43 15.4 5.6 4.1 6.2 12.3 1.2 17.1L306 145.6c-3.8 3.7-9.5 3.8-14 1-5.4-3.4-11.4-5.1-17.8-5.1h-38.9c-9 0-16.3 8.2-16.3 18.3 0 8.2 5 15.5 12.1 17.6l62.3 18.7c25.7 7.7 43.7 32.4 43.7 60.1 0 34-26.4 61.5-59.1 62.4v16.8c0 9.2-7.4 16.6-16.6 16.6h-11.1c-9.2 0-16.6-7.4-16.6-16.6v-17c-15.5-.8-30.5-6.1-43-15.4-5.6-4.1-6.2-12.3-1.2-17.1l16.3-15.5c3.8-3.7 9.5-3.8 14-1 5.4 3.4 11.4 5.1 17.8 5.1h38.9c9 0 16.3-8.2 16.3-18.3 0-8.2-5-15.5-12.1-17.6l-62.3-18.7c-25.7-7.7-43.7-32.4-43.7-60.1.1-34 26.4-61.5 59.1-62.4zM480 352h-32.5c-19.6 26-44.6 47.7-73 64h63.8c5.3 0 9.6 3.6 9.6 8v16c0 4.4-4.3 8-9.6 8H73.6c-5.3 0-9.6-3.6-9.6-8v-16c0-4.4 4.3-8 9.6-8h63.8c-28.4-16.3-53.3-38-73-64H32c-17.7 0-32 14.3-32 32v96c0 17.7 14.3 32 32 32h448c17.7 0 32-14.3 32-32v-96c0-17.7-14.3-32-32-32z"/></svg>
+            Donate
+          </a> 
+          <a class="sidebar-link achievements-button" onclick="achievements()" href="#achievements" data-url="{% url 'achievements' %}">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 384 512"><path d="M97.12 362.63c-8.69-8.69-4.16-6.24-25.12-11.85-9.51-2.55-17.87-7.45-25.43-13.32L1.2 448.7c-4.39 10.77 3.81 22.47 15.43 22.03l52.69-2.01L105.56 507c8 8.44 22.04 5.81 26.43-4.96l52.05-127.62c-10.84 6.04-22.87 9.58-35.31 9.58-19.5 0-37.82-7.59-51.61-21.37zM382.8 448.7l-45.37-111.24c-7.56 5.88-15.92 10.77-25.43 13.32-21.07 5.64-16.45 3.18-25.12 11.85-13.79 13.78-32.12 21.37-51.62 21.37-12.44 0-24.47-3.55-35.31-9.58L252 502.04c4.39 10.77 18.44 13.4 26.43 4.96l36.25-38.28 52.69 2.01c11.62.44 19.82-11.27 15.43-22.03zM263 340c15.28-15.55 17.03-14.21 38.79-20.14 13.89-3.79 24.75-14.84 28.47-28.98 7.48-28.4 5.54-24.97 25.95-45.75 10.17-10.35 14.14-25.44 10.42-39.58-7.47-28.38-7.48-24.42 0-52.83 3.72-14.14-.25-29.23-10.42-39.58-20.41-20.78-18.47-17.36-25.95-45.75-3.72-14.14-14.58-25.19-28.47-28.98-27.88-7.61-24.52-5.62-44.95-26.41-10.17-10.35-25-14.4-38.89-10.61-27.87 7.6-23.98 7.61-51.9 0-13.89-3.79-28.72.25-38.89 10.61-20.41 20.78-17.05 18.8-44.94 26.41-13.89 3.79-24.75 14.84-28.47 28.98-7.47 28.39-5.54 24.97-25.95 45.75-10.17 10.35-14.15 25.44-10.42 39.58 7.47 28.36 7.48 24.4 0 52.82-3.72 14.14.25 29.23 10.42 39.59 20.41 20.78 18.47 17.35 25.95 45.75 3.72 14.14 14.58 25.19 28.47 28.98C104.6 325.96 106.27 325 121 340c13.23 13.47 33.84 15.88 49.74 5.82a39.676 39.676 0 0 1 42.53 0c15.89 10.06 36.5 7.65 49.73-5.82zM97.66 175.96c0-53.03 42.24-96.02 94.34-96.02s94.34 42.99 94.34 96.02-42.24 96.02-94.34 96.02-94.34-42.99-94.34-96.02z"/></svg>
+            Achievements
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="nav__menu" id="nav-menu">
+      <ul class="nav__list">
+        <li class="nav__item"  onclick="home()" href="#home" data-url="{% url 'home' %}">
+          <a class="nav__link nav__home active-bn-link">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="28" fill="currentColor" viewBox="0 0 576 512"><path d="M280.37 148.26L96 300.11V464a16 16 0 0 0 16 16l112.06-.29a16 16 0 0 0 15.92-16V368a16 16 0 0 1 16-16h64a16 16 0 0 1 16 16v95.64a16 16 0 0 0 16 16.05L464 480a16 16 0 0 0 16-16V300L295.67 148.26a12.19 12.19 0 0 0-15.3 0zM571.6 251.47L318.47 43a48 48 0 0 0-61 0L4.34 251.47a12 12 0 0 0-1.6 16.9l25.5 31A12 12 0 0 0 45.15 301l235.22-193.74a12.19 12.19 0 0 1 15.3 0L530.9 301a12 12 0 0 0 16.9-1.6l25.5-31a12 12 0 0 0-1.7-16.93z"/></svg> 
+            <span class="nav__name">Home</span>
+          </a>
+        </li>
+        <li class="nav__item" onclick="phases()" href="#phases" data-url="{% url 'phases' %}">
+          <a class="nav__link nav__phases">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="currentColor" viewBox="0 0 384 512"><path d="M120 72c0-39.765 32.235-72 72-72s72 32.235 72 72c0 39.764-32.235 72-72 72s-72-32.236-72-72zm254.627 1.373c-12.496-12.497-32.758-12.497-45.254 0L242.745 160H141.254L54.627 73.373c-12.496-12.497-32.758-12.497-45.254 0-12.497 12.497-12.497 32.758 0 45.255L104 213.254V480c0 17.673 14.327 32 32 32h16c17.673 0 32-14.327 32-32V368h16v112c0 17.673 14.327 32 32 32h16c17.673 0 32-14.327 32-32V213.254l94.627-94.627c12.497-12.497 12.497-32.757 0-45.254z"/></svg>  
+            <span class="nav__name">Life Phases</span>
+          </a>
+        </li>
+        <li class="nav__item" onclick="donations()" href="#donations" data-url="{% url 'donate' %}">
+          <a class="nav__link nav__donations" style="height: 100%;justify-content: center;">
+            <svg height="30" fill="currentColor" version="1.1" viewbox="0 0 1000 1000" width="30" x="0px" xmlns="http://www.w3.org/2000/svg" y="0px"><g><g transform="translate(0.000000,511.000000) scale(0.100000,-0.100000)"><path d="M2334.5,4488.4c-444.9-47-903.6-219.5-1217.1-456.7c-166.6-125.4-413.6-386.1-529.2-560.6C64.8,2691.1-43,1648.4,290.2,595.9c288.1-913.3,850.6-1740.5,1897.3-2789.1c829.1-831,1675.8-1471.9,2640.1-1995.2l170.5-92.1l172.5,92.1C6134.9-3667,6975.7-3030,7812.6-2193.2c717.3,717.4,1181.9,1301.4,1515,1903.1c539,970.2,705.6,2026.6,464.5,2920.4c-194,715.4-629.1,1287.7-1209.3,1587.6c-650.7,337.1-1428.8,368.5-2105,82.3c-456.7-192.1-968.2-599.8-1338.7-1062.3c-68.6-86.2-131.3-156.8-139.2-156.8c-7.8,0-74.5,74.5-149,166.6C4145.5,4123.9,3216.4,4582.5,2334.5,4488.4z M5196,2150.2c0-74.5,5.9-137.2,15.7-137.2c78.4-2,309.7-70.6,427.3-127.4c186.2-90.2,344.9-245,442.9-431.2c74.5-143.1,143.1-362.6,117.6-384.2c-7.8-5.9-137.2-27.4-288.1-45.1c-150.9-17.6-297.9-37.2-327.3-43.1c-47-9.8-52.9-2-82.3,86.2c-17.6,52.9-54.9,125.4-82.3,162.7c-47.1,66.6-176.4,174.4-207.8,174.4c-7.8,0-15.7-237.2-15.7-525.3V354.8l152.9-43.1c82.3-25.5,241.1-88.2,350.8-141.1c431.2-209.7,617.4-505.7,619.3-980c0-227.4-29.4-380.2-111.7-558.6c-158.8-343-490-591.9-897.7-676.2l-113.7-21.6v-254.8v-252.8h-196h-196v250.9v248.9l-129.4,25.5c-176.4,33.3-341,103.9-490,209.7c-154.8,111.7-264.6,247-362.6,446.9c-76.4,158.8-149,419.5-131.3,468.5c7.8,19.6,92.1,37.2,311.6,60.7c397.9,43.1,382.2,45.1,397.9-25.5c33.3-166.6,205.8-415.5,343-495.9l60.8-35.3v566.4v566.4l-82.3,23.5c-47,13.7-168.5,64.7-270.5,113.7c-152.9,72.5-213.6,117.6-335.2,239.1c-170.5,172.5-252.8,319.5-303.8,544.9c-43.1,194-29.4,495.9,29.4,660.5c133.3,374.4,466.5,639,889.8,707.6l72.5,11.8v123.5c0,66.6,5.9,129.4,13.7,135.2c5.9,7.8,94.1,13.7,196,13.7H5196V2150.2z"></path><path d="M4672.7,1348.5c-307.7-221.5-268.5-658.6,72.5-835l58.8-31.4v462.6C4804,1458.3,4807.9,1446.5,4672.7,1348.5z"></path><path d="M5196-936.8c0-401.8,5.9-519.4,25.5-519.4c51,2,201.9,82.3,264.6,143.1c219.5,209.7,225.4,570.3,13.7,754.6c-72.5,66.6-221.5,141.1-276.4,141.1C5199.9-417.4,5196-501.7,5196-936.8z"></path></g></g></svg>
+          </a>
+        </li>
+        <li class="nav__item" onclick="emotions()" href="#emotions" data-url="{% url 'emotions' %}">
+          <a class="nav__link nav__emotions">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="currentColor" viewBox="0 0 496 512"><path d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm80 168c17.7 0 32 14.3 32 32s-14.3 32-32 32-32-14.3-32-32 14.3-32 32-32zm-160 0c17.7 0 32 14.3 32 32s-14.3 32-32 32-32-14.3-32-32 14.3-32 32-32zm194.8 170.2C334.3 380.4 292.5 400 248 400s-86.3-19.6-114.8-53.8c-13.6-16.3 11-36.7 24.6-20.5 22.4 26.9 55.2 42.2 90.2 42.2s67.8-15.4 90.2-42.2c13.4-16.2 38.1 4.2 24.6 20.5z"/></svg>
+            <span class="nav__name">Emotion Phases</span>
+          </a>
+        </li>
+        <li class="nav__item" onclick="achievements()" href="#achievements" data-url="{% url 'achievements' %}">
+          <a class="nav__link nav__achievements">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="currentColor" viewBox="0 0 384 512"><path d="M97.12 362.63c-8.69-8.69-4.16-6.24-25.12-11.85-9.51-2.55-17.87-7.45-25.43-13.32L1.2 448.7c-4.39 10.77 3.81 22.47 15.43 22.03l52.69-2.01L105.56 507c8 8.44 22.04 5.81 26.43-4.96l52.05-127.62c-10.84 6.04-22.87 9.58-35.31 9.58-19.5 0-37.82-7.59-51.61-21.37zM382.8 448.7l-45.37-111.24c-7.56 5.88-15.92 10.77-25.43 13.32-21.07 5.64-16.45 3.18-25.12 11.85-13.79 13.78-32.12 21.37-51.62 21.37-12.44 0-24.47-3.55-35.31-9.58L252 502.04c4.39 10.77 18.44 13.4 26.43 4.96l36.25-38.28 52.69 2.01c11.62.44 19.82-11.27 15.43-22.03zM263 340c15.28-15.55 17.03-14.21 38.79-20.14 13.89-3.79 24.75-14.84 28.47-28.98 7.48-28.4 5.54-24.97 25.95-45.75 10.17-10.35 14.14-25.44 10.42-39.58-7.47-28.38-7.48-24.42 0-52.83 3.72-14.14-.25-29.23-10.42-39.58-20.41-20.78-18.47-17.36-25.95-45.75-3.72-14.14-14.58-25.19-28.47-28.98-27.88-7.61-24.52-5.62-44.95-26.41-10.17-10.35-25-14.4-38.89-10.61-27.87 7.6-23.98 7.61-51.9 0-13.89-3.79-28.72.25-38.89 10.61-20.41 20.78-17.05 18.8-44.94 26.41-13.89 3.79-24.75 14.84-28.47 28.98-7.47 28.39-5.54 24.97-25.95 45.75-10.17 10.35-14.15 25.44-10.42 39.58 7.47 28.36 7.48 24.4 0 52.82-3.72 14.14.25 29.23 10.42 39.59 20.41 20.78 18.47 17.35 25.95 45.75 3.72 14.14 14.58 25.19 28.47 28.98C104.6 325.96 106.27 325 121 340c13.23 13.47 33.84 15.88 49.74 5.82a39.676 39.676 0 0 1 42.53 0c15.89 10.06 36.5 7.65 49.73-5.82zM97.66 175.96c0-53.03 42.24-96.02 94.34-96.02s94.34 42.99 94.34 96.02-42.24 96.02-94.34 96.02-94.34-42.99-94.34-96.02z"/></svg>
+            <span class="nav__name">Goals</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div class="wrapper">
+      <div class="header header-shadow">
+        <a class="small-screen-logo" href="#">Storikyn</a>
+        <div class="search-bar dissapear">
+          <i class="fa fa-long-arrow-left back-icon" onclick="reversefullSearch()"></i>
+          <input placeholder="Search for stories, phases etc..." id="searchTextbox" type="text">
+          <button class="searchButton lookupBtn">
+            <i class="fa fa-search search-icon"></i>
+         </button>
+        </div>
+        <div class="user-settings">
+            <button class="button-post search-circle" onclick="fullSearch()">
+              <svg xmlns="http://www.w3.org/2000/svg" height="17" viewBox="0 0 512 512"><path d="M508.5 481.6l-129-129c-2.3-2.3-5.3-3.5-8.5-3.5h-10.3C395 312 416 262.5 416 208 416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c54.5 0 104-21 141.1-55.2V371c0 3.2 1.3 6.2 3.5 8.5l129 129c4.7 4.7 12.3 4.7 17 0l9.9-9.9c4.7-4.7 4.7-12.3 0-17zM208 384c-97.3 0-176-78.7-176-176S110.7 32 208 32s176 78.7 176 176-78.7 176-176 176z"/></svg>
+              Search
+            </button>
+          {% if request.user.is_authenticated %}
+            <button class="button-post first" onclick="openCreatePost()"><svg viewbox="0 0 512.06 512.06" xmlns="http://www.w3.org/2000/svg">
+              <path d="M426.63 188.22C402.97 93.95 307.37 36.7 213.08 60.37A176 176 0 0080.39 218.3a96 96 0 0016 190.72h80v-32h-80a64 64 0 010-128 16 16 0 0016-16c-.08-79.53 64.33-144.06 143.86-144.14a144 144 0 01141.42 116.14 16 16 0 0013.6 12.8 80 80 0 01-10.88 159.2h-64v32h64c61.86-.18 111.85-50.48 111.66-112.34a112 112 0 00-85.41-108.46z"></path>
+              <path d="M245.03 253.66l-64 64 22.56 22.56 36.8-36.64v153.44h32V303.58l36.64 36.64 22.56-22.56-64-64a16 16 0 00-22.55 0z"></path></svg> 
+              <span class="create-modal-text">Compose</span>
+            </button> 
+            <button class="button-post second remove" onclick="openCreateQuestion()">
+              <svg viewbox="0 0 512.06 512.06" xmlns="http://www.w3.org/2000/svg">
+              <path d="M426.63 188.22C402.97 93.95 307.37 36.7 213.08 60.37A176 176 0 0080.39 218.3a96 96 0 0016 190.72h80v-32h-80a64 64 0 010-128 16 16 0 0016-16c-.08-79.53 64.33-144.06 143.86-144.14a144 144 0 01141.42 116.14 16 16 0 0013.6 12.8 80 80 0 01-10.88 159.2h-64v32h64c61.86-.18 111.85-50.48 111.66-112.34a112 112 0 00-85.41-108.46z"></path>
+              <path d="M245.03 253.66l-64 64 22.56 22.56 36.8-36.64v153.44h32V303.58l36.64 36.64 22.56-22.56-64-64a16 16 0 00-22.55 0z"></path></svg> 
+              <span class="create-modal-text">Ask</span>
+            </button> 
+            <img alt="" class="user-img" src="{% static 'images/shadie.jpg' %}" data-url="{% url 'profile' user.username %}">
+            <div class="user-details" style="display: flex;position: relative;">
+              <div class="username-icon" style="display: flex;cursor: pointer;">
+                <div class="username">
+                  {{ user.username }}
+                </div>
+                <svg viewBox="0 0 492 492" fill="currentColor">
+                  <path
+                    d="M484.13 124.99l-16.11-16.23a26.72 26.72 0 00-19.04-7.86c-7.2 0-13.96 2.79-19.03 7.86L246.1 292.6 62.06 108.55c-5.07-5.06-11.82-7.85-19.03-7.85s-13.97 2.79-19.04 7.85L7.87 124.68a26.94 26.94 0 000 38.06l219.14 219.93c5.06 5.06 11.81 8.63 19.08 8.63h.09c7.2 0 13.96-3.57 19.02-8.63l218.93-219.33A27.18 27.18 0 00492 144.1c0-7.2-2.8-14.06-7.87-19.12z">
+                  </path>
+                </svg>
+              </div>
+              <ul class="nav-list-submenu">
+                <li class="nav-list-submenu-item">
+                  <a class="nav-link user-dropdown-link" onclick="user()" data-url="{% url 'profile' user.username %}"><i class="fas fa-user"></i>{{ user.username }}</a>
+                </li>
+                <li class="nav-list-submenu-item">
+                  <a class="nav-link logout" ><i class="fas fa-sign-out"></i>Signout</a>
+                </li>
+                <li class="nav-list-submenu-item">
+                  <a class="nav-link" href="#"><i class="fad fa-moon-stars"></i>Appearance : Shadie Theme</a>
+                </li>
+                <li class="nav-list-submenu-item" data-toggle="modal" data-target="#myModal" share-url="{% url 'share_website' %}" onclick="share(this.getAttribute('share-url'))">
+                  <a class="nav-link" href="#"><i class="fas fa-user-plus"></i>Invite friends</a>
+                </li>
+                <li class="nav-list-submenu-item">
+                  <a class="nav-link feedback-dropdown-link" data-url="{% url 'feedback' %}"><i class="fas fa-comment-alt"></i>Send Feedback</a>
+                </li>
+              </ul><!-- end of nav-list-submenu -->
+            </div>
+            <div class="notify" style="display: flex;position: relative;">
+              <div class="notify_icon" style="display: flex;cursor: pointer;" data-url="{% url 'notifications' user.username %}">
+                <div class="notification"></div>
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M18.707 8.796c0 1.256.332 1.997 1.063 2.85.553.628.73 1.435.73 2.31 0 .874-.287 1.704-.863 2.378a4.537 4.537 0 01-2.9 1.413c-1.571.134-3.143.247-4.736.247-1.595 0-3.166-.068-4.737-.247a4.532 4.532 0 01-2.9-1.413 3.616 3.616 0 01-.864-2.378c0-.875.178-1.682.73-2.31.754-.854 1.064-1.594 1.064-2.85V8.37c0-1.682.42-2.781 1.283-3.858C7.861 2.942 9.919 2 11.956 2h.09c2.08 0 4.204.987 5.466 2.625.82 1.054 1.195 2.108 1.195 3.745v.426zM9.074 20.061c0-.504.462-.734.89-.833.5-.106 3.545-.106 4.045 0 .428.099.89.33.89.833-.025.48-.306.904-.695 1.174a3.635 3.635 0 01-1.713.731 3.795 3.795 0 01-1.008 0 3.618 3.618 0 01-1.714-.732c-.39-.269-.67-.694-.695-1.173z" />
+                </svg>
+              </div>
+              <div id="notifications-popup">
+                <div class="notifications-popup" id="notifications-container">
+                  {{ notifications_template_content|safe }}
+                </div>
+              </div>
+            </div>
+          {% else %}
+            <button id="signup-btn" class="btn btn-primary website-signup" type="button" name="button" data-url="{% url 'register' %}" style="margin-right: 10px;">Sign up</button>
+            <button id="login-btn" class="btn btn-primary website-signin" type="button" name="button" data-url="{% url 'ajax-login' %}">Sign in</button>
+          {% endif  %}
+        </div>
+      </div>
+      <div class="main-container show-home">
+        <!-- Start Of Home Tab -->
+        <section class="home" id="home" style="height: 100%;display: flex;flex-flow: column;">
+          {{ home_template_content|safe }}
+        </section>
+        <!-- End Of Home Tab -->
+        <!-- Start Of Emotions Tab -->
+        <section class="emotions base-section" id="emotions">
+          {{ emotions_template_content|safe }}
+        </section>
+        <!-- End Of Emotions Tab -->
+        <!-- Start Of Phases Tab -->
+        <section class="phases base-section" id="phases">
+          {{ phases_template_content|safe }}
+        </section>
+        <!-- End Of Phases Tab -->
+        <!-- Start Of Donation Tab -->
+        <section class="donations base-section" id="donations">
+          {{ donate_template_content|safe }}
+        </section>
+        <!-- End Of Donation Tab -->
+        <!-- Start Of Achievements Tab -->
+        <section class="achievements base-section" id="achievements">
+          {{ achievements_template_content|safe }}
+        </section>
+        <!-- End Of Achievements Tab -->
+        <!-- Start Of User Profile -->
+        <section class="user-profile base-section" id="profile">
+          {{ profile_template_content|safe }}
+        </section>
+        <!-- End Of Achievements Tab -->
+        <!-- Start Of Article -->
+        <section class="article base-section" id="article">
+          {{ article_template_content|safe }}
+        </section>
+        <!-- End Of Article Tab -->
+        <!-- Start Of Forum -->
+        <section class="forum base-section" id="forum">
+          {{ forum_template_content|safe }}
+        </section>
+        <!-- End Of Forum Tab -->
+        <!-- Start Of Question -->
+        <section class="user-question base-section" id="user-question">
+          {{ question_template_content|safe }}
+        </section>
+        <!-- End Of Question Tab -->
+        <!-- Start Of Question -->
+        <section class="search base-section" id="search">
+          {{ search_template_content|safe }}
+        </section>
+        <!-- End Of Question Tab -->
+        <!-- Start Of Feedback -->
+        <section class="feedback base-section" id="feedback">
+          {{ feedback_template_content|safe }}
+        </section>
+        <!-- End Of Feedback Tab -->
+
+
+        <div id="option">
+          <!-- For post options -->
+        </div>
+
+        <!-- ==================== -->
+        <!-- Notification Element -->
+        <section class="popup-notification" id="notification">
+          Item added to basket
+        </section>
+        <!-- Notification Element -->
+        <!-- ==================== -->
+
+        
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <div class="close" id="ModelBox">
+    <div class="back-drop" id="BackDrop">
+      <div class="post-model-wrp">
+        <div id="BookModelBox">
+          {{ book_template_content|safe }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="close" id="Post_ModalBox">
+    <div class="back-drop" id="PostBackDrop">
+      <div class="post-model-wrp" >
+        <div id="PostModelBox">
+          {{ book_template_content|safe }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="close" id="Registration_ModalBox">
+    <div class="back-drop" id="RegistrationBackDrop">
+      <div class="post-model-wrp" >
+        <div id="RegistrationModelBox">
+          {% block content %}
+          {% endblock %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="blank">
+  </div>
+
+
+  </div>
+
+  <div class="close" id="Phases_ModalBox">
+    <div class="back-drop" id="PhasesBackDrop" onclick="closePhases()"></div>
+    <div class="post-model-wrp">
+      <div class="post-box" >
+        <!-- Card Header Start -->
+        <div class="post-box-header">
+          <h2 class="box-header-text">Choose Phase</h2>
+          <div class="header-svg-box" onclick="closePhases()" style="right: 1.5rem;">
+            <svg xmlns="http://www.w3.org/2000/svg" class="ht-6 wh-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </div>
+        </div><!-- Card Header End -->
+        <div class="post-box-body">
+          <div id="PhasesModelBox"></div>
+          <button class="post-button" id="HomeDoneBtn">Done</button>
+        </div>
+      </div>  
+    </div>
+  </div>
+
+  <div class="close" id="Create_Post">
+    <div class="back-drop" id="BackDrop" onclick="closeCreatePost()"></div>
+    <div id="ModelBox">
+      <div class="post-box">
+        <!-- Card Header Start -->
+        <div class="post-box-header">
+          <h2 class="box-header-text">Create Post</h2>
+          <div class="header-svg-box" onclick="closeCreatePost()" style="right: 1.5rem;">
+            <svg xmlns="http://www.w3.org/2000/svg" class="ht-6 wh-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </div>
+        </div><!-- Card Header End -->
+        <!-- Card Body Start -->
+        <form class="post-box-body" id="floating-create-post-form">
+          <div class="body-user-details">
+            <div class="user-profile-pic">
+              <a href="#"><img alt="{{ user.username }}" class="profile-pic-img" src="{% static 'images/shadie.jpg' %}"></a>
+            </div>
+            <div class="other-details">
+              <h2 class="user-username">{{ user.username }}</h2>
+              <label><input class="js-anonymous" name="anonymous" type="checkbox"> Anonymous</label>
+            </div>
+          </div><!-- Input Start -->
+          <div class="input-box">
+            <textarea class="form-control input-area" placeholder="Title:" style="background-color: transparent;border: 1px solid #4a5568;color: #fff;" id="floating-post-title" name="title" autocomplete="off" rows="1"></textarea>
+            <textarea class="input-area" id="floating-post-body" style="margin-top: 10px;font-size: 1rem;" placeholder="What's on your mind, {{ user.username }}?" name="content" rows="3"></textarea>
+          </div><!-- Input End -->
+          <!-- Input Below Icons Start -->
+          <div class="text-options">
+            <div class="text-emoji">
+              <svg xmlns="http://www.w3.org/2000/svg" class="ht-8 wh-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+          </div><!-- Input Below Icons End -->
+          <p class="website-error dissapear" id="floating-post-error">Error: Both title and body fields should be filled and should not be left blank.</p>
+          <!-- Bottom Icons Start -->
+          <div class="add-media">
+            <input class="js-upload-file-input" name="bait-image" type="file" accept="image/*" id="floating-post-image-upload" onchange="getImageEditor(this.id);" preview="floating-post-preview"> <!-- Attached Files -->
+            <div class="add-to-post">
+              Add to Your Post
+            </div>
+            <div class="add-pic">
+              <label class="file-upload-link js-file-upload-link" for="floating-post-image-upload">
+                <div class="add-pic-item">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="ht-6 wh-6 text-green-500" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd" />
+                  </svg>
+                </div>
+              </label>
+              <div class="add-pic-item add-audio">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="ht-6 wh-6 text-red-700" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 015 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z" clip-rule="evenodd" />
+                  </svg>
+              </div>
+            </div>
+          </div><!-- Bottom Icons Start -->
+          <div class="attached-files js-attached-files" style="margin-top: 2em">
+            <div id="floating-post-preview" style="position: relative;width: 100px;"></div>
+          </div>
+          <button class="post-button">Post</button>
+        </form><!-- Card Body End -->
+      </div>
+    </div>
+  </div>
+
+  <div class="close" id="Create_Question">
+    <div class="back-drop" id="BackDrop" onclick="closeCreateQuestion()"></div>
+    <div id="ModelBox">
+      <div class="post-box">
+        <!-- Card Header Start -->
+        <div class="post-box-header">
+          <h2 class="box-header-text">Write Question</h2>
+          <div class="header-svg-box" onclick="closeCreateQuestion()" style="right: 1.5rem;">
+            <svg class="ht-6 wh-6" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor">
+            <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+          </svg>
+          </div>
+        </div><!-- Card Header End -->
+        <!-- Card Body Start -->
+        <form class="post-box-body" id="create-question-form">
+          <div class="body-user-details">
+            <div class="user-profile-pic">
+              <a href="#"><img alt="{{ user.username }}" class="profile-pic-img" src="{% static 'images/shadie.jpg' %}"></a>
+            </div>
+            <div class="other-details">
+              <h2 class="user-username">{{ user.username }}</h2>
+              <label><input class="js-anonymous" name="anonymous" type="checkbox"> Anonymous</label>
+            </div>
+          </div><!-- Input Start -->
+          <div class="input-box">
+            <textarea class="input-area" name="title" id="floating-question-title" style="font-size: 1rem;" placeholder="What would you like to ask in this forum, {{ user.username }}?" rows="3"></textarea>
+            <input type="hidden" name="question-forum" id="question-forum" value=""> 
+          </div><!-- Input End -->
+          <!-- Input Below Icons Start -->
+          <div class="text-options">
+            <div class="text-emoji">
+              <svg xmlns="http://www.w3.org/2000/svg" class="ht-8 wh-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+          </div><!-- Input Below Icons End -->
+          <p class="website-error dissapear" id="floating-question-error">Error: Body field should be filled and should not be left blank.</p>
+          <!-- Bottom Icons Start -->
+          <div class="add-media">
+            <input class="js-upload-file-input" name="bait-image" accept="image/*" type="file" id="floating-question-image-upload" onchange="getImageEditor(this.id);" preview="floating-question-preview"> <!-- Attached Files -->
+            <div class="add-to-post">
+              Add to Your Post
+            </div>
+            <div class="add-pic">
+              <label class="file-upload-link js-file-upload-link" for="floating-question-image-upload">
+                <div class="add-pic-item">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="ht-6 wh-6 text-green-500" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd" />
+                  </svg>
+                </div>
+              </label>
+              <div class="add-pic-item add-audio">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="ht-6 wh-6 text-red-700" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 015 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z" clip-rule="evenodd" />
+                  </svg>
+              </div>
+            </div>
+          </div><!-- Bottom Icons Start -->
+          <div class="attached-files js-attached-files" style="margin-top: 2em">
+            <div id="floating-question-preview" style="position: relative;width: 100px;"></div>
+          </div>
+          <button class="post-button ask-button">Ask</button>
+        </form><!-- Card Body End -->
+      </div>
+    </div>
+  </div><!-- partial -->
+
+  <div class="close" id="Create_Answer">
+    <div class="back-drop" id="AnswerBackDrop" onclick="closeCreateAnswer()"></div>
+    <div id="AnswerModelBox">
+      <div class="post-box">
+        <!-- Card Header Start -->
+        <div class="post-box-header">
+          <h2 class="box-header-text">Create Answer</h2>
+          <div class="header-svg-box" onclick="closeCreateAnswer()" style="right: 1.5rem;">
+            <svg xmlns="http://www.w3.org/2000/svg" class="ht-6 wh-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </div>
+        </div><!-- Card Header End -->
+        <!-- Card Body Start -->
+        <form class="post-box-body" id="create-answer-form">
+          <div class="body-user-details">
+            <div class="user-profile-pic">
+              <a href="#"><img alt="{{ user.username }}" class="profile-pic-img" src="{% static 'images/shadie.jpg' %}"></a>
+            </div>
+            <div class="other-details">
+              <h2 class="user-username">{{ user.username }}</h2>
+              <label><input class="js-anonymous" name="anonymous" type="checkbox"> Anonymous</label>
+            </div>
+          </div><!-- Input Start -->
+          <div class="input-box">
+            <textarea class="input-area" id="floating-question-answer-body" style="font-size: 1rem;" name="content" placeholder="What's is your supposed answer to the question, {{ user.username }}?" rows="3"></textarea>
+            <input type="hidden" name="answer-question" id="floating-answer-question" value=""> 
+          </div><!-- Input End -->
+          <!-- Input Below Icons Start -->
+          <div class="text-options">
+            <div class="text-emoji">
+              <svg xmlns="http://www.w3.org/2000/svg" class="ht-8 wh-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+          </div><!-- Input Below Icons End -->
+          <!-- Bottom Icons Start -->
+          <p class="website-error dissapear" id="floating-question-answer-error">Error: Both title and body fields should be filled and should not be left blank.</p>
+          <div class="add-media">
+            <input class="js-upload-file-input" name="bait-image" type="file" accept="image/*" id="floating-answer-image-upload" onchange="getImageEditor(this.id);" preview="floating-answer-preview"> <!-- Attached Files -->
+            <div class="add-to-post">
+              Add to Your Answer
+            </div>
+            <div class="add-pic">
+              <label class="file-upload-link js-file-upload-link" for="floating-answer-image-upload">
+                <div class="add-pic-item">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="ht-6 wh-6 text-green-500" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd" />
+                  </svg>
+                </div>
+              </label>
+              <div class="add-pic-item add-audio">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="ht-6 wh-6 text-red-700" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 015 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z" clip-rule="evenodd" />
+                  </svg>
+              </div>
+            </div>
+          </div><!-- Bottom Icons Start -->
+          <div class="attached-files js-attached-files" style="margin-top: 2em">
+            <div id="floating-answer-preview" style="position: relative;width: 100px;"></div>
+          </div>
+          <button class="post-button answer-button">Submit</button>
+        </form><!-- Card Body End -->
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" tabindex="-1" role="dialog" id="modal">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content"></div>
+    </div>
+  </div>
+
+  <div class="cd-popup" role="alert">
+    <div class="cd-popup-container">
+      <p id="cd-popup-text">Are you sure you want to delete this element?</p>
+      <ul class="cd-buttons">
+        <li style="margin-right: 4%;"><a class="cd-popup-cancel">CANCEL</a></li>
+        <li><a class="cd-popup-yes">YES</a></li>
+      </ul>
+      <a class="cd-popup-close img-replace">Close</a>
+    </div> <!-- cd-popup-container -->
+  </div> <!-- cd-popup -->
+
+  <!-- share-with-popup-container -->
+  <div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="max-width: 800px;">
+      <!-- Modal content-->
+      <div class="modal-content" id="myModalBody">
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade p-0" id="basicModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="dialog">
+      <div class="modal-content p-0">
+        <div class="modal-body" id="basicModalBody">
+        </div>
+      </div>
+    </div>
+  </div>
+   
+
+  
+  <!--<script src="https://code.jquery.com/jquery-2.2.0.min.js" type="text/javascript"></script>-->
+  
+  <script src="{% static 'css/slick/slick.js' %}"></script> 
+  <script src='https://vjs.zencdn.net/5-unsafe/video.js'></script> 
+  <script src="{% static 'js/product.js' %}"></script> 
+  <script src="{% static 'js/donate.js' %}"></script> 
+  <script src="{% static 'js/owl.carousel.min.js' %}"></script> 
+
+  <!-- You can alternatively load the minified version -->    
+  <script src="{% static 'js/popper.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  <!-- You can alternatively load the minified version -->
+
+  <!-- Bootstrap 5 -->
+  {% bootstrap_javascript %}
+  <script src="{% static 'js/images.js' %}"></script>
+  <script src="{% static 'js/functionality.js' %}"></script>
+  <script src="{% static 'js/confirmation-popup.js' %}"></script>
+  <script src="{% static 'js/clipboard.min.js' %}"></script>
+  <script type="text/javascript">
+
+    // Get the CSRF token from the cookie
+    function getCSRFToken() {
+      const cookieValue = document.cookie.match(/csrftoken=([^;]+)/);
+      return cookieValue ? cookieValue[1] : '';
+    }
+
+    $('.logout').on('click', function(event){
+      event.preventDefault();
+      var popupText = document.getElementById("cd-popup-text");
+      popupText.innerHTML = "Are you sure you want to logout?";
+      $('.cd-popup-yes').addClass('cd-popup-logout');
+      $('.cd-popup-logout').removeClass('cd-popup-yes');
+      $('.cd-popup').addClass('is-visible');      
+      clear();
+    });
+
+    $('.ask-button').on('click', function(event){
+      event.preventDefault();
+      var returnValue = validateFloatingQuestionForm();
+
+      // If the return value is true, continue with logic
+      if (returnValue === true) {
+        var form = document.getElementById('create-question-form');
+        var formData = new FormData(form);
+        var imageBase64 = $('#floating-question-image-upload')[0].src;
+        formData.append('image', base64ToBlob(imageBase64));
+        const csrfToken = getCSRFToken();
+        $.ajax({
+          url: "{% url 'create_question' %}",
+          type: 'POST',
+          headers: {
+            'X-CSRFToken': csrfToken, // Include the CSRF token in the request header
+          },
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function () {
+            $('#create-question-form').trigger('reset');
+            const preview_container = document.getElementById("floating-question-preview");
+            $(preview_container).html("");
+            closeCreateQuestion()
+            showNotification("Question created successfully");
+          },
+          error: function () {
+            alert('Error occurred. Please try again.');
+          }
+        });
+      }
+    });
+
+    function validateFloatingQuestionForm() {
+      if ($('#floating-question-title').val() === '') {
+        $('#floating-question-error').removeClass('dissapear');
+        showNotification("Error: Body field should be filled and should not be left blank.");
+        return false;
+      }
+      return true;
+    }
+
+    $('.answer-button').on('click', function(event){
+      event.preventDefault();
+      var returnValue = validateFloatingAnswerForm();
+
+      // If the return value is true, continue with logic
+      if (returnValue === true) {
+        var form = document.getElementById('create-answer-form');
+        var formData = new FormData(form);
+        if (document.getElementById("floating-answer-image-upload").src.length > 0 ) {
+          var imageBase64 = $('#floating-answer-image-upload')[0].src;
+          formData.append('image', base64ToBlob(imageBase64));
+        } else {
+          formData.append('image', '');
+        }
+
+        const csrfToken = getCSRFToken();
+        $.ajax({
+          url: "{% url 'answer_question' %}",
+          type: 'POST',
+          headers: {
+            'X-CSRFToken': csrfToken, // Include the CSRF token in the request header
+          },
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function () {
+            $('#create-answer-form').trigger('reset');
+            const preview_container = document.getElementById("floating-answer-preview");
+            $(preview_container).html("");
+            closeCreateAnswer();
+            showNotification("Answer created successfully");
+          },
+          error: function () {
+            alert('Error occurred. Please try again.');
+          }
+        });
+      }
+    });
+
+    function validateFloatingAnswerForm() {
+      if ($('#floating-question-answer-body').val() === '') {
+        $('#floating-question-answer-error').removeClass('dissapear');
+        showNotification("Error: Body field should be filled and should not be left blank.");
+        return false;
+      }
+      return true;
+    }
+
+
+    $('.text-emoji').on('click', function(event){
+      showNotification("This feature has not been added yet and Im working on it.");
+    });
+
+    $('.add-audio').on('click', function(event){
+      showNotification("This feature has not been added yet and Im working on it.");
+    });
+
+    $('.cd-popup').on('click', function(event){
+      if( $(event.target).is('.cd-popup-logout') ) {
+        event.preventDefault();
+        window.location.href = "{% url 'user_logout' %}";
+      } 
+    });
+
+    function share(url) {
+      var loader = '<div class="overlay"><div class="overlayDoor"></div><div class="overlayContent"><div class="loader"><div class="inner"></div></div></div></div>'
+      $('#myModalBody').html(loader);
+      $('#myModalBody').load(url);
+    }
+
+    $(document).on('submit','#floating-create-post-form', function(event){
+      event.preventDefault();
+      var returnValue = validateBasePostForm();
+
+      // If the return value is true, continue with logic
+      if (returnValue === true) {
+        closeCreatePost();
+        openPhases()
+        var loader = '<div class="overlay"><div class="overlayDoor"></div><div class="overlayContent"><div class="loader"><div class="inner"></div></div></div></div>'
+        $('#PhasesModelBox').html(loader);
+        $('#PhasesModelBox').load("{% url 'get_phase_options' %}");
+        getFloatingPostPhase();
+      }
+    });
+
+    function validateBasePostForm() {
+      if ($('#floating-post-title').val() === '' || $('#floating-post-body').val() === '') {
+        $('#floating-post-error').removeClass('dissapear');
+        showNotification("Error: Both title and body fields should be filled and should not be left blank.");
+        return false;
+      }
+      return true;
+    }
+
+    $('.website-signup').click(function(e) {
+      e.preventDefault();
+      var url = $(this).attr('data-url');
+      var loader = '<div class="overlay"><div class="overlayDoor"></div><div class="overlayContent"><div class="loader"><div class="inner"></div></div></div></div>'
+      $('#blank').html(loader);
+      $('#blank').load(url);
+    });
+
+    $('.website-signin').click(function(e) {
+      e.preventDefault();
+      var url = $(this).attr('data-url');
+      var loader = '<div class="overlay"><div class="overlayDoor"></div><div class="overlayContent"><div class="loader"><div class="inner"></div></div></div></div>'
+      $('#blank').html(loader);
+      $('#blank').load(url);
+    });
+
+    $(document).on('input','#searchTextbox', function(event){
+      event.preventDefault();
+      if (document.getElementById("searchTextbox").value.length > 0){
+        $('.header').addClass('search-active');
+      } else {
+        $('.header').removeClass('search-active');
+      }
+    });
+
+    $(document).on('click','#searchTextbox', function(event){
+      event.preventDefault();
+      if (document.getElementById("searchTextbox").value.length > 0){
+        $('.header').addClass('search-active');
+      } else {
+        $('.header').addClass('search-active');
+      }
+    });
+
+    $('.lookupBtn').click(function(e) {
+      e.preventDefault();
+      var searchvalue = document.getElementById("searchTextbox").value;
+      var url = '/search/posts/?q=' + searchvalue;
+      search();
+      $('#search').load(url);
+      history.pushState(null, null, url);
+    });
+
+    function getFloatingPostPhase() {
+      var button = document.getElementById("HomeDoneBtn");
+      button.addEventListener('click', function() {
+        var inputToDelete = document.getElementById('floating-post-phase-input');
+        if (inputToDelete) {
+          inputToDelete.parentNode.removeChild(inputToDelete);
+        }
+
+        var form = document.getElementById('floating-create-post-form');
+        var newInput = document.createElement('input');
+        newInput.type = 'hidden';
+        newInput.name = 'phase'; // Name your input field as per your requirement
+        newInput.id = 'floating-post-phase-input'
+        var selectMenu = document.getElementById("phaseSelectOptions");
+        newInput.value = selectMenu.value;
+        form.appendChild(newInput);
+        var formData = new FormData(form);
+        if (document.getElementById("floating-post-image-upload").src.length > 0 ) {
+          var imageBase64 = $('#floating-post-image-upload')[0].src;
+          formData.append('image', base64ToBlob(imageBase64));
+        } else {
+          formData.append('image', '');
+        }
+        const csrfToken = getCSRFToken();
+
+        $.ajax({
+          url: "{% url 'create_post' %}",
+          type: 'POST',
+          headers: {
+            'X-CSRFToken': csrfToken, // Include the CSRF token in the request header
+          },
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function () {
+            $('#floating-create-post-form').trigger('reset');
+            const preview_container = document.getElementById("floating-post-preview");
+            $(preview_container).html("");
+            closePhases();
+            showNotification("Post created successfully");
+          },
+          error: function () {
+            alert('Error occurred. Please try again.');
+          }
+        });
+      });
+    }
+    
+  </script>
+</body>
+</html>

@@ -1,0 +1,220 @@
+{% load static %}
+{% load custom_filters %}
+{% for question in questions %}
+  <div class="card">
+    <div class="card-content">
+      <div class="flex hover:border-grey rounded bg-white cursor-pointer">
+        <div class="w-1/12 flex flex-col text-center">
+          {% if user in question.upvotes.all %}
+            <i class="fas fa-arrow-alt-up vote-red" data-url="{% url 'upvote_question' question.id %}"></i>
+          {% else %}
+            <i class="fas fa-arrow-alt-up vote-grey" data-url="{% url 'upvote_question' question.id %}"></i>
+          {% endif  %}
+          
+
+          <span class="question-vote-text">{{ question.aggregate_count }}</span>
+
+          {% if user in question.downvotes.all %}
+            <i class="fas fa-arrow-alt-down vote-red" data-url="{% url 'downvote_question' question.id %}"></i>
+          {% else %}
+            <i class="fas fa-arrow-alt-down vote-grey" data-url="{% url 'downvote_question' question.id %}"></i>
+          {% endif  %}
+        </div>
+        <div class="w-11/12 pr">
+          <div class="question-header">
+            <div class="flex items-center">
+              <a class="profile-link-img font-semibold no-underline hover:underline text-black flex items-center" data-url="{% url 'profile' question.author.username %}">
+                {% if question.author.profile.pro_image %}
+                  <img src="{{ question.author.profile.pro_image.url }}" class="question-profile">
+                {% else %}
+                  <img src="{% static 'images/default.jpg' %}" class="question-profile">
+                {% endif %} 
+              </a> 
+              <div class="flex q-psuedo-name">
+                <span class="question-username">{{ question.author }}</span>
+                <span class="text-grey mx-1 text-xxs q-dot" style="display: flex;align-items: center;">•</span> 
+                <span class="text-grey asked-when">Asked {{ question.created_at| shorten_forum_time }}</span>
+              </div>
+            </div>
+            <div class="more" data-url="{% url 'question_options' question.id %}">
+              <img alt="more" src="{% static 'images/more3.png' %}">
+            </div>
+          </div>
+          <div>
+            <h2 class="question">{{ question.title }}</h2>
+          </div>
+          <div class="comments">
+              <ul>
+                <li class="show_answers" data-url="{% url 'question' question.id %}" class="hover:bg-grey-lighter p-1">
+                  <svg class="w-4 fill-current text-grey" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M10 15l-4 4v-4H2a2 2 0 0 1-2-2V3c0-1.1.9-2 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-8zM5 7v2h2V7H5zm4 0v2h2V7H9zm4 0v2h2V7h-2z"></path></svg> <span class="question-footer-item">{{ question.answers_count }}</span>
+                </li>
+                {% if user in question.followers.all %}
+                  <li class="question_follow liked" id="question_follow_{{ question.id }}" data-url="{% url 'follow_question' question.id %}"><i class="fas fa-rss "></i><div class="followers-count">{{ question.followers.count }}</div></li>
+                {% else %}
+                  <li class="question_follow" id="question_follow_{{ question.id }}" data-url="{% url 'follow_question' question.id %}"><i class="fas fa-rss text-grey"></i><div class="followers-count">{{ question.followers.count }}</div></li>
+                {% endif  %}
+                <li data-toggle="modal" data-target="#myModal" share-url="{% url 'share_question' question.id %}" onclick="share(this.getAttribute('share-url'))"><img alt="" src="{% static 'images/share.png' %}"></li>
+                <li class="hover:bg-grey-lighter p-1 ml-2" onclick="CreateAnswer('{{ question.id }}')">
+                  <svg class="w-4 fill-current text-grey" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M0 2C0 .9.9 0 2 0h14l4 4v14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm5 0v6h10V2H5zm6 1h3v4h-3V3z"></path></svg> 
+                  <span class="question-footer-item">Answer</span>
+                </li>
+              </ul>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% empty %}
+  <br>
+   <h6 class="title is-5">You do not have any Hoodposts!</h6>              
+{% endfor %}
+<script>
+  $(document).ready(function() {
+    $('.more').click(function(e) {
+      e.preventDefault();
+      var url = $(this).attr('data-url');
+      var loader = '<div class="overlay"><div class="overlayDoor"></div><div class="overlayContent"><div class="loader"><div class="inner"></div></div></div></div>'
+      toggle_option(this);
+      $('#option').html(loader);
+      $('#option').load($(this).attr('data-url'));
+    });
+
+    $('.show_answers').click(function(e) {
+      e.preventDefault();
+      var url = $(this).attr('data-url');
+      history.pushState(null, null, url);
+      var loader = '<div class="overlay"><div class="overlayDoor"></div><div class="overlayContent"><div class="loader"><div class="inner"></div></div></div></div>'
+      question();
+      $('#user-question').html(loader);
+      $('#user-question').load(url);
+    });
+
+    // Get the CSRF token from the cookie
+    function getCSRFToken() {
+      const cookieValue = document.cookie.match(/csrftoken=([^;]+)/);
+      return cookieValue ? cookieValue[1] : '';
+    }
+
+    $('.profile-link-img').click(function(e) {
+      e.preventDefault();
+      user();
+      var url = $(this).attr('data-url');
+      $('#profile').load(url);
+      history.pushState(null, null, url);
+    });
+
+    $('.question_follow').click(function(event){
+      const $this = this
+      const url = $(this).attr("data-url");
+      const followIcon = this.querySelector(".fa-rss");
+      const followCount = this.querySelector(".followers-count");
+      const csrfToken = getCSRFToken();
+
+      $.ajax({
+          type:"GET",
+          url: url,
+          headers: {
+            'X-CSRFToken': csrfToken, // Include the CSRF token in the request header
+          },
+          success: function(response) 
+          {
+            let follows = followCount.innerText;
+            follows = parseInt( follows );
+            if (response.success === 'Question has been followed successfully.') {
+              follows++;
+              $this.classList.add("liked");
+            } else {
+              follows--;
+              $this.classList.remove("liked");
+            }
+            followCount.innerHTML = follows
+          } 
+      })
+    });
+
+    $('.fa-arrow-alt-up').click(function(event){
+      const $this = this
+      const url = $(this).attr("data-url");
+      const container = $this.closest(".flex-col");
+      const oppIcon = container.querySelector(".fa-arrow-alt-down");
+      const voteCount = container.querySelector(".question-vote-text");
+      const csrfToken = getCSRFToken();
+
+      $.ajax({
+        type:"GET",
+        url: url,
+        headers: {
+          'X-CSRFToken': csrfToken, // Include the CSRF token in the request header
+        },
+        success: function(response) 
+        {
+          let votes = voteCount.innerText;
+          votes = parseInt( votes );
+          if (response.success === 'Question upvoted successfully.') {
+            votes++;
+            $this.classList.remove("vote-grey");
+            $this.classList.add("vote-red");
+            if ( oppIcon.classList.contains('vote-red') ) {
+              votes++;
+              oppIcon.classList.remove("vote-red");
+              oppIcon.classList.add("vote-grey");
+            }
+          } else {
+            votes--;
+            $this.classList.remove("vote-red");
+            $this.classList.add("vote-grey");
+          }
+          voteCount.innerHTML = votes
+          showNotification(response.success); 
+        } 
+      })
+    });
+
+    $('.fa-arrow-alt-down').click(function(event){
+      const $this = this
+      const url = $(this).attr("data-url");
+      const container = $this.closest(".flex-col");
+      const oppIcon = container.querySelector(".fa-arrow-alt-up");
+      const voteCount = container.querySelector(".question-vote-text");
+      const csrfToken = getCSRFToken();
+
+      $.ajax({
+        type:"GET",
+        url: url,
+        headers: {
+          'X-CSRFToken': csrfToken, // Include the CSRF token in the request header
+        },
+        success: function(response) 
+        {
+          let votes = voteCount.innerText;
+          votes = parseInt( votes );
+          if (response.success === 'Question downvoted successfully.') {
+            votes--;
+            $this.classList.remove("vote-grey");
+            $this.classList.add("vote-red");
+            if ( oppIcon.classList.contains('vote-red') ) {
+              votes--;
+              oppIcon.classList.remove("vote-red");
+              oppIcon.classList.add("vote-grey");
+            }
+          } else {
+            votes++;
+            $this.classList.remove("vote-red");
+            $this.classList.add("vote-grey");
+          }
+          voteCount.innerHTML = votes
+        } 
+      })
+    });
+
+  });
+
+  function CreateAnswer(questionID) {
+    var questionInput = document.getElementById("floating-answer-question");
+    questionInput.value = questionID;
+    openCreateAnswer();
+  }
+  
+</script>

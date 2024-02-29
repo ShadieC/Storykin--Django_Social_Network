@@ -1,0 +1,45 @@
+{% load static %}
+{% load humanize %}
+
+<div class="phases-control-fluid">
+  <ul class='phaseboxes'>
+    {% for phase in phases %}
+    <li class='phasebox' >  
+      {% if phase.phase_type == "Emotional Phase" %} 
+        <a class="emobox-btn" data-url="{% url 'menace-emo-phasecontent' phase.slug %}" fake-url="{% url 'emo-phasecontent' phase.slug %}">{{ phase.name }}</a>
+      {% else %} 
+        <a class="lifebox-btn" data-url="{% url 'menace-life-phasecontent' phase.slug %}" fake-url="{% url 'life-phasecontent' phase.slug %}">{{ phase.name }}</a>
+      {% endif %}
+    </li>
+    {% empty %}
+      <br>
+        <h6 class="title is-5">You do not have any Hoodposts!</h6>              
+    {% endfor %}
+  </ul>
+</div>
+
+<script>
+  $(document).ready(function() {
+    $('.emobox-btn').click(function(e) {
+      e.preventDefault();
+      var url = $(this).attr('data-url');
+      var pushUrl = $(this).attr('fake-url');
+      history.pushState(null, null, pushUrl);
+      var loader = '<div class="overlay"><div class="overlayDoor"></div><div class="overlayContent"><div class="loader"><div class="inner"></div></div></div></div>'
+      $('#emotions').html(loader);
+      $('#emotions').load($(this).attr('data-url'));
+      emotions();
+    });
+    $('.lifebox-btn').click(function(e) {
+      e.preventDefault();
+      var url = $(this).attr('data-url');
+      var pushUrl = $(this).attr('fake-url');
+      history.pushState(null, null, pushUrl);
+      var loader = '<div class="overlay"><div class="overlayDoor"></div><div class="overlayContent"><div class="loader"><div class="inner"></div></div></div></div>'
+      $('#phases').html(loader);
+      $('#phases').load($(this).attr('data-url'));
+      phases();
+    });
+  });
+
+</script>
