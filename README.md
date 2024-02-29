@@ -12,5 +12,6 @@ As seen from the above image the experiences are shared under Emotional Phases a
 ![Alt text](Preview_Images/06_CreatePosts.jpg.JPG)
 ![Alt text](Preview_Images/07_LifePhases.jpg.JPG)
 
+Follow me on Instagram: https://www.instagram.com/shadie_code/?hl=en
 
 
